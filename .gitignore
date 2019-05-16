@@ -1,0 +1,4 @@
+# Ignore Python virtual environment folder
+# Consistent VE folder name please
+env/
+

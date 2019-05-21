@@ -2,3 +2,5 @@
 # Consistent VE folder name please
 env/
 *~
+application.egg-info/
+saien.egg-info/

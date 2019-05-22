@@ -7,23 +7,29 @@
               charset="utf-8">
         <title>Saien</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='js/base.js') }}"></script>
     </head>
 
     <body>
-        <span class="sidebar_toggle" onclick="toggling()">☰</span>
-        <div id="sidebar" class="sidenav">
-            <a href="#">
-                Home
-            </a>
-            <a href="#">
-                News
-            </a>
-            <a href="#">
-                Search Item
-            </a>
-            <a href="#">
-                Contact
-            </a>
+        <div class="sidebar_container" id="noselect">
+            <div class="sidebar_toggle_container">
+                <span class="sidebar_toggle_switch" onclick="toggling()">&#10539;</span>
+                <span class="sidebar_toggle_animation"></span>
+            </div>
+            <div class="sidebar">
+                <a href="#">
+                    Home
+                </a>
+                <a href="#">
+                    News
+                </a>
+                <a href="#">
+                    Search Item
+                </a>
+                <a href="#">
+                    Contact
+                </a>
+            </div>
         </div>
     </body>
 </html>

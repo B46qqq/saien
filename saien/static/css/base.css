@@ -14,7 +14,7 @@ body {
 
 .sidebar_container, .sidebar {
     height: 100%;
-    width: 260px;
+    width: 265px;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -33,6 +33,7 @@ body {
 .sidebar a {
     padding: 12px 12px 12px 32px;
     text-decoration: none;
+    white-space: nowrap;
     font-size: 25px;
     color: #efefef;
     display: block;
@@ -53,28 +54,52 @@ body {
     font-size: 35px;
     font-weight: bolder;
     top: 5px;
-    right: 40px;
+    right: 45px;
     z-index: 2;
 }
 
-.sidebar_toggle_switch {
+.sidebar_toggle_switch, .sidebar_toggle_switch_closed {
     position: absolute;
     top: 0px;
     left: 0px;
     transition: all 0.3s linear;
 }
 
-.sidebar_toggle_switch:hover{
+.sidebar_toggle_switch_closed {
+    left: 5px;
+}
+
+.sidebar_toggle_animation {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+
+    line-height: 30px;
+    width: 35px;
+    height: 35px;
+    font-size: 35px;
+    right: 35px;
+    transition: all 0.5s cubic-bezier(.35,.73,.79,.88);
+}
+
+
+
+.sidebar_toggle_switch:hover, .sidebar_toggle_switch_closed:hover{
     color: white;
     border-radius: 100px;
     transform: rotate(180deg);
 }
 
-// animation: name duration timing-function delay iteration-count direction fill-mode play-state;
-
-// Animation for sidebar_toggle
-@keyframes sts_spin {
-    100% {
-        transform: rotate(180deg);
-    }
+.sidebar_toggle_switch_closed:hover {
+    color: #173f5f;
+    border-radius: none;
+    transform: rotateY(180deg);
 }
+
+.sidebar_toggle_switch:hover + .sidebar_toggle_animation {
+    visibility: visible;
+    opacity: 0.8;
+    color: white;
+    right: 194px;
+}
+

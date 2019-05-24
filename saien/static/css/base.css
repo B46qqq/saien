@@ -87,13 +87,13 @@ body {
 .sidebar_toggle_switch:hover, .sidebar_toggle_switch_closed:hover{
     color: white;
     border-radius: 100px;
-    transform: rotate(180deg);
+    transform: rotate(-180deg);
 }
 
 .sidebar_toggle_switch_closed:hover {
     color: #173f5f;
-    border-radius: none;
-    transform: rotateY(180deg);
+    border-radius: 0px;
+    transform: rotate(180deg);
 }
 
 .sidebar_toggle_switch:hover + .sidebar_toggle_animation {

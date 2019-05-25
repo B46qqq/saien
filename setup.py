@@ -1,5 +1,6 @@
 from setuptools import setup
 
+
 setup (
     name = 'saien',
     packages = ['saien'],
@@ -7,6 +8,7 @@ setup (
     install_requires =
     [
         'flask',
+        'flask-sqlalchemy',
     ],
 )
 

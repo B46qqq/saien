@@ -4,6 +4,6 @@ env/
 *~
 application.egg-info/
 saien.egg-info/
-saien/__pycache__/
+__pycache__/
 *.pyc
 *.egg-info/

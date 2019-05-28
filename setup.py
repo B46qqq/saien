@@ -9,6 +9,7 @@ setup (
     [
         'flask',
         'flask-sqlalchemy',
+        'sqlalchemy-utils',
     ],
 )
 

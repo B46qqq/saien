@@ -1,5 +1,10 @@
-import os
+from os import environ
 
 class Config:
-    SECRET_KEY = 'SOmekeyfromOS>ENVIRON.GET'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
+    # General config
+    SECRET_KEY = environ.get('SAIEN_SECRET')
+    FLASK_APP = environ.get('SAIEN_APP')
+    FLASK_ENV = environ.get('DEVELOPMENT')
+
+    # Flask-SQLAlchemy
+    SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI')

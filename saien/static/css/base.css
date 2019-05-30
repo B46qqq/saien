@@ -83,7 +83,6 @@ body {
 }
 
 
-
 .sidebar_toggle_switch:hover, .sidebar_toggle_switch_closed:hover{
     color: white;
     border-radius: 100px;
@@ -103,3 +102,12 @@ body {
     right: 194px;
 }
 
+.content_container {
+    position: fixed;
+    top: 0px;
+    left: 225px;
+    height: 100%;
+    width: 100%;
+    padding: 30px;
+    transition: 0.5s;
+}

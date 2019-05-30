@@ -1,11 +1,23 @@
-from saien import db
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 from datetime import datetime
+
+db = SQLAlchemy()
 
 shopContacts = db.Table('shopcontacts',
                         db.Column('shop_id', db.Integer, db.ForeignKey('shop.shop_id')),
                         db.Column('contact_id', db.Integer, db.ForeignKey('contactperson.cp_id')),
 )
 
+class Admin(db.Model):
+    __tablename__ = 'admin'
+
+    admin_id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(31), nullable = False)
+    password = db.Column(db.String(127), nullable = False)
+
+    def __repr__(self):
+        returnStr = str('Admin name: %s\n') % (self.name)
 
 class Shop(db.Model):
     __tablename__ = 'shop'
@@ -14,6 +26,8 @@ class Shop(db.Model):
     shop_name = db.Column(db.String(63), nullable = False)
     shop_address = db.Column(db.String(255), nullable = False)
     shop_phone = db.Column(db.String(15))
+    shop_email = db.Column(db.String(63), nullable = False, unique = True)
+    shop_password = db.Column(db.String(32), nullable = False)
     
     invoices = db.relationship('Invoice', backref='origin_shop')
     contacts = db.relationship('ContactPerson',
@@ -51,7 +65,6 @@ class Invoice(db.Model):
 
     def __repr__(self):
         returnStr = str('Invoice date: %s\nTotal (AUD): $%s\n') % (self.order_date.strftime('%d/%m/%Y'), str(self.total/100))
-    
         return returnStr
     
 
@@ -66,15 +79,33 @@ class Product(db.Model):
 
     invoiceitems = db.relationship('InvoiceItem', backref='origin_product')
 
+    def __repr__(self):
+        returnStr = str('Product name: %s\n') % (self.product_name)
+        if (self.product_id is not None):
+            returnStr = str('Product ID: %s\n') % (self.product_id) + returnStr
+        if (self.product_description is not None):
+            returnStr += str('Description: %s\n') % (self.product_description)
+        if (self.price_unit_kg is not None):
+            returnStr += str('Price (KG): $%s\n') % (str(self.price_unit_kg / 100))
+        if (self.price_unit_box is not None):
+            returnStr += str('Price (Box): $%s\n') % (str(self.price_unit_box / 100))
+        return returnStr
+
 # Line_item
 class InvoiceItem(db.Model):
     __tablename__ = 'invoiceitem'
 
     invoiceitem_id = db.Column(db.Integer, primary_key = True)
-    invoiceitem_unit = db.Column(db.String(3)) # BOX OR KG
-    invoiceitem_quantity = db.Column(db.Integer)
-    invoiceitem_price = db.Column(db.Integer)
+    invoiceitem_unit = db.Column(db.String(3), nullable = False) # BOX OR KG
+    invoiceitem_quantity = db.Column(db.Integer, nullable = False)
+    invoiceitem_price = db.Column(db.Integer, nullable = False)
 
     product_id = db.Column(db.Integer, db.ForeignKey('product.product_id'))
     invoice = db.Column(db.Integer, db.ForeignKey('invoice.invoice_id'))
-    
+
+    def __repr__(self):
+        returnStr = str('Invoice item quantity: %s\n') % (str(self.invoiceitem_quantity / 10))
+        returnStr += str('Invoice item unit: %s\n') % (str(self.invoiceitem_unit).lower())
+        returnStr += str('Inovice item price: %s\n') % (str(self.invoiceitem_price / 100))
+
+        return returnStr

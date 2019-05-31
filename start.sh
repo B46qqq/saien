@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-eval "source env/bin/activate"
+echo $BASH_VERSION
 
 required=("flask"\
           "flask-login"\

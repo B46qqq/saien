@@ -1,0 +1,10 @@
+{% extends "base_bg_sb.html" %}
+
+{% block content_block %}
+<h1>Please login</h1>
+<form action="" method="post">
+    <input type="text" placeholder="email" name="username"
+           value="{{ request.form.username }}">
+    <input type="submit" value="Login">
+</form>
+{% endblock %}

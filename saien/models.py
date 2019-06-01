@@ -9,7 +9,7 @@ shopContacts = db.Table('shopcontacts',
                         db.Column('contact_id', db.Integer, db.ForeignKey('contactperson.cp_id')),
 )
 
-class Admin(db.Model):
+class Admin(UserMixin, db.Model):
     __tablename__ = 'admin'
 
     admin_id = db.Column(db.Integer, primary_key = True)

@@ -63,21 +63,29 @@ function showTab(n) {
     var x = document.getElementsByClassName("tab");
     x[n].style.display = "block";
     if (n == 0){
-        document.getElementsByClassName("login_section_back").style.display = "none";
+        document.getElementsByClassName("login_section_back")[0].style.display = "none";
     } else {
-        document.getElementsByClassName("login_section_back").style.display = "inline";
+        document.getElementsByClassName("login_section_back")[0].style.display = "inline";
     }
 
     if (n == (x.length - 1)){
-        document.getElementsByClassName("login_section_next").innerHTML = "Submit";
+        document.getElementsByClassName("login_section_next")[0].innerHTML = "Submit";
     } else {
-        document.getElementsByClassName("login_section_next").innerHTML = "Next";
+        document.getElementsByClassName("login_section_next")[0].innerHTML = "Next";
     }
     updateStepIndicator(n);
 }
 
 function nextPrev(n) {
-    
+    var x = document.getElementsByClassName("tab");
+    if (n == 1 && !validateForm()) return false;
+    x[currentTab].style.display = "none";
+    currentTab = currentTab + n;
+    if (currentTab >= x.length){
+        console.log("submission !");
+        return false;
+    }
+    showTab(currentTab);
 }
 
 function updateStepIndicator(n) {
@@ -86,5 +94,22 @@ function updateStepIndicator(n) {
         x[i].className = x[i].className.replace(" active", "");
     }
     x[n].className += " active";
+}
+
+function validateForm() {
+    var x, y, i, valid = true;
+    x = document.getElementsByClassName("tab");
+    y = x[currentTab].getElementsByTagName("input");
+
+    for (i = 0; i < y.length; ++i){
+        if (y[i].value == ""){
+            y[i].className += "invalid";
+            valid = false;
+        }
+    }
+    
+    if (valid)
+        document.getElementsByClassName("step")[currentTab].className += " finished";
+    return valid;
 }
 

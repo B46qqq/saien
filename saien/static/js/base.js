@@ -52,3 +52,39 @@ function toggling(){
         stw.setAttribute("class", "sidebar_toggle_switch");
     }
 }
+
+/* 
+ * User Login Section scripts
+ */
+var currentTab = 0;
+showTab(currentTab);
+
+function showTab(n) {
+    var x = document.getElementsByClassName("tab");
+    x[n].style.display = "block";
+    if (n == 0){
+        document.getElementsByClassName("login_section_back").style.display = "none";
+    } else {
+        document.getElementsByClassName("login_section_back").style.display = "inline";
+    }
+
+    if (n == (x.length - 1)){
+        document.getElementsByClassName("login_section_next").innerHTML = "Submit";
+    } else {
+        document.getElementsByClassName("login_section_next").innerHTML = "Next";
+    }
+    updateStepIndicator(n);
+}
+
+function nextPrev(n) {
+    
+}
+
+function updateStepIndicator(n) {
+    var i, x = document.getElementsByClassName("step");
+    for (i = 0; i < x.length; ++i){
+        x[i].className = x[i].className.replace(" active", "");
+    }
+    x[n].className += " active";
+}
+

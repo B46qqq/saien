@@ -7,7 +7,7 @@
               charset="utf-8">
         <title>Saien</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-        <script type="text/javascript" src="{{ url_for('static', filename='js/base.js') }}"></script>
+
     </head>
 
     <body>
@@ -19,6 +19,41 @@
                 <span class="sidebar_toggle_animation"></span>
             </div>
             <div class="sidebar">
+                <div class="login_section">
+                    
+                    <form action="">
+                        
+                        <div class="tab">
+                            <img src="/static/icon/unknown_customer.png">
+                        </div>
+                        
+                        <div class="tab">
+                            <input type="text" placeholder="Email" oninput="this.className=''">
+                        </div>
+
+                        <div style="overflow: auto;">
+                            <div style="float: right;">
+                                <button type="button"
+                                        class="login_section_back"
+                                        onclick="nextPrev(-1)">
+                                    Back
+                                </button>
+                                <button type="button"
+                                        class="login_section_next"
+                                        onclick="nextPrev(1)">
+                                    Login
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="login_section_indicator"
+                            <span class="step"></span>
+                            <span class="step"></span>
+                        </div>
+                        
+                    </form>
+                    
+                </div>
                 <a href="#">
                     Home
                 </a>
@@ -40,5 +75,6 @@
             {% endblock %}
         </div>
 
+        <script type="text/javascript" src="{{ url_for('static', filename='js/base.js') }}"></script>
     </body>
 </html>

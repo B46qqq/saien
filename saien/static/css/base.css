@@ -4,8 +4,6 @@
     -khtml-user-select: none; /* Konqueror HTML */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; /* Non-prefixed version, currently
-                          supported by Chrome and Opera */
 }
 
 body {
@@ -111,3 +109,63 @@ body {
     padding: 30px;
     transition: 0.5s;
 }
+
+
+
+.tab {
+    display: none;
+}
+
+.tab img {
+    height: 80px;
+    width: 80px;
+}
+
+.step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+}
+
+.step.active {
+    opacity: 1;
+}
+
+
+.step.finish {
+    background-color: #4caf50;
+}
+
+.login_section input {
+    padding: 10px;
+    width: 90%;
+    font-size: 16px;
+    border: 1px solid #aaaaaa;
+}
+
+.login_section input.invalid {
+    background-color: #ffdddd;
+}
+
+.login_section button {
+    background-color: #4caf50;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login_section button:hover{
+    opacity: 0.8;
+}
+
+.login_section .login_section_back {
+    background-color: #bbbbbb;
+}
+

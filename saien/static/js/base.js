@@ -38,6 +38,8 @@ function toggling(){
 
     if (escape(tb_content) === "%u292B"){
         s.style.width = "0px";
+        s.style.opacity = "0.1";        
+        s.style.boxShadow = "none";
         c.style.left = "0px";
         sc.style.left = "-185px";
         stw.innerHTML = "&#9776;";
@@ -45,6 +47,8 @@ function toggling(){
         stw.setAttribute("class", "sidebar_toggle_switch_closed");
     } else { // Hope there are only two situation
         s.style.width = "225px";
+        s.style.opacity = "1";
+        s.style.boxShadow = "-5px -3px 10px 5px #000";
         c.style.left = "225px";
         sc.style.left = "0px";
         stw.innerHTML = "&#10539;";
@@ -61,19 +65,27 @@ showTab(currentTab);
 
 function showTab(n) {
     var x = document.getElementsByClassName("tab");
+    var lsb = document.querySelector(".login_section_back");
+    var lsn = document.querySelector(".login_section_next");
     x[n].style.display = "block";
     if (n == 0){
-        document.getElementsByClassName("login_section_back")[0].style.display = "none";
+        lsb.style.display = "none";
+        lsn.style.display = "none";
+        hideStepIndicator();
     } else {
-        document.getElementsByClassName("login_section_back")[0].style.display = "inline";
+        lsb.style.display = "inline";
+        lsn.style.display = "inline";
+        showStepIndicator();
     }
 
-    if (n == (x.length - 1)){
-        document.getElementsByClassName("login_section_next")[0].innerHTML = "Submit";
-    } else {
-        document.getElementsByClassName("login_section_next")[0].innerHTML = "Next";
-    }
-    updateStepIndicator(n);
+    if (n == (x.length - 1))
+        lsn.innerHTML = "Submit";
+    else
+        lsn.innerHTML = "Next";
+
+    // The first step after user icon is the n = 0
+    if (n == 0) return;
+    updateStepIndicator(--n);
 }
 
 function nextPrev(n) {
@@ -96,6 +108,18 @@ function updateStepIndicator(n) {
     x[n].className += " active";
 }
 
+function hideStepIndicator(){
+    var s = document.getElementsByClassName("step");
+    for (var i = 0; i < s.length; ++i)
+        s[i].style.display = "none";
+}
+
+function showStepIndicator(){
+    var s = document.getElementsByClassName("step");
+    for (var i = 0; i < s.length; ++i)
+        s[i].style.display = "inline-block";    
+}
+
 function validateForm() {
     var x, y, i, valid = true;
     x = document.getElementsByClassName("tab");
@@ -112,4 +136,3 @@ function validateForm() {
         document.getElementsByClassName("step")[currentTab].className += " finished";
     return valid;
 }
-

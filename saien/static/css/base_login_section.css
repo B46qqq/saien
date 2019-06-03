@@ -1,0 +1,169 @@
+.login_section{
+    position: static;
+    width: 100%;
+    height: 150px;
+    margin: 20px 0px 30px 0px;
+}
+
+.login_section input {
+    padding: 10px;
+    width: 90%;
+    font-size: 16px;
+    border: 1px solid #aaaaaa;
+}
+
+.login_section input.invalid {
+    background-color: #ffdddd;
+}
+
+.login_section button {
+    background-color: #4caf50;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login_section button:hover{
+    opacity: 0.8;
+}
+
+.login_section .login_section_back {
+    background-color: #bbbbbb;
+}
+
+.tab {
+    display: none;
+    font-family: palatino;
+}
+
+.tab_usericon, .tab_usericon img{
+    position: relative;
+    height: 80px;
+    width: 80px;
+    left: calc(50% - 40px);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+
+}
+
+.tab_usericon span{
+    position: absolute;
+    opacity: 0;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 40px;
+    width: 80px;
+    text-align: center;
+    font-style: italic;
+    font-size: 25px;
+    border-bottom-right-radius: 80px;
+    border-bottom-left-radius: 80px;
+    transition: 0.3s;
+}
+
+.tab_usericon:hover {
+    box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.4);
+    transform: scale(1.2, 1.2);
+}
+
+.tab_usericon:hover span{
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+}
+
+.step.active {
+    opacity: 1;
+}
+
+.step.finish {
+    background-color: #4caf50;
+}
+
+.tab_input, .tab_input * {
+    box-sizing: border-box;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+}
+
+.tab_input {
+    position: relative;
+    margin: auto;
+    width: 100%;
+    max-width: 225px;
+}
+
+.tab_input .input_label {
+    position: absolute;
+    top: 16px;
+    left: 0px;
+    font-size: 16px;
+    color: #9098a9;
+    font-weight: 500;
+    transform-origin: 0 0;
+    transition: all 0.25s ease;
+}
+
+.tab_input .input_border {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: #07f;
+    transform: scaleX(0);
+    transform-origin: 0 0;
+    transition: all 0.25s ease;
+}
+
+.tab_input input {
+    -webkit-appearance: none;
+    width: 100%;
+    border: 0;
+    padding: 12px 0;
+    height: 48px;
+    font-size: 16px;
+    font-weight: 500;
+    border-bottom: 2px solid #c8ccd4;
+    background: none;
+    border-radius: 0;
+    color: #223254;
+    transition: all 0.15s ease;
+}
+
+.tab_input input:hover {
+    background: rgba(34,50,84,0.03);
+}
+.tab_input input:not(:placeholder-shown) + span {
+    color: #5a667f;
+    transform: translateY(-26px) scale(0.75);
+}
+.tab_input input:focus {
+    background: #fff;
+    outline: none;
+}
+.tab_input input:focus + span {
+    color: #173f5f;
+    transform: translateY(-26px) scale(0.75);
+}
+.tab_input input:focus + span + .input_border {
+    transform: scaleX(1);
+}
+
+
+

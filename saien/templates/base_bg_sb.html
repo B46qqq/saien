@@ -6,28 +6,51 @@
               content="width=device-width, initial-scale=1"
               charset="utf-8">
         <title>Saien</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/base.css') }}">
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/base_login_section.css') }}">
     </head>
 
     <body>
         <div class="sidebar_container" id="noselect">
+            <!--
+                 Sidebar toggler container
+                 # including animation
+            -->
             <div class="sidebar_toggle_container">
                 <span class="sidebar_toggle_switch"
                       onmouseover="toggle_animation()"
                       onclick="toggling()">&#10539;</span>
                 <span class="sidebar_toggle_animation"></span>
             </div>
+            
+            <!--
+                 The rest of sidebar elements container
+            -->
             <div class="sidebar">
+                
+                <!--
+                     Login section contains the UI for
+                     user login.
+                     After login, it will prompt with individual
+                     user interface.
+                -->
                 <div class="login_section">
-                    
-                    <form action="">
-                        
+                    <form action=""> <!-- Action to be set -->
                         <div class="tab">
-                            <img src="/static/icon/unknown_customer.png">
+                            <div class="tab_usericon" onclick="nextPrev(1)">
+                                <img src="/static/icon/unknown_customer.png">
+                                <span>Login</span>
+                            </div>
                         </div>
                         
                         <div class="tab">
-                            <input type="text" placeholder="Email" oninput="this.className=''">
+                            <div class="tab_input">
+                                <input type="text" placeholder="&nbsp;" oninput="this.className=''">
+                                <span class="input_label">Email</span>
+                                <span class="input_border"></span>
+                            </div>
                         </div>
 
                         <div style="overflow: auto;">
@@ -35,7 +58,7 @@
                                 <button type="button"
                                         class="login_section_back"
                                         onclick="nextPrev(-1)">
-                                    Back
+                                    Cancel
                                 </button>
                                 <button type="button"
                                         class="login_section_next"
@@ -49,22 +72,23 @@
                             <span class="step"></span>
                             <span class="step"></span>
                         </div>
-                        
                     </form>
-                    
                 </div>
-                <a href="#">
-                    Home
-                </a>
-                <a href="#">
-                    News
-                </a>
-                <a href="#">
-                    Search Item
-                </a>
-                <a href="#">
-                    Contact
-                </a>
+
+                <div class="navigation_section">
+                    <a href="#">
+                        Home
+                    </a>
+                    <a href="#">
+                        News
+                    </a>
+                    <a href="#">
+                        Search Item
+                    </a>
+                    <a href="#">
+                        Contact
+                    </a>
+                </div>
             </div>
         </div>
 

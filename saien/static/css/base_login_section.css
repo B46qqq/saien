@@ -17,16 +17,23 @@
 }
 
 .login_section button {
-    background-color: #4caf50;
+    display: inline-block;
+    padding: 0.3em 1.2em;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 2em;
+    text-decoration: none;
+    font-weight: 300;
     color: #ffffff;
-    border: none;
-    padding: 10px 20px;
+    background-color: #4eb5f1;
     font-size: 16px;
+    text-align: center;
     cursor: pointer;
+    transition: all 0.2s;
 }
 
 .login_section button:hover{
     opacity: 0.8;
+    background-color: #4095c6;
 }
 
 .login_section .login_section_back {
@@ -103,15 +110,15 @@
 
 .tab_input {
     position: relative;
-    margin: auto;
+    margin: 20px 0px 20px 0px;
     width: 100%;
     max-width: 225px;
 }
 
 .tab_input .input_label {
     position: absolute;
-    top: 16px;
-    left: 0px;
+    top: 10px;
+    left: 10px;
     font-size: 16px;
     color: #9098a9;
     font-weight: 500;
@@ -135,8 +142,8 @@
     -webkit-appearance: none;
     width: 100%;
     border: 0;
-    padding: 12px 0;
-    height: 48px;
+    padding: 0px 10px 0px 10px;
+    height: 35px;
     font-size: 16px;
     font-weight: 500;
     border-bottom: 2px solid #c8ccd4;
@@ -147,19 +154,19 @@
 }
 
 .tab_input input:hover {
-    background: rgba(34,50,84,0.03);
+    background: #173f5f;
 }
 .tab_input input:not(:placeholder-shown) + span {
-    color: #5a667f;
-    transform: translateY(-26px) scale(0.75);
+    color: #fff;
+    transform: translateY(-23px) scale(0.75);
 }
 .tab_input input:focus {
-    background: #fff;
+    background: #eee;
     outline: none;
 }
 .tab_input input:focus + span {
-    color: #173f5f;
-    transform: translateY(-26px) scale(0.75);
+    color: #fff;
+    transform: translateY(-24px) scale(0.85);
 }
 .tab_input input:focus + span + .input_border {
     transform: scaleX(1);

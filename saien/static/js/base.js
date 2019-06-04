@@ -127,7 +127,8 @@ function validateForm() {
 
     for (i = 0; i < y.length; ++i){
         if (y[i].value == ""){
-            y[i].className += "invalid";
+            if (! y[i].className.includes("invalid"))
+                y[i].className += "invalid";
             valid = false;
         }
     }

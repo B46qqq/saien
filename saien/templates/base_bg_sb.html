@@ -51,23 +51,26 @@
                                 <span class="input_label">Email</span>
                                 <span class="input_border"></span>
                             </div>
-                        </div>
-
-                        <div style="overflow: auto;">
-                            <div style="float: right;">
-                                <button type="button"
-                                        class="login_section_back"
-                                        onclick="nextPrev(-1)">
-                                    Cancel
-                                </button>
-                                <button type="button"
-                                        class="login_section_next"
-                                        onclick="nextPrev(1)">
-                                    Login
-                                </button>
+                            <div class="tab_input">
+                                <input type="password" placeholder="&nbsp;" oninput="this.className=''">
+                                <span class="input_label">Password</span>
+                                <span class="input_border"></span>
                             </div>
                         </div>
 
+                        <div>
+                            <button type="button"
+                                    class="login_section_back"
+                                    onclick="nextPrev(-1)">
+                                Back
+                            </button>
+                            <button type="button"
+                                    class="login_section_next"
+                                    onclick="nextPrev(1)">
+                                Login
+                            </button>
+                        </div>
+                        
                         <div class="login_section_indicator">
                             <span class="step"></span>
                             <span class="step"></span>

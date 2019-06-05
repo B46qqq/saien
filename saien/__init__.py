@@ -20,7 +20,9 @@ login = LoginManager(app)
 
 # establish routes
 from saien.level0.views import level0
+from saien.user.views import user
 from saien.admin.views import admin
 app.register_blueprint(level0)
 app.register_blueprint(admin)
+app.register_blueprint(user)
 

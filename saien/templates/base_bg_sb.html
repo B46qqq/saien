@@ -8,8 +8,6 @@
         <title>Saien</title>
         <link rel="stylesheet"
               href="{{ url_for('static', filename='css/base.css') }}">
-        <link rel="stylesheet"
-              href="{{ url_for('static', filename='css/base_login_section.css') }}">
     </head>
 
     <body>
@@ -37,9 +35,9 @@
                      user interface.
                 -->
                 <div class="login_section">
-                    <form action=""> <!-- Action to be set -->
+                    <form action="{{ url_for('user.verify') }}" method="POST"> <!-- Action to be set -->
                         <div class="tab">
-                            <div class="tab_usericon" onclick="nextPrev(1)">
+                            <div class="tab_usericon">
                                 <img src="/static/icon/unknown_customer.png">
                                 <span>Login</span>
                             </div>
@@ -47,24 +45,27 @@
                         
                         <div class="tab">
                             <div class="tab_input">
-                                <input type="text" placeholder="&nbsp;" oninput="this.className=''">
                                 <span class="input_label">Email</span>
-                                <span class="input_border"></span>
+                                <input type="email"
+                                       placeholder="&nbsp;"
+                                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                       required>
                             </div>
                             <div class="tab_input">
-                                <input type="password" placeholder="&nbsp;" oninput="this.className=''">
                                 <span class="input_label">Password</span>
-                                <span class="input_border"></span>
+                                <input type="password"
+                                       placeholder="&nbsp;"
+                                       required>
                             </div>
                         </div>
 
                         <div>
-                            <button type="button"
+                            <button 
                                     class="login_section_back"
                                     onclick="nextPrev(-1)">
                                 Back
                             </button>
-                            <button type="button"
+                            <button 
                                     class="login_section_next"
                                     onclick="nextPrev(1)">
                                 Login

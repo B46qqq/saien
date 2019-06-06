@@ -1,15 +1,13 @@
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
+from saien import db, bcrypt
 from datetime import datetime
-
-db = SQLAlchemy()
+from sqlalchemy.ext.hybrid import hybrid_property
 
 shopContacts = db.Table('shopcontacts',
                         db.Column('shop_id', db.Integer, db.ForeignKey('shop.shop_id')),
                         db.Column('contact_id', db.Integer, db.ForeignKey('contactperson.cp_id')),
 )
 
-class Admin(UserMixin, db.Model):
+class Admin(db.Model):
     __tablename__ = 'admin'
 
     admin_id = db.Column(db.Integer, primary_key = True)
@@ -18,6 +16,7 @@ class Admin(UserMixin, db.Model):
 
     def __repr__(self):
         returnStr = str('Admin name: %s\n') % (self.name)
+        return returnStr
 
 class Shop(db.Model):
     __tablename__ = 'shop'
@@ -28,6 +27,7 @@ class Shop(db.Model):
     shop_phone = db.Column(db.String(15))
     shop_email = db.Column(db.String(63), nullable = False, unique = True)
     shop_password = db.Column(db.String(32), nullable = False)
+    shop_auth = db.Column(db.Boolean, default = False)
     
     invoices = db.relationship('Invoice', backref='origin_shop')
     contacts = db.relationship('ContactPerson',
@@ -35,6 +35,27 @@ class Shop(db.Model):
                                lazy = 'subquery',
                                backref = db.backref('shop', lazy = True))
     
+    @property
+    def is_authenticated(self):
+        return self.shop_auth
+
+    @property
+    def is_active(self):
+        return True
+    
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.shop_id)
+
+    def set_password(self, password):
+        self.shop_password = bcrypt.generate_password(password)
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.shop_password, password)
+        
     def __repr__(self):
         returnStr = str('Shop name: %s\nLocation: %s\n') % (self.shop_name, self.shop_address)
         if (self.shop_phone is not None):

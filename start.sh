@@ -5,6 +5,8 @@ echo $BASH_VERSION
 required=("flask"\
           "flask-login"\
           "flask-sqlalchemy"\
+          "flask_wtf"\
+          "flask_bcrypt"\
          )
 needed=()
 installed="$(pip3 list --format=freeze | cut -d '=' -f 1)"
@@ -33,8 +35,7 @@ do
     echo -e "\e[42m $out_last\e[0m\e[39m"
 done
 
-
-export FLASK_APP=saien
+export FLASK_APP=wsgi.py
 export FLASK_ENV=development
-
+export APP_CONFIG_FILE=config.py
 flask run

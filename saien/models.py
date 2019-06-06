@@ -14,10 +14,32 @@ class Admin(db.Model):
     name = db.Column(db.String(31), nullable = False)
     password = db.Column(db.String(127), nullable = False)
 
+    @property
+    def is_authenticated(self):
+        return self.admin_id
+
+    @property
+    def is_active(self):
+        return True
+    
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.admin_id)
+
+    def set_password(self, password):
+        self.password = bcrypt.generate_password(password)
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.password, password)    
+
     def __repr__(self):
         returnStr = str('Admin name: %s\n') % (self.name)
         return returnStr
 
+    
 class Shop(db.Model):
     __tablename__ = 'shop'
     

@@ -21,8 +21,8 @@ def create_app():
         from saien.user.views import user
         from saien.admin.views import admin
         app.register_blueprint(level0)
-        app.register_blueprint(admin)
         app.register_blueprint(user)
+        app.register_blueprint(admin)
 
         db.create_all()
 

@@ -1,8 +1,8 @@
 from flask import render_template, redirect, request, Blueprint, url_for
 from flask_login import login_user, current_user, logout_user, login_required
 from .forms import UserLoginForm
-from saien.models import db, Shop
-from saien import login_manager
+from saien.models import Shop
+from saien import login_manager, db
 
 user = Blueprint('user', __name__)
 
@@ -26,7 +26,6 @@ def test():
                 return "Login failed"
             if USER.validate(form.password.data):
                 login_user(_user_)
-                print ("logged ! in!")
                 return redirect(url_for('level0.index'))
         print ("wrong password")
         return redirect(url_for('user.test'))

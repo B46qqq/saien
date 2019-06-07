@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Email
+from wtforms.validators import DataRequired, Length
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired('Please enter Email for login.'),
-                                             Email('Please enter an valid Email address')])
-    password = PasswordField('Password', validators=[DataRequired()])
+    # Upon login failure, only error message will be displayed
+    # is : login failed
+    username = StringField('Username', [DataRequired()])
+    password = PasswordField('Password', [DataRequired()])
     submit = SubmitField('log in')

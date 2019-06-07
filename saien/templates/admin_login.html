@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/admin_login.css') }}"
+    </head>
+    <body>
+        <form class="login" method="post" action="{{ url_for('admin.index') }}">
+            {{ form.csrf_token }}
+            {{ form.username(placeholder="Username") }}
+            {{ form.password(placeholder="Password") }}
+            {{ form.submit(placeholder="login", class_='submit_button') }}
+            
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="message">
+                <span class="message_close" onclick="this.parentElement.style.display='none';">
+                    &times;
+                </span>
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </form>
+    </body>
+</html>

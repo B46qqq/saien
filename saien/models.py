@@ -30,7 +30,7 @@ class Admin(db.Model):
         return str(self.admin_id)
 
     def set_password(self, password):
-        self.password = bcrypt.generate_password(password)
+        self.password = bcrypt.generate_password_hash(password)
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)    
@@ -152,3 +152,4 @@ class InvoiceItem(db.Model):
         returnStr += str('Inovice item price: %s\n') % (str(self.invoiceitem_price / 100))
 
         return returnStr
+

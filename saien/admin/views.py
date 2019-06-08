@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, Blueprint, url_for, flash
+from flask import render_template, redirect, request, Blueprint, url_for, flash, session
 from flask_login import login_user, current_user, logout_user, login_required
 from .forms import LoginForm
 from saien.models import *
@@ -29,6 +29,7 @@ def index():
 
             if target != None and target.check_password(str(form.password.data)):
                 login_user(target)
+                session.permanent = True
                 return redirect(url_for('level0.index'))
             else:
                 flash('Invalid credentials')

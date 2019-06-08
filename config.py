@@ -1,4 +1,5 @@
 from os import environ
+from datetime import timedelta
 
 class Config:
     # General config
@@ -11,6 +12,9 @@ class Config:
 
     # Flask-Bcrypt
     BCRYPT_LOG_ROUNDS = 10
+
+    # Session timeout
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
 
     # Flask-SQLAlchemy
     SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI')

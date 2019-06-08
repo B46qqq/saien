@@ -16,7 +16,7 @@ class Admin(db.Model):
 
     @property
     def is_authenticated(self):
-        return self.admin_id
+        return True
 
     @property
     def is_active(self):

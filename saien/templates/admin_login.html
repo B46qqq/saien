@@ -2,7 +2,8 @@
 <html>
     <head>
         <link rel="stylesheet"
-              href="{{ url_for('static', filename='css/admin_login.css') }}"
+              href="{{ url_for('static', filename='css/admin_login.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <form class="login" method="post" action="{{ url_for('admin.index') }}">

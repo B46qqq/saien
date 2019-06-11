@@ -1,58 +1,20 @@
-function get_toggle_btn(){
-    var toggle_btn = document.querySelector(".sidebar_toggle_switch");
-
-    if (toggle_btn == null){
-        toggle_btn = document.querySelector(".sidebar_toggle_switch_closed");
-        if (toggle_btn == null){
-            console.log("ERROR @ get_toggle_btn() > possibly classname not found");
-            return null;
-        }
+function get_element(className){
+    var element = document.querySelector(className);
+    if (element == null || element === undefined){
+        console.log("Error : element of class : " +
+                    className +
+                    " cannot be found");
+        return null;
     }
-
-    return toggle_btn;
-}
-
-function toggle_animation(){
-    var toggle_btn = get_toggle_btn();
-    if (toggle_btn == null) return null;
-    
-    var tb_content = toggle_btn.textContent;
-    if (escape(tb_content) === "%u292B"){
-        var togglemation = document.querySelector(".sidebar_toggle_animation");
-        togglemation.innerHTML = "&#171;";
-    }
-        
+    return element;
 }
 
 
-function toggling(){
-    var toggle_btn = get_toggle_btn();
-    if (toggle_btn == null) return null;
+function close_sidebar(){
+    var b = get_element(".sidebar_open"); // <body>
+    var sc = get_element(".sidebar_container");
 
-    var tb_content = toggle_btn.textContent;
-
-    var s = document.querySelector(".sidebar");
-    var c = document.querySelector(".content_container");
-    var sc = document.querySelector(".sidebar_container");
-    var stw = toggle_btn;
-
-    if (escape(tb_content) === "%u292B"){
-        s.style.width = "0px";
-        s.style.opacity = "0.1";        
-        s.style.boxShadow = "none";
-        c.style.left = "0px";
-        sc.style.left = "-185px";
-        stw.innerHTML = "&#9776;";
-        stw.removeAttribute("class");
-        stw.setAttribute("class", "sidebar_toggle_switch_closed");
-    } else { // Hope there are only two situation
-        s.style.width = "225px";
-        s.style.opacity = "1";
-        s.style.boxShadow = "-5px -3px 10px 5px #000";
-        c.style.left = "225px";
-        sc.style.left = "0px";
-        stw.innerHTML = "&#10539;";
-        stw.removeAttribute("class");
-        stw.setAttribute("class", "sidebar_toggle_switch");
-    }
+    sc.style.minWidth = "unset";
+    b.classList.toggle("sidebar_close");
 }
+

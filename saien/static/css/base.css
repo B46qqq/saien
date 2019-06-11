@@ -6,98 +6,61 @@
     -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
-body {
-  font-family: Arial, Helvetica;
+.sidebar_open {
+    display: grid;
+    grid-template-areas: "sidebar content";
+    grid-template-columns: calc(225px + 1vw) 1fr;
+    grid-template-rows: 100vh;
+    font-family: Arial, Helvetica;
+    margin: 0;
+    transition: all 2s ease-in;
 }
 
-.sidebar_container, .sidebar {
-    height: 100%;
-    width: 265px;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 30px;
+.sidebar_close {
+    grid-template-columns: 0vw 100vw;
 }
 
-.sidebar {
-    width: 225px;
-    background-color: #1a527f;
-    padding-top: 60px;
+.sidebar_container {
+    grid-area: sidebar;
+    background-color: #43464D;
     border-radius: 0px 25px 0px 0px;
     box-shadow: -5px -3px 10px 5px #000;
+
+    display: grid;
+    grid-template-areas:
+        "animation"
+        "login_section"
+        "auth_navi"
+        "common_navi";
+    grid-template-rows: 50px minmax(auto, 255px) auto 1fr;
+    overflow-x: hidden;
+    z-index: 5;
 }
 
-.sidebar .navigation_section{
-    position: static;
-    width: 225px;
+.sidebar_container * {
 }
 
-.sidebar a {
-    padding: 12px 12px 12px 32px;
-    text-decoration: none;
-    white-space: nowrap;
-    font-size: 25px;
-    color: #efefef;
-    display: block;
-    transition: 0.3s;
+.sidebar_toggle_container {
+    grid-area: animation;
+    position: relative;
 }
 
-.sidebar a:hover {
-    color: #ffffff;
-    background-color: #173f5f;
-}
-
-.sidebar_toggle_container, .sidebar_toggle_switch {
+.sidebar_toggle_switch {
     position: absolute;
     text-align: center;
-    line-height: 30px;
-    width: 35px;
-    height: 35px;
-    font-size: 35px;
+    line-height: 35px;
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
     font-weight: bolder;
-    top: 5px;
-    right: 45px;
-    z-index: 2;
+    right: 0px;
+    color: #252629;
 }
 
-.sidebar_toggle_switch, .sidebar_toggle_switch_closed {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    transition: all 0.3s linear;
-}
-
-.sidebar_toggle_switch_closed {
-    left: 5px;
-}
-
-.sidebar_toggle_animation {
-    position: absolute;
-    visibility: hidden;
-    opacity: 0;
-
-    line-height: 30px;
-    width: 35px;
-    height: 35px;
-    font-size: 35px;
-    right: 35px;
-    transition: all 0.5s cubic-bezier(.35,.73,.79,.88);
-}
-
-
-.sidebar_toggle_switch:hover, .sidebar_toggle_switch_closed:hover{
+.sidebar_toggle_switch:hover{
     color: white;
     border-radius: 100px;
     transform: rotate(-180deg);
-}
-
-.sidebar_toggle_switch_closed:hover {
-    color: #173f5f;
-    border-radius: 0px;
-    transform: rotate(180deg);
 }
 
 .sidebar_toggle_switch:hover + .sidebar_toggle_animation {
@@ -107,12 +70,42 @@ body {
     right: 194px;
 }
 
+.sidebar_toggle_animation {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    line-height: 32px;
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
+    right: 40px;
+}
+
+
+.login_section {
+    grid-area: login_section;
+}
+
+.common_sidebar .navigation_section{
+    position: static;
+}
+
+.common_sidebar a {
+    padding: 12px 12px 12px 32px;
+    text-decoration: none;
+    white-space: nowrap;
+    font-size: 25px;
+    color: #efefef;
+    display: block;
+}
+
+.common_sidebar a:hover {
+    color: #ffffff;
+    background-color: #173f5f;
+}
+
 .content_container {
-    position: fixed;
+    grid-area: content;
     top: 0px;
-    left: 225px;
-    height: 100%;
-    width: 100%;
     padding: 30px;
-    transition: 0.5s;
 }

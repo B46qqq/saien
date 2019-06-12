@@ -11,10 +11,17 @@ function get_element(className){
 
 
 function close_sidebar(){
-    var b = get_element(".sidebar_open"); // <body>
     var sc = get_element(".sidebar_container");
 
-    sc.style.minWidth = "unset";
-    b.classList.toggle("sidebar_close");
+    sc.style.width = "0vw";
+    sc.style.boxShadow = "unset";
+    sc.classList.add("sidebar_container_transition");
 }
 
+
+function open_sidebar(){
+    var so = get_element(".sidebar_open"); // <body>
+    var sc = get_element(".sidebar_container");
+
+    so.style.transition = "unset";
+}

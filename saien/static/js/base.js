@@ -9,14 +9,12 @@ function get_element(className){
     return element;
 }
 
-
 function sidebar_toggle(){
     var sc = get_element(".sidebar_container");
+    var stcc = get_element(".sidebar_toggle_container_closed");
 
     sc.classList.add("sidebar_container_transition");
     sc.classList.toggle("sidebar_container_closed");
-
-    console.log(sc);
 
     if (!sc.classList.contains("sidebar_container_closed")){
         sc.addEventListener("transitionend",
@@ -27,7 +25,9 @@ function sidebar_toggle(){
                             function(){
                                 sc.classList.remove("sidebar_container_transition");
                             });
+        stcc.style.left = "-35px";
+    } else {
+        stcc.style.left = "0vw";
     }
 }
-
 

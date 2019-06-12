@@ -30,7 +30,7 @@ def index():
             if target != None and target.check_password(str(form.password.data)):
                 login_user(target)
                 session.permanent = True
-                return redirect(url_for('level0.index'))
+                return redirect(url_for('admin.dashboard'))
             else:
                 flash('Invalid credentials')
                 return redirect(url_for('admin.index'), code=302)
@@ -42,12 +42,15 @@ def index():
 @admin.route('/admin/dashboard/', methods=['GET'])
 @login_required
 def dashboard():
-    return "welcome admin"
+    print ("welcome admin")
+    session['auth_admin'] = True
+    return render_template('admin_base.html')
 
 
 @admin.route('/admin/logout', methods=['GET'])
 @login_required
 def admin_logout():
     logout_user()
-    return "admin is logged out"
+    session.clear()
+    return redirect(url_for('level0.index'))
 

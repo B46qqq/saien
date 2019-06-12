@@ -10,14 +10,35 @@ body {
     margin: 0;
 }
 
-
 .sidebar_toggle_container_closed {
     position: fixed;
-    top: 5vw;
-    left: 0vw;
-    background-color: red;
+    top: 10vh;
+    left: -35px;
     height: 35px;
     width: 35px;
+    border-radius: 5px;
+    transition: left 1s ease,
+                transform 0.3s linear,
+                background-color 0.3s linear;
+}
+
+.sidebar_toggle_container_closed:hover {
+    transform: rotate(180deg);
+    background-color: #43464D;
+}
+
+.sidebar_toggle_container_closed:hover > bar {
+    background-color: #C9CCD1;
+}
+
+bar {
+    display: block;
+    width: 35px;
+    height: 5px;
+    background-color: black;
+    margin: 5px 0;
+    border-radius: 10px;
+    transition: background-color 0.3s linear;
 }
 
 
@@ -80,6 +101,7 @@ body {
     font-weight: bolder;
     right: 0px;
     color: #252629;
+    transition: all 0.3s ease-in;
 }
 
 .sidebar_toggle_switch:hover{
@@ -92,7 +114,7 @@ body {
     visibility: visible;
     opacity: 0.8;
     color: white;
-    right: 194px;
+    right: calc(100% - 40px);
 }
 
 .sidebar_toggle_animation {
@@ -104,11 +126,20 @@ body {
     height: 40px;
     font-size: 40px;
     right: 40px;
+    transition: all 0.3s ease-in;
 }
 
 
 .login_section {
     grid-area: login_section;
+}
+
+.auth_sidebar {
+    grid-area: auth_navi;
+}
+
+.common_sidebar{
+    grid-area: common_navi;
 }
 
 .common_sidebar .navigation_section{

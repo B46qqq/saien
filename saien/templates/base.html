@@ -1,0 +1,86 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1"
+              charset="utf-8">
+        <title>Saien</title>
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/base.css') }}">
+        {% block css_block %}
+        {% endblock %}
+    </head>
+
+    <body>
+        <div class="sidebar_toggle_container_closed" onclick="sidebar_toggle()">
+            <bar></bar>
+            <bar></bar>
+            <bar></bar>
+        </div>
+        <div class="sidebar_open">
+            <div class="sidebar_container" id="noselect">
+                <!--
+                     Sidebar toggler container
+                     # including animation
+                -->
+                <div class="sidebar_toggle_container">
+                    <span class="sidebar_toggle_switch"
+                          onclick="sidebar_toggle()">&#10539;</span>
+                    <span class="sidebar_toggle_animation">&#171</span>
+                </div>
+                
+                <!--
+                     The content of this section will change dynamically
+                     based on which user or admin signed in
+                -->
+                <div class="login_section">
+                    {% block login_section %}
+                    {% endblock %}
+
+                </div>
+
+                <!--
+                     This section will contain navigation / information
+                     only after admin or user logged in
+                -->
+                <div class="auth_sidebar">
+                    {% block auth_sidebar %}
+                    {% endblock %}
+                </div>
+                
+                <!--
+                     The rest of sidebar elements container
+                -->
+                <div class="common_sidebar">
+                    <div class="navigation_section">
+                        <a href="#">
+                            Home
+                        </a>
+                        <a href="#">
+                            News
+                        </a>
+                        <a href="#">
+                            Search Item
+                        </a>
+                        <a href="#">
+                            Contact
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content_container">
+                hello world
+                {% block content_block %}
+                {% endblock %}
+            </div>
+
+            <script type="text/javascript" src="{{ url_for('static', filename='js/base.js') }}"></script>
+            {% block js_block %}
+            {% endblock %}
+        </div>
+    </body>
+</html>
+
+

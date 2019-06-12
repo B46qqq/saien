@@ -6,6 +6,21 @@
     -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
+body {
+    margin: 0;
+}
+
+
+.sidebar_toggle_container_closed {
+    position: fixed;
+    top: 5vw;
+    left: 0vw;
+    background-color: red;
+    height: 35px;
+    width: 35px;
+}
+
+
 .sidebar_open {
     display: grid;
     grid-template-areas: "sidebar content";
@@ -40,6 +55,11 @@
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
+}
+
+.sidebar_container_closed {
+    width: 0vw;
+    box-shadow: unset;
 }
 
 .sidebar_container * {

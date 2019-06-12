@@ -10,18 +10,24 @@ function get_element(className){
 }
 
 
-function close_sidebar(){
+function sidebar_toggle(){
     var sc = get_element(".sidebar_container");
 
-    sc.style.width = "0vw";
-    sc.style.boxShadow = "unset";
     sc.classList.add("sidebar_container_transition");
+    sc.classList.toggle("sidebar_container_closed");
+
+    console.log(sc);
+
+    if (!sc.classList.contains("sidebar_container_closed")){
+        sc.addEventListener("transitionend",
+                            function(){
+                                sc.classList.remove("sidebar_container_transition");
+                            });
+        sc.addEventListener("webkitTransitionEnd",
+                            function(){
+                                sc.classList.remove("sidebar_container_transition");
+                            });
+    }
 }
 
 
-function open_sidebar(){
-    var so = get_element(".sidebar_open"); // <body>
-    var sc = get_element(".sidebar_container");
-
-    so.style.transition = "unset";
-}

@@ -49,7 +49,6 @@ class Shop(db.Model):
     shop_phone = db.Column(db.String(15))
     shop_email = db.Column(db.String(63), nullable = False, unique = True)
     shop_password = db.Column(db.String(32), nullable = False)
-    shop_auth = db.Column(db.Boolean, default = False)
     
     invoices = db.relationship('Invoice', backref='origin_shop')
     contacts = db.relationship('ContactPerson',
@@ -59,7 +58,7 @@ class Shop(db.Model):
     
     @property
     def is_authenticated(self):
-        return self.shop_auth
+        return True
 
     @property
     def is_active(self):

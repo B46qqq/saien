@@ -18,7 +18,7 @@
             <bar></bar>
             <bar></bar>
         </div>
-        <div class="sidebar_open">
+        <div class="window">
             <div class="sidebar_container" id="noselect">
                 <!--
                      Sidebar toggler container
@@ -37,7 +37,6 @@
                 <div class="login_section">
                     {% block login_section %}
                     {% endblock %}
-
                 </div>
 
                 <!--
@@ -53,25 +52,33 @@
                      The rest of sidebar elements container
                 -->
                 <div class="common_sidebar">
-                    <div class="navigation_section">
-                        <a href="#">
-                            Home
-                        </a>
-                        <a href="#">
-                            News
-                        </a>
-                        <a href="#">
-                            Search Item
-                        </a>
-                        <a href="#">
-                            Contact
-                        </a>
+                    <div class="aline_wrapper">
+                        <aline>
+                            <a href="#">Home</a>
+                        </aline>
+                    </div>
+                    
+                    <div class="aline_wrapper">
+                        <aline>
+                            <a href="#">News</a>
+                        </aline>
+                    </div>
+
+                    <div class="aline_wrapper">
+                        <aline>
+                            <a href="#">Search Item</a>
+                        </aline>
+                    </div>
+
+                    <div class="aline_wrapper">
+                        <aline>
+                            <a href="#">Contact</a>
+                        </aline>
                     </div>
                 </div>
             </div>
 
             <div class="content_container">
-                hello world
                 {% block content_block %}
                 {% endblock %}
             </div>

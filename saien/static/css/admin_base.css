@@ -1,3 +1,120 @@
 .sidebar_container {
-    background-color: #7e191b;
+    background-color: #f9a602;
+}
+
+.sidebar_toggle_switch {
+  color: #2f586e;
+}
+
+.sidebar_toggle_switch:hover {
+  color: #173f5f;
+}
+
+.sidebar_toggle_switch:hover + .sidebar_toggle_animation {
+  opacity: 1;
+  color: #173f5f;
+}
+
+.login_section {
+}
+
+.admin_logo_wrapper, .admin_logo_wrapper *{
+    position: relative;
+    height: auto;
+    width: 100%;
+    padding: 20px 0 40px 0;
+}
+
+.admin_logo {
+    height: 50px;
+    width: 160px;
+    left: 50%;
+    margin-left: -80px;
+    border: 3px solid #fff;
+    text-align: center;
+    letter-spacing: 5px;
+    font-size: 35px;
+    color: #fff;
+    white-space : nowrap;
+    padding: unset;
+}
+
+.admin_settings {
+    position: relative;
+    height: calc(2 * 45px);
+    width: 100%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50px 50px;
+    grid-template-areas:
+        "s1 s2"
+        "s3 s4";
+    justify-items: center;
+    align-items: center;
+}
+
+.admin_setting_btn {
+    height: 40px;
+    width: 100px;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    padding: 1px 8px;
+    color: #fff;
+    background-color: #2f586e;
+    box-shadow: 5px 5px 5px rgba(33, 33, 33, 0.5);
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.admin_setting_btn:hover {
+    border: 2px solid #173f5f;
+    padding: 0px 7px;
+    background-color: #fff;
+    color: #173f5f;
+    box-shadow: 5px 5px 5px rgba(33, 33, 33, 0.7);
+}
+
+.s1 {
+    grid-area: s1;
+}
+
+.s2 {
+    grid-area: s2;
+}
+
+.s3 {
+    grid-area: s3;
+}
+
+.s4 {
+    grid-area: s4;
+}
+
+.auth_sidebar {
+    border-bottom-style: double;
+    border-color: #44444b;
+    border-width: 0 0 5px 0;
+}
+
+.aline_wrapper {
+    background-color: #2f586e;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.aline_wrapper:hover {
+    background-color: #fff;
+    color: #173f5f;
+    border: 3px solid #173f5f;
+}
+
+aline > a:after {
+    border: 1px solid #fff;
+    background: #fff;
+}
+
+aline > a:before {
+    background: #173f5f;
+    box-shadow: 0 0 3px 2px #173f5f;
 }

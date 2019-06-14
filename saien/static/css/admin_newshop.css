@@ -1,0 +1,111 @@
+.content {
+    position: relative;
+    border: 1px solid black;
+    border-radius: 20px;
+    width: 100%;
+    height: 100%;
+}
+
+.content h1 {
+    position: relative;
+    font-size: 36px;
+    text-align: center;
+}
+
+
+.register_section {
+    position: relative;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: auto 20px auto;
+    grid-template-areas:
+        "in_must in_optional"
+        ". ."
+        "pw pws";
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+}
+
+.in_must, .in_optional {
+    display: grid;
+    align-items: end;
+}
+
+.in_must {
+    grid-area: in_must;
+    justify-items: end;
+}
+
+.in_optional {
+    grid-area: in_optional;
+}
+
+.form_pw {
+    display: grid;
+    grid-area: pw;
+    justify-items: end;
+    align-items: end;
+}
+
+
+.in {
+    position: relative;
+    margin: 10px 20px;
+    width: 100%;
+    max-width: 280px;
+}
+
+.in .label {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    font-size: 16px;
+    color: #9098a9;
+    font-weight: 500;
+    transform-origin: 0 0;
+    transition: all 0.2s ease;
+}
+.in .border {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: #07f;
+    transform: scaleX(0);
+    transform-origin: 0 0;
+    transition: all 0.15s ease;
+}
+.in input {
+    -webkit-appearance: none;
+    width: 100%;
+    border: 0;
+    font-family: inherit;
+    padding: 12px 0;
+    height: 48px;
+    font-size: 16px;
+    font-weight: 500;
+    border-bottom: 2px solid #c8ccd4;
+    background: none;
+    border-radius: 0;
+    color: #223254;
+    transition: all 0.15s ease;
+}
+.in input:hover {
+    background: rgba(34,50,84,0.05);
+}
+.in input:not(:placeholder-shown) + span {
+    color: #5a667f;
+    transform: translateY(-26px) scale(0.75);
+}
+.in input:focus {
+    background: none;
+    outline: none;
+}
+.in input:focus + span {
+    color: #07f;
+    transform: translateY(-26px) scale(0.75);
+}
+.in input:focus + span + .border {
+    transform: scaleX(1);
+}

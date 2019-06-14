@@ -6,10 +6,56 @@
 {% endblock %}
 
 {% block login_section %}
-<div class="admin_logo">
-    SAIEN
+<div class="admin_logo_wrapper">
+    <div class="admin_logo">
+        SAIEN
+    </div>
+</div>
+
+<div class="admin_settings">
+    <div class="s1">
+        <button class="admin_setting_btn" >
+            Setting
+        </button>
+    </div>
+    <div class="s2">
+        <button class="admin_setting_btn">
+            Database
+        </button>
+    </div>
+    <div class="s3">
+        <button class="admin_setting_btn">
+            Others
+        </button>
+    </div>
+    <div class="s4">
+        <button class="admin_setting_btn"
+                onclick="window.location.href='{{ url_for('admin.admin_logout') }}'">
+            Logout
+        </button>
+    </div>
 </div>
 {% endblock %}
 
 {% block auth_sidebar %}
+<div class="aline_wrapper">
+    <aline>
+        <a href="#">Orders</a>
+    </aline>
+</div>
+<div class="aline_wrapper">
+    <aline>
+        <a href="#">Create Notice</a>
+    </aline>
+</div>
+<div class="aline_wrapper">
+    <aline>
+        <a href="#">THINGS</a>
+    </aline>
+</div>
+
+<div class="aline_wrapper"
+     onclick="window.location.href='{{ url_for('admin.createNewCustomerAccount') }}'">
+    <aline><a>Create Shop</a></aline>
+</div>
 {% endblock %}

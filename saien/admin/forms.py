@@ -8,3 +8,13 @@ class LoginForm(FlaskForm):
     username = StringField('Username', [DataRequired()])
     password = PasswordField('Password', [DataRequired()])
     submit = SubmitField('log in')
+
+
+class NewShopForm(FlaskForm):
+    shopname = StringField('Username', [DataRequired()])
+    password = PasswordField('Password', [DataRequired()])
+    shop_address = StringField('Address', [DataRequired()])
+    shop_phone = StringField('Phone')
+    shop_email = StringField('Email', [DataRequired()])
+    register = SubmitField('Register')
+    

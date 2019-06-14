@@ -19,16 +19,19 @@
                 {{ form.shopname(placeholder="") }}
                 <span class="label">Shop Name</span>
                 <span class="border"></span>
+                {% for error in form.shopname.errors %}
+                {{ error }}
+                {% endfor %}
             </label>
 
             <label class="in">
-                <input type="text" placeholder="">
+                {{ form.shop_address(placeholder="") }}
                 <span class="label">Shop Address</span>
                 <span class="border"></span>
             </label>
 
             <label class="in">
-                <input type="text" placeholder="&nbsp;">
+                {{ form.shop_email(placeholder="") }}
                 <span class="label">Shop Email</span>
                 <span class="border"></span>
             </label>
@@ -36,7 +39,7 @@
 
         <div class="in_optional">
             <label class="in">
-                <input type="text" placeholder="&nbsp;">
+                {{ form.shop_phone(placeholder="") }}
                 <span class="label">
                     Shop Phone Number (Optional)
                 </span>
@@ -46,20 +49,42 @@
 
         <div class="form_pw">
             <label class="in">
-                <input type="text" placeholder="&nbsp;">
+                {{ form.password(placeholder="") }}
                 <span class="label">
                     Password
                 </span>
                 <span class="border"></span>
             </label>
+            
             <label class="in">
-                <input type="text" placeholder="&nbsp;">
+                {{ form.confirm(placeholder="") }}
                 <span class="label">
                     Confirm Password
                 </span>
                 <span class="border"></span>
             </label>
+            {{ form.register(placeholder="Register", class_="reg_btn") }}
+        </div>
+
+        <div class="form_pws">
+            <button class="reg_btn" type="button" onclick="reset_inputs()">
+                Reset Inputs
+            </button>
         </div>
     </form>
+    
+    <div class="notice">
+        <div class="individual_notice">
+            Notice for admin
+        </div>
+    </div>
+    
 </div>
+
+{% endblock %}
+
+
+{% block js_block %}
+{{ super() }}
+<script type="text/javascript" src="{{ url_for('static', filename='js/admin_newshop.js') }}"></script>
 {% endblock %}

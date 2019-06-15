@@ -1,3 +1,4 @@
+{% from "microplate/render_input.html" import render_input %}
 {% extends "admin_base.html" %}
 
 {% block css_block %}
@@ -7,80 +8,75 @@
 {% endblock %}
 
 {% block content_block %}
-<div class="content">
-    <h1> Create new account for customer </h1>
-    
-    <form class="register_section"
-          method="post"
-          action="{{ url_for('admin.createNewCustomerAccount') }}">
-        {{ form.csrf_token }}
-        <div class="in_must">
-            <label class="in">
-                {{ form.shopname(placeholder="") }}
-                <span class="label">Shop Name</span>
-                <span class="border"></span>
-                {% for error in form.shopname.errors %}
-                {{ error }}
-                {% endfor %}
-            </label>
+<h1> Create new account for customer </h1>
 
-            <label class="in">
-                {{ form.shop_address(placeholder="") }}
-                <span class="label">Shop Address</span>
-                <span class="border"></span>
-            </label>
-
-            <label class="in">
-                {{ form.shop_email(placeholder="") }}
-                <span class="label">Shop Email</span>
-                <span class="border"></span>
-            </label>
-        </div>
-
-        <div class="in_optional">
-            <label class="in">
-                {{ form.shop_phone(placeholder="") }}
-                <span class="label">
-                    Shop Phone Number (Optional)
-                </span>
-                <span class="border"></span>
-            </label>
-        </div>
-
-        <div class="form_pw">
-            <label class="in">
-                {{ form.password(placeholder="") }}
-                <span class="label">
-                    Password
-                </span>
-                <span class="border"></span>
-            </label>
-            
-            <label class="in">
-                {{ form.confirm(placeholder="") }}
-                <span class="label">
-                    Confirm Password
-                </span>
-                <span class="border"></span>
-            </label>
-            {{ form.register(placeholder="Register", class_="reg_btn") }}
-        </div>
-
-        <div class="form_pws">
-            <button class="reg_btn" type="button" onclick="reset_inputs()">
-                Reset Inputs
-            </button>
-        </div>
-    </form>
-    
-    <div class="notice">
-        <div class="individual_notice">
-            Notice for admin
-        </div>
+<form class="register_section"
+      method="post"
+      action="{{ url_for('admin.createNewCustomerAccount') }}">
+    {{ form.csrf_token }}
+    <div class="in_must">
+        {{ render_input(form.shopname, placeholder=" ") }}
+        {{ render_input(form.shop_address, placeholder=" ") }}
+        {{ render_input(form.shop_email, placeholder=" ") }}
     </div>
-    
-</div>
 
+    <div class="in_optional">
+        {{ render_input(form.shop_phone, placeholder=" ") }}
+    </div>
+
+    <div class="form_pw">
+        {{ render_input(form.password, placeholder=" ") }}
+        {{ render_input(form.confirm, placeholder=" ") }}
+
+        {{ form.register(placeholder="Register", class_="reg_btn") }}
+    </div>
+
+    <div class="form_pws">
+        <button class="reg_btn" type="button" onclick="reset_inputs()">
+            Reset Inputs
+        </button>
+    </div>
+</form>
+
+{% with errors = get_flashed_messages(category_filter=["error"]) %}
+{% if errors %}
+<div class="alert">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">
+        &times;
+    </span>
+    <strong>New account creation failed!</strong>
+    <ul>
+        {% for error in errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endwith %}
+
+{% with msgs = get_flashed_messages(category_filter=["success"]) %}
+{% if msgs %}
+<div class="alert success">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">
+        &times;
+    </span>
+    <strong>New account created successfully!</strong>
+    <ul>
+        {% for msg in msgs %}
+        <li>{{ msg }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="alert info">
+    <strong>Information for Saien members</strong>
+    <br />
+    After Register a new account, an automated Email will be sent to
+    the Email address entered for the customer. The Email will contain
+    a link which direct the customer to reset their password.    
+</div>
 {% endblock %}
 
 

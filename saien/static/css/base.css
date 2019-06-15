@@ -28,6 +28,7 @@ body {
     transition: left 1s ease,
                 transform 0.3s linear,
                 background-color 0.3s linear;
+    z-index: 5;
 }
 
 .sidebar_toggle_container_closed:hover {
@@ -76,6 +77,9 @@ bar {
         "common_navi";
     grid-template-rows: 50px minmax(auto, 255px) auto 1fr;
     overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-color: grey;
+    scrollbar-width: thin;
     z-index: 5;
 }
 
@@ -168,7 +172,7 @@ bar {
 
 .aline_wrapper {
     height: 100%;
-    width: 100%;
+    width: 90%;
     padding: 14px 20px;
     background-color: #fff;
     border: 1px solid #000;
@@ -250,4 +254,8 @@ aline > a:before {
     grid-area: content;
     top: 0px;
     padding: 0 30px;
+    overflow-y: auto;
+    scrollbar-color: grey;
+    scrollbar-width: thin;
 }
+

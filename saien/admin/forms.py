@@ -11,12 +11,12 @@ class LoginForm(FlaskForm):
 
 
 class NewShopForm(FlaskForm):
-    shopname = StringField('Username', [InputRequired()])
+    shopname = StringField('Shop Name', [DataRequired()])
     password = PasswordField('Password', [DataRequired(),
                                           EqualTo('confirm', message="Passwords must match")])
-    confirm = PasswordField('Repeat Password')
-    shop_address = StringField('Address', [DataRequired()])
-    shop_phone = StringField('Phone')
-    shop_email = StringField('Email', [DataRequired()])
+    confirm = PasswordField('Confirm Password')
+    shop_address = StringField('Shop Address', [DataRequired()])
+    shop_phone = StringField('Shop Phone Number (optional)')
+    shop_email = StringField('Shop Email', [DataRequired()])
     register = SubmitField('Register')
     

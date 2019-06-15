@@ -1,5 +1,6 @@
 from flask import render_template, redirect, request, Blueprint, url_for, flash, session
 from flask_login import login_user, current_user, logout_user, login_required
+from sqlalchemy import exc
 from .forms import LoginForm, NewShopForm
 from saien.models import *
 from saien import login_manager
@@ -55,9 +56,29 @@ def dashboard():
 @login_required
 def createNewCustomerAccount():
     form = NewShopForm()
-    if request.method == 'POST':
-        # create new customer entry and store in database
-        print ('post method detected')
+    if request.method == 'POST' and form.validate():
+        newCustomer = Shop(shop_name=form.shopname.data,
+                           shop_address=form.shop_address.data,
+                           shop_phone=form.shop_phone.data,
+                           shop_email=form.shop_email.data,
+                           shop_password=form.password.data)
+        newCustomer.set_password(str(form.password.data))
+        db.session.add(newCustomer)
+        try:
+            db.session.commit()
+        except exc.IntegrityError:
+            flash(u'Error upon insert new Shop to database.', 'error')
+            flash(u'Possible Reasons: Email address conflict (New shop and existing shop share the same Email?)'
+                  , 'error')
+            return redirect(url_for('admin.createNewCustomerAccount'), code=302)
+        except exc.SQLAlchemyError:
+            flash(u'New Shop insertion to database error!', 'error')
+            return redirect(url_for('admin.createNewCustomerAccount'), code=302)
+
+        # if no error => insertion success.
+        flash(u'Account for %s is successfully created' % newCustomer.shop_name,
+              'success')
+        return redirect(url_for('admin.createNewCustomerAccount'), code=302)
     
     return render_template('admin_newshop.html',
                            form = form)

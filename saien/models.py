@@ -72,7 +72,7 @@ class Shop(db.Model):
         return str(self.shop_id)
 
     def set_password(self, password):
-        self.shop_password = bcrypt.generate_password(password)
+        self.shop_password = bcrypt.generate_password_hash(password)
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.shop_password, password)

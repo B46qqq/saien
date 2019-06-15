@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 
+{% block css_block %}
+{{ super() }}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/inputs.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/level0_base.css') }}">
+{% endblock %}
+
+
 {% block login_section %}
 <form action="{{ url_for('user.verify') }}" method="POST"> <!-- Action to be set -->
     <div class="tab">
@@ -10,19 +19,21 @@
     </div>
 
     <div class="tab">
-        <div class="tab_input">
-            <span class="input_label">Email</span>
+        <label class="in">
             <input type="email"
                    placeholder="&nbsp;"
-                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                    required>
-        </div>
-        <div class="tab_input">
-            <span class="input_label">Password</span>
+            <span class="label">Email</span>
+            <span class="border"></span>
+        </label>
+
+        <label class="in">
             <input type="password"
                    placeholder="&nbsp;"
                    required>
-        </div>
+            <span class="label">Password</span>
+            <span class="border"></span>
+        </label>
     </div>
 
     <div>

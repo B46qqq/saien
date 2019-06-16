@@ -10,18 +10,51 @@
 
 
 {% block login_section %}
-<form action="{{ url_for('user.verify') }}" method="POST"> <!-- Action to be set -->
-    <div class="tab">
-        <div class="tab_usericon">
-            <img src="/static/icon/unknown_customer.png">
-            <span>Login</span>
-        </div>
+{% if session.login_failed %}
+<form action="{{ url_for('user.verify') }}" method="POST" style="grid-template-columns: 0 100%;">
+{% else %}
+<form action="{{ url_for('user.verify') }}" method="POST">
+{% endif %}
+
+    {% if session.login_failed %}
+    <div class="uicon" style="display: none;">
+    {% else %}
+    <div class="uicon">
+    {% endif %}
+      <a href="#" class="login_btn" onclick="showLoginForm()">
+            <div class="dots-container">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <span>
+                <img src="{{ url_for('static', filename='icon/unknown_customer.png') }}">
+            </span>
+        </a>
     </div>
 
-    <div class="tab">
+    {% if session.login_failed %}
+    <div class="tab_input" style="display: grid">
+    {% else %}
+    <div class="tab_input">
+    {% endif %}
+        {% with errors = get_flashed_messages() %}
+        {% if errors %}
+        <div class="alert userloginfielderror">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">
+                &times;
+            </span>
+            {% for error in errors %}
+            <strong>{{ error }}</strong>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
         <label class="in">
             <input type="email"
                    placeholder="&nbsp;"
+                   name="email"
                    required>
             <span class="label">Email</span>
             <span class="border"></span>
@@ -30,28 +63,27 @@
         <label class="in">
             <input type="password"
                    placeholder="&nbsp;"
+                   name="password"
                    required>
             <span class="label">Password</span>
             <span class="border"></span>
         </label>
-    </div>
 
-    <div>
-        <button 
-            class="login_section_back"
-            onclick="nextPrev(-1)">
-            Back
-        </button>
-        <button 
-            class="login_section_next"
-            onclick="nextPrev(1)">
+        <button class="reg_btn" type="submit">
             Login
         </button>
-    </div>
-    
-    <div class="login_section_indicator">
-        <span class="step"></span>
-        <span class="step"></span>
+        
+        <button class="reg_btn back_btn" type="button" onclick="hideLoginForm()">
+            Cancel
+        </button>
+
+        <input type="hidden" value="{{ next or '' }}" name="next">
     </div>
 </form>
+{% endblock %}
+
+
+{% block js_block %}
+{{ super() }}
+<script type="text/javascript" src="{{ url_for('static', filename='js/level0_base.js') }}"></script>
 {% endblock %}

@@ -12,9 +12,9 @@ class LoginForm(FlaskForm):
 
 class NewShopForm(FlaskForm):
     shopname = StringField('Shop Name', [DataRequired()])
-    password = PasswordField('Password', [DataRequired(),
-                                          EqualTo('confirm', message="Passwords must match")])
-    confirm = PasswordField('Confirm Password')
+    password = PasswordField('Confirm Password', [DataRequired(),
+                                          EqualTo('confirm', message="Passwords must match!")])
+    confirm = PasswordField('Password')
     shop_address = StringField('Shop Address', [DataRequired()])
     shop_phone = StringField('Shop Phone Number (optional)')
     shop_email = StringField('Shop Email', [DataRequired()])

@@ -4,9 +4,9 @@
 {% block css_block %}
 {{ super() }}
 <link rel="stylesheet"
-      href="{{ url_for('static', filename='css/admin_newshop.css') }}">
-<link rel="stylesheet"
       href="{{ url_for('static', filename='css/shared/inputs.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/admin_newshop.css') }}">
 {% endblock %}
 
 {% block content_block %}
@@ -27,8 +27,8 @@
     </div>
 
     <div class="form_pw">
-        {{ render_input(form.password, placeholder=" ") }}
         {{ render_input(form.confirm, placeholder=" ") }}
+        {{ render_input(form.password, placeholder=" ") }}
 
         {{ form.register(placeholder="Register", class_="reg_btn") }}
     </div>

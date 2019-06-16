@@ -1,16 +1,40 @@
-from flask import render_template, redirect, request, Blueprint, url_for
+from flask import render_template, redirect, request, Blueprint, url_for, flash, session
 from flask_login import login_user, current_user, logout_user, login_required
-from .forms import UserLoginForm
+from sqlalchemy import exc
+from .forms import *
 from saien.models import Shop
-from saien import login_manager, db
+from saien import login_manager
+from urllib.parse import urlparse, urljoin
 
 user = Blueprint('user', __name__)
 
+@login_manager.user_loader
+def load_user(shop_id):
+    if shop_id is not None:
+        return Shop.query.get(shop_id)
+    return None
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    return "NO PERMISSION"
+
 @user.route('/u/verify', methods=['POST'])
 def verify():
-    postedValue = request.form
-    print (postedValue)
+    target = Shop.query.filter_by(shop_email = str(request.form['email'])).first()
+    retURL = get_redirect_target()
+    if target is None:
+        flash (u'Login unsuccessful')
+        session['login_failed'] = True;
+        return redirect(retURL)
+
+    if retURL is not None:
+        return redirect(retURL)
+    print (request.form['email'])
     return "got it"
+
+@user.route('/u/reroute/', methods=['GET'])
+def uselessfunction():
+    return render_template('level0_base.html')
 
 @user.route('/u/test', methods=['GET', 'POST'])
 def test():
@@ -39,8 +63,22 @@ def logout():
     return redirect(url_for('level0.index'))
 
 
-@login_manager.user_loader
-def load_user(shop_id):
-    if shop_id is not None:
-        return Shop.query.get(shop_id)
-    return None
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and \
+           ref_url.netloc == test_url.netloc
+
+def get_redirect_target():
+    for target in request.values.get('next'), request.referrer:
+        if not target:
+            continue
+        if is_safe_url(target):
+            return target
+
+def redirect_back(endpoint, **values):
+    target = request.form['next']
+    if not target or not is_safe_url(target):
+        target = url_for(endpoint, **values)
+    return redirect(target)

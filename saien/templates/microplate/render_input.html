@@ -4,4 +4,14 @@
     <span class="label">{{ field.label }}</span>
     <span class="border"></span>
 </label>
+{% if field.errors %}
+<div class="alert warning fielderror">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">
+        &times;
+    </span>
+    {% for error in field.errors %}
+    <strong>{{ error }}</strong>
+    {% endfor %}
+</div>
+{% endif %}
 {% endmacro %}

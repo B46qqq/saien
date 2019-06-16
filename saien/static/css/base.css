@@ -33,11 +33,9 @@ body {
 
 .sidebar_toggle_container_closed:hover {
     transform: rotate(180deg);
-    background-color: #43464D;
 }
 
 .sidebar_toggle_container_closed:hover > bar {
-    background-color: #C9CCD1;
 }
 
 bar {
@@ -65,7 +63,7 @@ bar {
 .sidebar_container {
     grid-area: sidebar;
     width: calc(225px + 1vw);
-    background-color: #dcdcdc;
+    background-color: #F1F1F1;
     border-radius: 0px 25px 0px 0px;
     box-shadow: -5px -3px 10px 5px #000;
 

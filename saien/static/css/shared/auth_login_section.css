@@ -1,0 +1,75 @@
+.login_section {
+}
+
+.loginSection_logo_wrapper, .loginSection_logo_wrapper *{
+    position: relative;
+    height: auto;
+    width: 100%;
+    padding: 20px 0 40px 0;
+}
+
+.loginSection_logo {
+    height: 50px;
+    width: 160px;
+    left: 50%;
+    margin-left: -80px;
+    border: 3px solid #fff;
+    text-align: center;
+    letter-spacing: 5px;
+    font-size: 35px;
+    color: #fff;
+    white-space : nowrap;
+    padding: unset;
+}
+
+.loginSection_settings {
+    position: relative;
+    height: calc(2 * 45px);
+    width: 100%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50px 50px;
+    grid-template-areas:
+        "s1 s2"
+        "s3 s4";
+    justify-items: center;
+    align-items: center;
+}
+
+.loginSection_setting_btn {
+    height: 40px;
+    width: 100px;
+    border-radius: 5px;
+    border: 1px solid #000;
+    padding: 1px 8px;
+    color: #000;
+    background-color: #fff;
+    box-shadow: 5px 5px 5px rgba(33, 33, 33, 0.5);
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.loginSection_setting_btn:hover {
+    border: 2px solid #fff;
+    padding: 0px 7px;
+    background-color: #000;
+    color: #fff;
+    box-shadow: 5px 5px 5px rgba(33, 33, 33, 0.7);
+}
+
+.s1 {
+    grid-area: s1;
+}
+
+.s2 {
+    grid-area: s2;
+}
+
+.s3 {
+    grid-area: s3;
+}
+
+.s4 {
+    grid-area: s4;
+}

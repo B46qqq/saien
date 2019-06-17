@@ -4,13 +4,14 @@
 <link rel="stylesheet"
       href="{{ url_for('static', filename='css/shared/auth_login_section.css') }}">
 <link rel="stylesheet"
-      href="{{ url_for('static', filename='css/admin_base.css') }}">
+      href="{{ url_for('static', filename='css/auth_user_base.css') }}">
 {% endblock %}
+
 
 {% block login_section %}
 <div class="loginSection_logo_wrapper">
     <div class="loginSection_logo">
-        SAIEN
+        SHOP
     </div>
 </div>
 
@@ -22,42 +23,53 @@
     </div>
     <div class="s2">
         <button class="loginSection_setting_btn">
-            Database
+            " "
         </button>
     </div>
     <div class="s3">
         <button class="loginSection_setting_btn">
-            Others
+            " "
         </button>
     </div>
     <div class="s4">
         <button class="loginSection_setting_btn"
-                onclick="window.location.href='{{ url_for('admin.admin_logout') }}'">
+                onclick="window.location.href='{{ url_for('user.logout') }}'">
             Logout
         </button>
     </div>
 </div>
 {% endblock %}
 
+
 {% block auth_sidebar %}
 <div class="aline_wrapper">
     <aline>
-        <a href="#">Orders</a>
+        <a>Make Order</a>
     </aline>
 </div>
 <div class="aline_wrapper">
     <aline>
-        <a href="#">Create Notice</a>
+        <a>Order History</a>
     </aline>
 </div>
 <div class="aline_wrapper">
     <aline>
-        <a href="#">THINGS</a>
+        <a>
+            ""
+        </a>
     </aline>
 </div>
 
-<div class="aline_wrapper"
-     onclick="window.location.href='{{ url_for('admin.createNewCustomerAccount') }}'">
-    <aline><a>Create Shop</a></aline>
+<div class="aline_wrapper">
+    <aline>
+        <a>
+            ""
+        </a>
+    </aline>
 </div>
+{% endblock %}
+
+
+
+{% block js_block %}
 {% endblock %}

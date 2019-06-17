@@ -18,11 +18,11 @@ def create_app():
     with app.app_context():
         
         from saien.level0.views import level0
-        from saien.user.views import user
         from saien.admin.views import admin
+        from saien.user.views import user
         app.register_blueprint(level0)
-        app.register_blueprint(user)
         app.register_blueprint(admin)
+        app.register_blueprint(user)
 
         db.create_all()
 

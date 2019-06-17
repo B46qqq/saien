@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block css_block %}
-{{ super() }}
 <link rel="stylesheet"
       href="{{ url_for('static', filename='css/shared/inputs.css') }}">
 <link rel="stylesheet"
@@ -10,18 +9,9 @@
 
 
 {% block login_section %}
-{% if session.login_failed %}
-<form action="{{ url_for('user.verify') }}" method="POST" style="grid-template-columns: 0 100%;">
-{% else %}
 <form action="{{ url_for('user.verify') }}" method="POST">
-{% endif %}
-
-    {% if session.login_failed %}
-    <div class="uicon" style="display: none;">
-    {% else %}
     <div class="uicon">
-    {% endif %}
-      <a href="#" class="login_btn" onclick="showLoginForm()">
+        <a href="#" class="login_btn" onclick="showLoginForm()">
             <div class="dots-container">
                 <div class="dot"></div>
                 <div class="dot"></div>
@@ -32,25 +22,22 @@
                 <img src="{{ url_for('static', filename='icon/unknown_customer.png') }}">
             </span>
         </a>
+      {% with errors = get_flashed_messages() %}
+      {% if errors %}
+      <div class="alert userloginfielderror">
+          <span class="closebtn" onclick="this.parentElement.style.display='none';">
+              &times;
+          </span>
+          {% for error in errors %}
+          <strong>{{ error }}</strong>
+          {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
     </div>
 
-    {% if session.login_failed %}
-    <div class="tab_input" style="display: grid">
-    {% else %}
     <div class="tab_input">
-    {% endif %}
-        {% with errors = get_flashed_messages() %}
-        {% if errors %}
-        <div class="alert userloginfielderror">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">
-                &times;
-            </span>
-            {% for error in errors %}
-            <strong>{{ error }}</strong>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
+
         <label class="in">
             <input type="email"
                    placeholder="&nbsp;"

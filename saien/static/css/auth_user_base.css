@@ -1,0 +1,21 @@
+.login_section {
+    border-color: #faeae3;
+}
+
+.sidebar_container {
+    background-color: #2f7e9e;
+}
+
+.sidebar_toggle_switch {
+    color: #e8e9ec;
+}
+
+.sidebar_toggle_switch:hover {
+    color: #fff;
+}
+
+.auth_sidebar {
+    border-bottom-style: double;
+    border-color: #FAEAE3;
+    border-width: 0 0 5px 0;
+}

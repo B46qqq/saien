@@ -2,64 +2,54 @@ from flask import render_template, redirect, request, Blueprint, url_for, flash,
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import exc
 from .forms import *
-from saien.models import Shop
-from saien import login_manager
+from saien.models import User
 from urllib.parse import urlparse, urljoin
+from saien.util.access_protocol import shop_login_required
 
 user = Blueprint('user', __name__)
 
-@login_manager.user_loader
-def load_user(shop_id):
-    if shop_id is not None:
-        return Shop.query.get(shop_id)
-    return None
-
-@login_manager.unauthorized_handler
-def unauthorized():
-    return "NO PERMISSION"
-
 @user.route('/u/verify', methods=['POST'])
 def verify():
-    target = Shop.query.filter_by(shop_email = str(request.form['email'])).first()
+    if current_user.is_authenticated and current_user.is_shop():
+        return redirect(url_for('user.index'))
+    
+    target = User.query.filter_by(email = str(request.form['email'])).first()
     retURL = get_redirect_target()
-    if target is None:
-        flash (u'Login unsuccessful')
-        session['login_failed'] = True;
-        return redirect(retURL)
 
-    if retURL is not None:
-        return redirect(retURL)
-    print (request.form['email'])
-    return "got it"
+    if target != None and target.check_password(str(request.form['password'])):
+        print (target)
+        if current_user is not None:
+            logout_user()
+        login_user(target)
+        return redirect(url_for('user.index'))
+    else:
+        flash (u'Login unsuccessful')
+        if retURL is not None:
+            return redirect(retURL)
+        else:
+            return redirect(url_for('level0.index'))
+
+
+@user.route('/u/', methods=['GET'])
+@login_required
+@shop_login_required
+def index():
+    if current_user.is_shop():
+        print ("yeah")
+    else:
+        print ("fuckedup")
+    return render_template('auth_user_base.html')
 
 @user.route('/u/reroute/', methods=['GET'])
 def uselessfunction():
     return render_template('level0_base.html')
 
-@user.route('/u/test', methods=['GET', 'POST'])
-def test():
-    if current_user.is_authenticated:
-        return redirect(url_for('level0.index'))
-
-    form = UserLoginForm(request.form)
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            USER = Shop.query.filter_by(shop_email = str(form.email.data)).first()
-            if USER is None:
-                print ("user does not exist -> display as login failed")
-                return "Login failed"
-            if USER.validate(form.password.data):
-                login_user(_user_)
-                return redirect(url_for('level0.index'))
-        print ("wrong password")
-        return redirect(url_for('user.test'))
-    return render_template('login.html',
-                           form=form)
 
 @user.route('/u/logout')
 @login_required
 def logout():
     logout_user()
+    session.clear()
     return redirect(url_for('level0.index'))
 
 

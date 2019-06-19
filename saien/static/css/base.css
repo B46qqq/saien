@@ -59,15 +59,11 @@ bar {
     transition: all 0s;
 }
 
-
 .sidebar_container {
     grid-area: sidebar;
     width: calc(225px + 1vw);
-    background-color: #F1F1F1;
-    border-radius: 0px 25px 0px 0px;
-    box-shadow: -5px -3px 10px 5px #000;
-
     display: grid;
+    border-right: 1px solid #D3D3D3;
     grid-template-areas:
         "animation"
         "login_section"
@@ -81,19 +77,15 @@ bar {
     z-index: 5;
 }
 
-.sidebar_container_transition {
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-}
-
-.sidebar_container_closed {
+.sc_closed {
     width: 0vw;
-    box-shadow: unset;
 }
 
-.sidebar_container * {
+.sc_transition {
+    -webkit-transition: all 0.5s ease-in;
+    -moz-transition: all 0.5s ease-in;
+    -o-transition: all 0.5s ease-in;
+    transition: all 0.5s ease-in;
 }
 
 .sidebar_toggle_container {
@@ -108,44 +100,20 @@ bar {
     width: 40px;
     height: 40px;
     font-size: 40px;
-    font-weight: bolder;
     right: 0px;
-    color: #252629;
-    transition: all 0.3s ease-in;
+    color: #A9A9A9;
+    transition: all 0.25s ease-in;
 }
 
 .sidebar_toggle_switch:hover{
-    color: white;
+    color: #000;
     border-radius: 100px;
     transform: rotate(-90deg);
 }
 
-.sidebar_toggle_switch:hover + .sidebar_toggle_animation {
-    visibility: visible;
-    opacity: 0.8;
-    color: white;
-    right: calc(100% - 40px);
-}
-
-.sidebar_toggle_animation {
-    position: absolute;
-    visibility: hidden;
-    opacity: 0;
-    line-height: 32px;
-    width: 40px;
-    height: 40px;
-    font-size: 40px;
-    right: 40px;
-    transition: all 0.3s ease-in;
-}
-
-
 .login_section {
     position: relative;
     grid-area: login_section;
-    border-bottom-style: double;
-    border-color: #44444b;
-    border-width: 0 0 5px 0;
 }
 
 .auth_sidebar, .common_sidebar {
@@ -168,85 +136,45 @@ bar {
     position: relative;
 }
 
-.aline_wrapper {
+.navitag {
     height: 100%;
-    width: 90%;
+    width: 95%;
     padding: 14px 20px;
-    background-color: #fff;
-    border: 1px solid #000;
+    background-color: #F8F8F8;
+    border: 1px solid #DCDCDC;
+    border-left: unset;
     border-radius: 0 10px 10px 0;
     color: #000;
-    box-shadow: 5px 5px 5px rgba(33, 33, 33, 0.5);
+    box-shadow: 5px 5px 5px rgba(33, 33, 33, 0.2);
+    transition: all 0.3s ease-out;
 }
 
-.aline_wrapper:hover{
-    background-color: #000;
-    color: #fff;
-    border: 3px solid #fff;
-    box-shadow: 5px 5px 5px rgba(33, 33, 33, 0.7);
+.navitag:hover{
+    width: 100%;
+    background-color: #fff;
+    border-right: unset;
+    border-radius: unset;
+    transition: 0.3s;
+    box-shadow: 5px 5px 5px rgba(33, 33, 33, 0.4);
 }
 
-.aline_wrapper:hover a:before{
-    visibility: visible;
-    transform: scaleX(1);
-}
 
-.aline_wrapper:hover{
+.navitag:hover{
     padding: 12px 18px;
 }
 
-aline {
+.navitag {
     display: block;
     font-size: 24px;
     font-weight: bold;
 }
 
-aline > a {
+.navitag a {
     text-decoration: none;
     color: inherit;
     letter-spacing: -0.5px;
     white-space: nowrap;
 }
-
-aline > a:before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background: black;
-    visibility: hidden;
-    border-radius: 5px;
-    transform: scaleX(0);
-    transition: 0.3s linear;
-}
-
-aline > a:after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    border: 1px solid #000;
-    bottom: 0px;
-    left: 0;
-    background: #000;
-    border-radius: 5px;
-    opacity: 0;
-    transform: scalex(0);
-    transition: 0.3s;
-}
-
-aline > a:after {
-    opacity: 0.2;
-    transform: scalex(1);
-}
-
-aline > a:before {
-    background: #fff;
-    box-shadow: 0 0 3px 2px #fff
-}
-
 
 .content_container {
     grid-area: content;

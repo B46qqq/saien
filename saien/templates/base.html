@@ -13,21 +13,21 @@
     </head>
 
     <body>
-        <div class="sidebar_toggle_container_closed" onclick="sidebar_toggle()">
+        <div class="sidebar_toggle_container_closed"
+             onclick="sidebar_opening()">
             <bar></bar>
             <bar></bar>
             <bar></bar>
         </div>
         <div class="window">
-            <div class="sidebar_container" id="noselect">
+            <div class="sidebar_container sc_transition" id="noselect">
                 <!--
                      Sidebar toggler container
                      # including animation
                 -->
                 <div class="sidebar_toggle_container">
                     <span class="sidebar_toggle_switch"
-                          onclick="sidebar_toggle()">&#10539;</span>
-                    <span class="sidebar_toggle_animation">&#171</span>
+                          onclick="sidebar_closing()">&#10539;</span>
                 </div>
                 
                 <!--
@@ -52,29 +52,21 @@
                      The rest of sidebar elements container
                 -->
                 <div class="common_sidebar">
-                    <div class="aline_wrapper">
-                        <aline>
-                            <a>Home</a>
-                        </aline>
+                    <div class="navitag">
+                        <a>Home</a>
                     </div>
                     
-                    <div class="aline_wrapper">
-                        <aline>
-                            <a>News</a>
-                        </aline>
+                    <div class="navitag">
+                        <a>News</a>
                     </div>
 
-                    <div class="aline_wrapper"
-                         onclick="window.location.href='{{ url_for('level0.redirectSearch') }}'">
-                        <aline>
-                            <a>Search Item</a>
-                        </aline>
+                    <div class="navitag"
+                         onclick="window.location.href='{{ url_for('level0.search') }}'">
+                        <a>Search Item</a>
                     </div>
 
-                    <div class="aline_wrapper">
-                        <aline>
-                            <a>Contact</a>
-                        </aline>
+                    <div class="navitag">
+                        <a>Contact</a>
                     </div>
                 </div>
             </div>

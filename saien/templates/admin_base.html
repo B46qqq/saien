@@ -40,23 +40,17 @@
 {% endblock %}
 
 {% block auth_sidebar %}
-<div class="aline_wrapper">
-    <aline>
-        <a href="#">Orders</a>
-    </aline>
+<div class="navitag">
+    <a href="#">Orders</a>
 </div>
-<div class="aline_wrapper">
-    <aline>
-        <a href="#">Create Notice</a>
-    </aline>
+<div class="navitag">
+    <a href="#">Create Notice</a>
 </div>
-<div class="aline_wrapper">
-    <aline>
-        <a href="#">THINGS</a>
-    </aline>
+<div class="navitag">
+    <a href="#">THINGS</a>
 </div>
 
-<div class="aline_wrapper"
+<div class="navitag"
      onclick="window.location.href='{{ url_for('admin.createNewCustomerAccount') }}'">
     <aline><a>Create Shop</a></aline>
 </div>

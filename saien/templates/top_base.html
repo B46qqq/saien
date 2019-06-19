@@ -1,0 +1,13 @@
+{% if current_user.is_anonymous %}
+
+{% extends "level0_base.html" %}
+
+{% elif current_user.is_shop() %}
+
+{% extends "user_base.html" %}
+
+{% else %}
+
+{% extends "admin_base.html" %}
+
+{% endif %}

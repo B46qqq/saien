@@ -34,7 +34,7 @@ def verify():
 @login_required
 @shop_login_required
 def index():
-    return render_template('auth_user_base.html')
+    return render_template('user_base.html')
 
 @user.route('/u/search/', methods=['GET'])
 @login_required

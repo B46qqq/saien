@@ -9,25 +9,30 @@ function get_element(className){
     return element;
 }
 
-function sidebar_toggle(){
+function sidebar_closing(){
     var sc = get_element(".sidebar_container");
     var stcc = get_element(".sidebar_toggle_container_closed");
 
-    sc.classList.add("sidebar_container_transition");
-    sc.classList.toggle("sidebar_container_closed");
-
-    if (!sc.classList.contains("sidebar_container_closed")){
-        sc.addEventListener("transitionend",
-                            function(){
-                                sc.classList.remove("sidebar_container_transition");
-                            });
-        sc.addEventListener("webkitTransitionEnd",
-                            function(){
-                                sc.classList.remove("sidebar_container_transition");
-                            });
-        stcc.style.left = "-35px";
-    } else {
+    sc.classList.add("sc_closed");
+    sc.addEventListener("transitionend", function(){
         stcc.style.left = "0vw";
-    }
+    }, { once: true });
+
+    sc.addEventListener("webkitTransitionEnd", function(){
+        stcc.style.left = "0vw";
+    }, { once: true });
 }
 
+function sidebar_opening(){
+    var sc = get_element(".sidebar_container");
+    var stcc = get_element(".sidebar_toggle_container_closed");
+
+    stcc.style.left = "-35vw";
+    stcc.addEventListener("transitionend", function(){
+        sc.classList.remove("sc_closed");
+    }, { once: true });
+
+    stcc.addEventListener("webkitTransitionEnd", function(){
+        sc.classList.remove("sc_closed");
+    }, { once: true });    
+}

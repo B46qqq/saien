@@ -92,3 +92,9 @@ def admin_logout():
     session.clear()
     return redirect(url_for('level0.index'))
 
+
+@admin.route('/admin/search', methods=['GET'])
+@login_required
+@admin_login_required
+def search():
+    return "admin is here"

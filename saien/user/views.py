@@ -34,11 +34,13 @@ def verify():
 @login_required
 @shop_login_required
 def index():
-    if current_user.is_shop():
-        print ("yeah")
-    else:
-        print ("fuckedup")
     return render_template('auth_user_base.html')
+
+@user.route('/u/search/', methods=['GET'])
+@login_required
+@shop_login_required
+def search():
+    return "shop is searching!"
 
 @user.route('/u/reroute/', methods=['GET'])
 def uselessfunction():

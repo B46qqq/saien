@@ -54,25 +54,26 @@
                 <div class="common_sidebar">
                     <div class="aline_wrapper">
                         <aline>
-                            <a href="#">Home</a>
+                            <a>Home</a>
                         </aline>
                     </div>
                     
                     <div class="aline_wrapper">
                         <aline>
-                            <a href="#">News</a>
+                            <a>News</a>
+                        </aline>
+                    </div>
+
+                    <div class="aline_wrapper"
+                         onclick="window.location.href='{{ url_for('level0.redirectSearch') }}'">
+                        <aline>
+                            <a>Search Item</a>
                         </aline>
                     </div>
 
                     <div class="aline_wrapper">
                         <aline>
-                            <a href="#">Search Item</a>
-                        </aline>
-                    </div>
-
-                    <div class="aline_wrapper">
-                        <aline>
-                            <a href="#">Contact</a>
+                            <a>Contact</a>
                         </aline>
                     </div>
                 </div>
@@ -82,11 +83,12 @@
                 {% block content_block %}
                 {% endblock %}
             </div>
-
-            <script type="text/javascript" src="{{ url_for('static', filename='js/base.js') }}"></script>
-            {% block js_block %}
-            {% endblock %}
         </div>
+
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='js/base.js') }}"></script>
+        {% block js_block %}
+        {% endblock %}
     </body>
 </html>
 

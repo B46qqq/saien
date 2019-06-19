@@ -169,6 +169,9 @@ class Product(db.Model):
 
     invoiceitems = db.relationship('InvoiceItem', backref='origin_product')
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
     def __repr__(self):
         returnStr = str('Product name: %s\n') % (self.product_name)
         if (self.product_id is not None):
@@ -215,4 +218,14 @@ def db_restart():
     admin.set_password(admin.password)
     admin.roles.append(roleAdmin)
     db.session.add_all([roleAdmin, roleShop, admin])
+    db.session.commit()
+
+def db_init_product():
+    # Only listing a few vegtable / fruit for teting
+    # a = Product(product_name='a')
+    asparagus = Product(product_name='asparagus', price_unit_kg='1000')
+    avocado = Product(product_name='avocado', price_unit_kg='900')
+    beetroot = Product(product_name='beetroot', price_unit_kg='1300')
+    broccoli = Product(product_name='broccoli')
+    db.session.add_all([asparagus, avocado, beetroot, broccoli])
     db.session.commit()

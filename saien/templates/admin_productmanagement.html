@@ -21,12 +21,13 @@
     </div>
 
     <div class="product_info">
-        <form action="/tobedecided" method="POST">
+        <form action="{{ url_for('admin.pmhandler') }}" method="POST">
             <p>Product Name:</p>
             <label class="in">
                 <input type="text"
                        id="pinfo_name"
                        placeholder="&nbsp;"
+                       name="pname"
                        required>
                 <span id="pname_label" class="label">Current Product Name: </span>
                 <span id="pname_border" class="border"></span>
@@ -34,7 +35,7 @@
             
             <p>Product Description: </p>
             <label class="in text">
-                <textarea id="pinfo_des" placeholder="&nbsp;"></textarea>
+                <textarea id="pinfo_des" placeholder="&nbsp;" name="pdescription"></textarea>
                 <span id="pdes_label" class="label">Current Product Description: </span>
                 <span id="pdes_border" class="border"></span>
             </label>
@@ -43,8 +44,8 @@
             <label class="in">
                 <input type="currency"
                        id="pinfo_pkg"
-                       placeholder="&nbsp;"
-                       required>
+                       name="ppkg"
+                       placeholder="&nbsp;">
                 <span id="ppkg_label" class="label">Current Product Price (per KG): </span>
                 <span id="ppkg_border" class="border"></span>
             </label>
@@ -53,13 +54,24 @@
             <label class="in">
                 <input type="currency"
                        id="pinfo_box"
-                       placeholder="&nbsp;"
-                       required>
+                       name="ppbox"
+                       placeholder="&nbsp;">
                 <span id="pbox_label" class="label">Current Product Price (per BOX): </span>
                 <span id="pbox_border" class="border"></span>
             </label>
             
-            <input type="submit">
+            <button class="reg_btn hide" type="submit" name="update" value="update">
+                Update
+            </button>
+
+            <br>
+            
+            <div>
+                <button id="beforedelete" class="reg_btn del_btn" type="button" onclick="confirmDelete(event)">Delete</button>
+                <button id="canceldelete" class="reg_btn hide" type="button" onclick="cancelDelete()">Cancel</button>           
+                <button id="delete" class="reg_btn del_btn hide" type="submit" name="update" value="delete">!DELETE!</button>
+            </div>
+
         </form>
 
     </div>

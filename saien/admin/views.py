@@ -50,8 +50,20 @@ def productManagement():
     for p in products:
         plist.append({"id" : p.product_id,
                       "name" : p.product_name})
-    print (plist)
     return render_template('admin_productmanagement.html', plist=plist)
+
+
+@admin.route('/admin/productmanagement/handler', methods=['POST'])
+@login_required
+@admin_login_required
+def pmhandler():
+    if (request.form['update'] == 'update'):
+        print (request.form['pdescription'])
+        print("hello update")
+    else:
+        print ("about to delete")
+    return "update";
+
 
 @admin.route('/admin/newshop/', methods=['GET', 'POST'])
 @login_required

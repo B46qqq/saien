@@ -34,8 +34,8 @@
     </div>
 
     <div class="form_pws">
-        <button class="reg_btn" type="button" onclick="reset_inputs()">
-            Reset Inputs
+        <button class="reg_btn" type="reset">
+            Reset
         </button>
     </div>
 </form>
@@ -79,10 +79,4 @@
     the Email address entered for the customer. The Email will contain
     a link which direct the customer to reset their password.    
 </div>
-{% endblock %}
-
-
-{% block js_block %}
-{{ super() }}
-<script type="text/javascript" src="{{ url_for('static', filename='js/admin_newshop.js') }}"></script>
 {% endblock %}

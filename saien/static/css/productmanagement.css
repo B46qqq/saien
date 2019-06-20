@@ -63,12 +63,17 @@ productlist {
 
 .product_info form {
     display: grid;
-    grid-template-columns: 180px auto;
+    width: 90%;
+    padding: 30px 20px;
+    grid-template-columns: 180px 1fr;
+    grid-template-areas:
+        "pn pnc"
+        "pd pdc"
+        "pkg pkgc"
+        "pbox pboxc"
+        "upd upd"
+        "del del";
     grid-row-gap: 20px;
-}
-
-.product_info form p{
-    padding-left: 30px;
 }
 
 .label_changed {
@@ -78,3 +83,18 @@ productlist {
     background: #ff9800 !important;
 }
 
+.hide {
+    opacity: 0;
+    z-index: -10;
+}
+
+.del_btn:hover, .del_confirm {
+    background-color: #f44336;
+    color: white;
+    border: 0px;
+    box-shadow: 2px 3px 5px rgba(33, 33, 33, 0.3);
+}
+
+.reg_btn {
+    margin: 10px 20px;
+}

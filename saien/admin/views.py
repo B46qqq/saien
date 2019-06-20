@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, Blueprint, url_for, flash, session
+from flask import render_template, redirect, request, Blueprint, url_for, flash, session, json
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import exc
 from .forms import LoginForm, NewShopForm
@@ -38,9 +38,24 @@ def index():
 def dashboard():
     return render_template('admin_base.html')
 
+# Product management page allow admins to update products within the
+# company. Update actions include add or remove product from the
+# base.
+@admin.route('/admin/productmanagement/', methods=['GET'])
+@login_required
+@admin_login_required
+def productManagement():
+    products = Product.query.all()
+    plist = []
+    for p in products:
+        plist.append({"id" : p.product_id,
+                      "name" : p.product_name})
+    print (plist)
+    return render_template('admin_productmanagement.html', plist=plist)
 
 @admin.route('/admin/newshop/', methods=['GET', 'POST'])
 @login_required
+@admin_login_required
 def createNewCustomerAccount():
     form = NewShopForm()
     if request.method == 'POST' and form.validate():
@@ -87,14 +102,18 @@ def createNewCustomerAccount():
 
 @admin.route('/admin/logout', methods=['GET'])
 @login_required
+@admin_login_required
 def admin_logout():
     logout_user()
     session.clear()
     return redirect(url_for('level0.index'))
 
 
-@admin.route('/admin/search', methods=['GET'])
+@admin.route('/product/get_product_management_form', methods=['POST'])
 @login_required
 @admin_login_required
-def search():
-    return "admin is here"
+def gpmf():
+    pid = (int)(request.form['pid'])
+    retInfo = Product.query.get(pid)
+    retInfo = json.dumps(retInfo.as_dict())
+    return retInfo;

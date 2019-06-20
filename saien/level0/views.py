@@ -15,6 +15,6 @@ def search():
     plist = []
     for p in products:
         plist.append(p.as_dict())
-    return render_template('top_base.html')
+    return render_template('searchpage.html')
 
 

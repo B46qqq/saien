@@ -43,15 +43,22 @@
 <div class="navitag">
     <a href="#">Orders</a>
 </div>
+
+<div class="navitag"
+     onclick="window.location.href='{{ url_for('admin.productManagement') }}'">
+    <a>Products</a>
+</div>
+
+<div class="navitag">
+    <a href="#">Stock List</a>
+</div>
+
 <div class="navitag">
     <a href="#">Create Notice</a>
-</div>
-<div class="navitag">
-    <a href="#">THINGS</a>
 </div>
 
 <div class="navitag"
      onclick="window.location.href='{{ url_for('admin.createNewCustomerAccount') }}'">
-    <aline><a>Create Shop</a></aline>
+    <a>Create Shop</a>
 </div>
 {% endblock %}

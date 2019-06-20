@@ -1,0 +1,77 @@
+{% extends "top_base.html" %}
+
+{% block css_block %}
+{{ super() }}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/inputs.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/productmanagement.css') }}">
+{% endblock %}
+
+{% block content_block %}
+<h1> Product management </h1>
+
+<productlist>
+    <div class="product_tab">
+        {% for p in plist %}
+        <a class="product_link" onclick="open_product(event, '{{ p.id }}')">
+            {{ p.name }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <div class="product_info">
+        <form action="/tobedecided" method="POST">
+            <p>Product Name:</p>
+            <label class="in">
+                <input type="text"
+                       id="pinfo_name"
+                       placeholder="&nbsp;"
+                       required>
+                <span id="pname_label" class="label">Current Product Name: </span>
+                <span id="pname_border" class="border"></span>
+            </label>
+            
+            <p>Product Description: </p>
+            <label class="in text">
+                <textarea id="pinfo_des" placeholder="&nbsp;"></textarea>
+                <span id="pdes_label" class="label">Current Product Description: </span>
+                <span id="pdes_border" class="border"></span>
+            </label>
+
+            <p>Price (per KG)</p>
+            <label class="in">
+                <input type="currency"
+                       id="pinfo_pkg"
+                       placeholder="&nbsp;"
+                       required>
+                <span id="ppkg_label" class="label">Current Product Price (per KG): </span>
+                <span id="ppkg_border" class="border"></span>
+            </label>
+
+            <p>Price (per BOX)</p>
+            <label class="in">
+                <input type="currency"
+                       id="pinfo_box"
+                       placeholder="&nbsp;"
+                       required>
+                <span id="pbox_label" class="label">Current Product Price (per BOX): </span>
+                <span id="pbox_border" class="border"></span>
+            </label>
+            
+            <input type="submit">
+        </form>
+
+    </div>
+    
+</productlist>
+{% endblock %}
+
+{% block js_block %}
+{{ super() }}
+<script>
+ var url_gpmf = "{{ url_for('admin.gpmf') }}";
+</script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='js/productmanagement.js') }}"></script>
+{% endblock %}

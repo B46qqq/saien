@@ -57,7 +57,11 @@ def productManagement():
 @login_required
 @admin_login_required
 def productNew():
-    return "new product added"
+    newpname = str(request.form['pname'])
+    new_target = Product(product_name=newpname);
+    db.session.add(new_target)
+    db.session.commit()
+    return str(new_target.product_id)
 
 @admin.route('/admin/productmanagement/pupdate', methods=['POST'])
 @login_required

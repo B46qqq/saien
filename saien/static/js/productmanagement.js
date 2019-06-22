@@ -67,16 +67,6 @@ function getProductForm(pid){
     request.send(args);
 }
 
-function fieldChange(a, b, c){
-    console.log(a);
-    console.log(b);
-    console.log(c);
-    if (a.value != b.product_name)
-        p_field_change(c);
-    else
-        p_field_revert(c);
-}
-
 function open_product(pid){
     revert_all_fields();
     if (!document.getElementById('delete').classList.contains('hide'))
@@ -256,18 +246,71 @@ function deleteProduct(){
         if ('success' in ret){
             document.getElementById(pid).style.display = 'none';
             blankForm();
-            msg_div.classList.add('success');
+            cancelDelete();
+            msg_div.classList.add('warning');
             msg.innerHTML = ret['success'];
             return;            
         }
-        msg_div.classList.remove('success');
+        msg_div.classList.remove('warning');
         msg.innerHTML = ret['error'];
     };
     request.send(args);
 }
 
+function handlerNewProduct(){
+    var newInput = document.getElementById('newp');
+    var isClickInside = newInput.contains(window.event.target);
+
+    if (!isClickInside){
+        document.removeEventListener('mousedown', handlerNewProduct);
+
+        var pname = newInput.value;
+        var np = document.getElementById('new_product');
+        if (pname == '' || pname == null){
+            np.parentNode.removeChild(np);
+            return;
+        }
+        
+        var args = "pname="+pname;
+        var request = new XMLHttpRequest();
+        
+        request.open('POST', url_productnew, true);
+        request.setRequestHeader('Content-type',
+                                 'application/x-www-form-urlencoded');
+
+        request.onload = function(){
+            var pid = Number(this.responseText);
+            np.firstChild.remove();
+            np.setAttribute('id', pid);
+            np.setAttribute('onclick', 'open_product(' + pid.toString() +')');
+            np.innerHTML = pname;
+        };
+
+        request.send(args);
+    }    
+}
 
 function blankForm(){
     document.getElementById('product_form').reset();
+}
+
+function createProduct(){
+    blankForm();
+    
+    var list = document.querySelector('.product_tab_list');
+    var newProduct = document.createElement('a');
+    var newInput = document.createElement('input');
+
+    newProduct.setAttribute('class', 'product_link');
+    newProduct.setAttribute('id', 'new_product');
+    newInput.setAttribute('type', 'text');
+    newInput.setAttribute('value', '');
+    newInput.setAttribute('id', 'newp');
+    newProduct.appendChild(newInput);
+
+    list.appendChild(newProduct);
+    newInput.focus();
+
+    document.addEventListener('mousedown', handlerNewProduct);
 }
 

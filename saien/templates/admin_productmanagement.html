@@ -22,7 +22,7 @@
     </div>
     
     <div class="product_tab">
-        <div>
+        <div class="product_tab_list">
             {% for p in plist %}
             <a class="product_link"
                id='{{ p.id }}'
@@ -32,7 +32,7 @@
             {% endfor %}
         </div>
         <div class="btn">
-            <button class="icon-btn add-btn" onclick="blankForm()">
+            <button class="icon-btn add-btn" onclick="createProduct()">
                 <div class="add-icon"></div>
                 <div class="btn-txt">Add</div>
             </button>

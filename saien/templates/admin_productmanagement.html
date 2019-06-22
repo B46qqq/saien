@@ -14,6 +14,11 @@
 <h1> Product management </h1>
 
 <productlist>
+    <input type="text"
+           id="product_filter"
+           onkeyup="product_filter()"
+           placeholder="Search for product..">
+    
     <div class="product_message alert hide" id="message">
         <span class="closebtn" onclick="this.parentElement.classList.add('hide');">
             &times;

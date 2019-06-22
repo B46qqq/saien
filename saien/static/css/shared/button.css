@@ -1,0 +1,104 @@
+.btn, .btn * {
+    text-align: center;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #9098a9;
+    background: white;
+    border-radius: 25px;
+    overflow: hidden;
+    position: relative;
+    transition: width 0.2s ease-in-out;
+}
+
+.icon-btn:hover {
+    background: #2196F3;
+    border: unset;
+}
+
+.add-btn:hover {
+    width: 120px;
+}
+.add-btn::before,
+.add-btn::after {
+    transition: width 0.2s ease-in-out, border-radius 0.2s ease-in-out;
+    content: "";
+    position: absolute;
+    height: 4px;
+    width: 10px;
+    top: calc(50% - 2px);
+    background: grey;
+}
+
+.add-btn::after {
+    right: 8px;
+    overflow: hidden;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+.add-btn::before {
+    left: 8px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+.icon-btn:focus {
+    outline: none;
+}
+.btn-txt {
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 16px;
+
+}
+.add-btn:hover::before,
+.add-btn:hover::after {
+    width: 4px;
+    border-radius: 2px;
+    background: #fff;
+}
+.add-btn:hover .btn-txt {
+    color: #fff;
+    opacity: 1;
+}
+.add-icon::before,
+.add-icon::after {
+    transition: all 0.2s ease-in-out;
+    content: "";
+    position: absolute;
+    height: 20px;
+    width: 2px;
+    top: calc(50% - 10px);
+    background: grey;
+    overflow: hidden;
+}
+
+.add-btn:hover .add-icon::before,
+.add-btn:hover .add-icon::after{
+    background-color: #fff;
+}
+
+.add-icon::before {
+    left: 17px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+.add-icon::after {
+    right: 17px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.add-btn:hover .add-icon::before {
+    left: 8px;
+    height: 4px;
+    top: calc(50% - 2px);
+}
+
+.add-btn:hover .add-icon::after {
+    right: 8px;
+    height: 4px;
+    top: calc(50% - 2px);
+}
+

@@ -7,13 +7,15 @@ function getProductForm(pid){
                              'application/x-www-form-urlencoded');
 
     request.onload = function(){
+        var p_id = document.getElementById('pinfo_id');
         var p_name = document.getElementById('pinfo_name');
         var p_des = document.getElementById('pinfo_des');
         var p_pkg = document.getElementById('pinfo_pkg');
         var p_box = document.getElementById('pinfo_box');
         
         p_info = JSON.parse(this.responseText);
-        
+
+        p_id.value = p_info.product_id;
         p_name.value = p_info.product_name;
         if (p_info.product_description == null){
             p_info.product_description = '';            
@@ -31,6 +33,7 @@ function getProductForm(pid){
         else p_box.value = '';
         p_box.focus();
         p_box.blur();
+
 
         p_name.addEventListener("input", function(){
             if (p_name.value != p_info.product_name)
@@ -64,22 +67,45 @@ function getProductForm(pid){
     request.send(args);
 }
 
-function open_product(e, pid){
+function fieldChange(a, b, c){
+    console.log(a);
+    console.log(b);
+    console.log(c);
+    if (a.value != b.product_name)
+        p_field_change(c);
+    else
+        p_field_revert(c);
+}
+
+function open_product(pid){
     revert_all_fields();
-    
-    p_links = document.getElementsByClassName("product_link");
-    var i = 0;
-    for (; i < p_links.length; ++i)
-        p_links[i].classList.remove("active");
-    e.currentTarget.classList.add("active");
+    if (!document.getElementById('delete').classList.contains('hide'))
+        cancelDelete();
+
+    var p_links = document.getElementsByClassName("product_link");
+    unselectAll()
+    document.getElementById(pid).classList.add("active");
+    document.getElementById('message').classList.add("hide");
     getProductForm(pid);
 }
+
+function refresh_product(pid){
+    var mess = document.getElementById('message')
+    if (! mess.classList.contains('hide')){
+        open_product(pid);
+        mess.classList.remove('hide')
+        return;
+    }
+    open_product(pid);
+}
+
 
 function p_field_change(f){
     var update_btn = document.querySelector('.reg_btn');
     var label = document.getElementById(f+'_label');
     var border = document.getElementById(f+'_border');
-    update_btn.classList.remove('hide');
+    update_btn.classList.remove('disabled');
+    update_btn.setAttribute('onclick', 'updateProduct()');
     label.classList.add('label_changed');
     label.innerHTML = label.innerHTML.replace('Current', 'Future');
     border.classList.add('border_changed');
@@ -89,7 +115,10 @@ function p_field_revert(f){
     var update_btn = document.querySelector('.reg_btn');
     var label = document.getElementById(f+'_label');
     var border = document.getElementById(f+'_border');
-    update_btn.classList.add('hide');    
+
+    
+    update_btn.classList.add('disabled');
+    update_btn.setAttribute('onclick', '');
     label.classList.remove('label_changed');
     label.innerHTML = label.innerHTML.replace('Future', 'Current');
     border.classList.remove('border_changed');
@@ -117,6 +146,10 @@ function localStringToNumber( s ){
 
 function onFocus(e){
     var value = e.target.value;
+    if (value == 'UNSET'){
+        e.target.value = '';
+        return;
+    }
     e.target.value = value ? localStringToNumber(value) : '';
 }
 
@@ -128,10 +161,11 @@ function onBlur(e){
         style                 : "currency",
         currencyDisplay       : "symbol"
     }
-    
-    e.target.value = value 
-        ? localStringToNumber(value).toLocaleString(undefined, options)
-        : '';
+    if (value == '' || value == 0){
+        e.target.value = 'UNSET';
+        return;
+    }
+    e.target.value = localStringToNumber(value).toLocaleString(undefined, options);
 }
 
 
@@ -148,3 +182,92 @@ function cancelDelete(){
     document.getElementById('delete').classList.remove('del_confirm');
     document.getElementById('canceldelete').classList.add('hide');
 }
+
+function unselectAll(){
+    var p_links = document.getElementsByClassName("product_link");
+    var i = 0;
+    for (; i < p_links.length; ++i)
+        p_links[i].classList.remove("active");
+}
+
+function getFormData(){
+    var form = document.getElementById('product_form');
+    var fd = new FormData(form);
+    var pid = fd.get('pid');
+
+    var args = 'pid=' + pid;
+    args += ('&' + 'pname=' + fd.get('pname'));
+    args += ('&' + 'pdes=' + fd.get('pdes').trim());
+    args += ('&' + 'ppkg=' + localStringToNumber(fd.get('ppkg')));
+    args += ('&' + 'pbox=' + localStringToNumber(fd.get('ppbox')));
+
+    return args;
+}
+
+function updateProduct(){
+    var form = document.getElementById('product_form');
+    // Somehow Flask server does not receiver the form data properly.
+    // convert to more permitive way :(
+    var fd = new FormData(form);
+    var pid = fd.get('pid');
+
+    var args = 'pid=' + pid;
+    args += ('&' + 'pname=' + fd.get('pname'));
+    args += ('&' + 'pdes=' + fd.get('pdes').trim());
+    args += ('&' + 'ppkg=' + localStringToNumber(fd.get('ppkg')));
+    args += ('&' + 'pbox=' + localStringToNumber(fd.get('ppbox')));
+
+    var request = new XMLHttpRequest();
+    request.open('POST', url_productupdate, true);
+    request.setRequestHeader('Content-type',
+                             'application/x-www-form-urlencoded');
+
+    request.onload = function(){
+        var ret =  JSON.parse(this.responseText);
+        var msg_div = document.getElementById('message');
+        var msg = msg_div.querySelector('strong');
+        msg_div.classList.remove('hide');
+        if ('success' in ret){
+            refresh_product(pid);
+            document.getElementById(pid).innerHTML = fd.get('pname');
+            msg_div.classList.add('success');
+            msg.innerHTML = ret['success'];
+            return;
+        }
+        msg_div.classList.remove('success');
+        msg.innerHTML = ret['error'];
+    };
+
+    request.send(args);
+}
+
+function deleteProduct(){
+    var pid = document.getElementById('pinfo_id').value;
+    var args = 'pid=' + pid;
+    var request = new XMLHttpRequest();
+    request.open('POST', url_productdelete, true);
+    request.setRequestHeader('Content-type',
+                             'application/x-www-form-urlencoded');
+    request.onload = function(){
+        var ret =  JSON.parse(this.responseText);
+        var msg_div = document.getElementById('message');
+        var msg = msg_div.querySelector('strong');
+        msg_div.classList.remove('hide');
+        if ('success' in ret){
+            document.getElementById(pid).style.display = 'none';
+            blankForm();
+            msg_div.classList.add('success');
+            msg.innerHTML = ret['success'];
+            return;            
+        }
+        msg_div.classList.remove('success');
+        msg.innerHTML = ret['error'];
+    };
+    request.send(args);
+}
+
+
+function blankForm(){
+    document.getElementById('product_form').reset();
+}
+

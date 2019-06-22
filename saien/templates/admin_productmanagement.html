@@ -5,6 +5,8 @@
 <link rel="stylesheet"
       href="{{ url_for('static', filename='css/shared/inputs.css') }}">
 <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/button.css') }}">
+<link rel="stylesheet"
       href="{{ url_for('static', filename='css/productmanagement.css') }}">
 {% endblock %}
 
@@ -12,18 +14,36 @@
 <h1> Product management </h1>
 
 <productlist>
+    <div class="product_message alert hide" id="message">
+        <span class="closebtn" onclick="this.parentElement.classList.add('hide');">
+            &times;
+        </span>
+        <strong></strong>
+    </div>
+    
     <div class="product_tab">
-        {% for p in plist %}
-        <a class="product_link" onclick="open_product(event, '{{ p.id }}')">
-            {{ p.name }}
-        </a>
-        {% endfor %}
+        <div>
+            {% for p in plist %}
+            <a class="product_link"
+               id='{{ p.id }}'
+               onclick="open_product('{{ p.id }}')">
+                {{ p.name }}
+            </a>
+            {% endfor %}
+        </div>
+        <div class="btn">
+            <button class="icon-btn add-btn" onclick="blankForm()">
+                <div class="add-icon"></div>
+                <div class="btn-txt">Add</div>
+            </button>
+        </div>
     </div>
 
     <div class="product_info">
-        <form action="{{ url_for('admin.pmhandler') }}" method="POST">
-            <p>Product Name:</p>
-            <label class="in">
+        <form id="product_form">
+            <input type="hidden" id="pinfo_id" name="pid">
+            <p class="pn">Product Name:</p>
+            <label class="in pnc">
                 <input type="text"
                        id="pinfo_name"
                        placeholder="&nbsp;"
@@ -33,15 +53,15 @@
                 <span id="pname_border" class="border"></span>
             </label>
             
-            <p>Product Description: </p>
-            <label class="in text">
-                <textarea id="pinfo_des" placeholder="&nbsp;" name="pdescription"></textarea>
+            <p class="pd">Product Description: </p>
+            <label class="in text pdc">
+                <textarea id="pinfo_des" placeholder="&nbsp;" name="pdes"></textarea>
                 <span id="pdes_label" class="label">Current Product Description: </span>
                 <span id="pdes_border" class="border"></span>
             </label>
 
-            <p>Price (per KG)</p>
-            <label class="in">
+            <p class="pkg">Price (per KG)</p>
+            <label class="in pkgc">
                 <input type="currency"
                        id="pinfo_pkg"
                        name="ppkg"
@@ -50,8 +70,8 @@
                 <span id="ppkg_border" class="border"></span>
             </label>
 
-            <p>Price (per BOX)</p>
-            <label class="in">
+            <p class="pbox">Price (per BOX)</p>
+            <label class="in pboxc">
                 <input type="currency"
                        id="pinfo_box"
                        name="ppbox"
@@ -60,16 +80,16 @@
                 <span id="pbox_border" class="border"></span>
             </label>
             
-            <button class="reg_btn hide" type="submit" name="update" value="update">
+            <button class="reg_btn disabled upd" type="button" name="update">
                 Update
             </button>
 
             <br>
             
-            <div>
+            <div class="del">
                 <button id="beforedelete" class="reg_btn del_btn" type="button" onclick="confirmDelete(event)">Delete</button>
                 <button id="canceldelete" class="reg_btn hide" type="button" onclick="cancelDelete()">Cancel</button>           
-                <button id="delete" class="reg_btn del_btn hide" type="submit" name="update" value="delete">!DELETE!</button>
+                <button id="delete" class="reg_btn del_btn hide" type="button" onclick="deleteProduct()">!DELETE!</button>
             </div>
 
         </form>
@@ -83,6 +103,9 @@
 {{ super() }}
 <script>
  var url_gpmf = "{{ url_for('admin.gpmf') }}";
+ var url_productupdate = "{{ url_for('admin.productUpdate') }}";
+ var url_productdelete = "{{ url_for('admin.productDelete') }}";
+ var url_productnew = "{{ url_for('admin.productNew') }}";
 </script>
 <script type="text/javascript"
         src="{{ url_for('static', filename='js/productmanagement.js') }}"></script>

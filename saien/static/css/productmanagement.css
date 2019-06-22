@@ -3,17 +3,28 @@ productlist {
     grid-template-columns: calc(200px + 2vw) auto;
     grid-template-rows: 50px auto;
     grid-template-areas:
-        "search search"
+        "search message"
         "p_list p_info";
     border: 1px solid #d3d3d3;
 }
 
-/* Style the tab */
+.product_search {
+    grid-area: search;
+}
+
+.product_message {
+    grid-area: message;
+}
+
+
 .product_tab {
     grid-area: p_list;
     width: 100%;
     height: 700px;
     background-color: #f3f3f3;
+
+    display: grid;
+    grid-template-rows: auto 40px;
 }
 
 .product_tab:hover {
@@ -53,7 +64,7 @@ productlist {
     width: 100%;
     border-left: none;
     height: 300px;
-    margin-left: 50px
+    margin: 30px 50px
 }
 
 .in {
@@ -64,8 +75,8 @@ productlist {
 .product_info form {
     display: grid;
     width: 90%;
-    padding: 30px 20px;
     grid-template-columns: 180px 1fr;
+    grid-template-rows: auto;
     grid-template-areas:
         "pn pnc"
         "pd pdc"
@@ -83,9 +94,14 @@ productlist {
     background: #ff9800 !important;
 }
 
+.disabled, .disabled:hover{
+    background-color: grey;
+    color: white;
+    box-shadow: unset;
+}
+
 .hide {
-    opacity: 0;
-    z-index: -10;
+    display: none;
 }
 
 .del_btn:hover, .del_confirm {
@@ -95,6 +111,74 @@ productlist {
     box-shadow: 2px 3px 5px rgba(33, 33, 33, 0.3);
 }
 
+.alert {
+    height: 100%;
+    width: 100%;
+    left: 0;
+    margin-left: 0;
+    max-width: 990px;
+    padding: 5px 30px;
+    font-size: 20px;
+    border-radius: 30px;
+    opacity: 0.9;
+    transition: all 0.2s ease;
+}
+
+.alert:hover {
+    opacity: 1;
+}
+
+
+.alert strong {
+    line-height: 35px;
+}
+
+.closebtn {
+    font-size: 35px;
+    line-height: 35px;
+}
+
+
 .reg_btn {
     margin: 10px 20px;
+}
+
+.pn{
+    grid-area: pn;
+}
+
+.pnc {
+    grid-area: pnc;
+}
+
+.pd {
+    grid-area: pd;
+}
+
+.pdc {
+    grid-area: pdc;
+}
+
+.pkg {
+    grid-area: pkg;
+}
+
+.pkgc {
+    grid-area: pkgc
+}
+
+.pbox {
+    grid-area: pbox;
+}
+
+.pboxc {
+    grid-area: pboxc;
+}
+
+.upd {
+    grid-area: upd;
+}
+
+.del {
+    grid-area: del;
 }

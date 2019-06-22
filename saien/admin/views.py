@@ -53,16 +53,45 @@ def productManagement():
     return render_template('admin_productmanagement.html', plist=plist)
 
 
-@admin.route('/admin/productmanagement/handler', methods=['POST'])
+@admin.route('/admin/productmanagement/pnew', methods=['POST'])
 @login_required
 @admin_login_required
-def pmhandler():
-    if (request.form['update'] == 'update'):
-        print (request.form['pdescription'])
-        print("hello update")
-    else:
-        print ("about to delete")
-    return "update";
+def productNew():
+    return "new product added"
+
+@admin.route('/admin/productmanagement/pupdate', methods=['POST'])
+@login_required
+@admin_login_required
+def productUpdate():
+    data = request.form;
+    update_target = Product.query.get((int)(data['pid']))
+
+    # Do nothing but return error message when product_name is none;
+    if str(data['pname']) is None or str(data['pname']) is '':
+        return json.dumps({'error' : 'Update Failed; product name cannot be none.'})
+    
+    update_target.product_name = str(data['pname'])
+    update_target.product_description = str(data['pdes'])
+    update_target.price_unit_kg = (int)(data['ppkg']) * 100
+    update_target.price_unit_box = (int)(data['pbox']) * 100
+    try:
+        db.session.commit()
+    except:
+        return json.dumps({'error' : 'Update Failed; database not accepting requests.'})
+    return json.dumps({'success' : 'Update Success'})
+
+@admin.route('/admin/productmanagement/pdelete', methods=['POST'])
+@login_required
+@admin_login_required
+def productDelete():
+    try:
+        delete_target = Product.query.get((int)(request.form['pid']))
+        db.session.delete(delete_target)
+        db.session.commit()
+    except:
+        return json.dumps({'error' : 'Deletion Failed; database not accepting requests.'})
+    return json.dumps({'success' : 'Product Deleted!'})
+
 
 
 @admin.route('/admin/newshop/', methods=['GET', 'POST'])

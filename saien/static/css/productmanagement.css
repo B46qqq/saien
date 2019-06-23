@@ -143,7 +143,7 @@ productlist {
 
 
 .reg_btn {
-    margin: 10px 20px;
+    margin: 10px 30px;
 }
 
 .pn{
@@ -184,4 +184,8 @@ productlist {
 
 .del {
     grid-area: del;
+}
+
+#product_form p {
+    margin-bottom: 8px;
 }

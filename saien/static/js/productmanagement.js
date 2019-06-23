@@ -93,25 +93,21 @@ function refresh_product(pid){
 function p_field_change(f){
     var update_btn = document.querySelector('.reg_btn');
     var label = document.getElementById(f+'_label');
-    var border = document.getElementById(f+'_border');
+
     update_btn.classList.remove('disabled');
     update_btn.setAttribute('onclick', 'updateProduct()');
     label.classList.add('label_changed');
     label.innerHTML = label.innerHTML.replace('Current', 'Future');
-    border.classList.add('border_changed');
 }
 
 function p_field_revert(f){
     var update_btn = document.querySelector('.reg_btn');
     var label = document.getElementById(f+'_label');
-    var border = document.getElementById(f+'_border');
-
     
     update_btn.classList.add('disabled');
     update_btn.setAttribute('onclick', '');
     label.classList.remove('label_changed');
     label.innerHTML = label.innerHTML.replace('Future', 'Current');
-    border.classList.remove('border_changed');
 }
 
 function revert_all_fields(){

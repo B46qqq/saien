@@ -19,6 +19,7 @@ h1 {
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: auto 20px auto;
+    grid-column-gap: 30px;
     grid-template-areas:
         "in_must in_optional"
         ". ."
@@ -26,12 +27,13 @@ h1 {
         ;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
-    margin: 100px 0 0 0;
+    margin: 60px 0 0 0;
 }
 
 .in_must, .in_optional {
     display: grid;
     align-items: end;
+    grid-row-gap: 15px;
 }
 
 .in_must {
@@ -46,6 +48,7 @@ h1 {
 .form_pw {
     display: grid;
     grid-area: pw;
+    grid-row-gap: 15px;
     justify-items: end;
     align-items: end;
 }
@@ -60,4 +63,14 @@ h1 {
     width: 280px;
     left: unset;
     margin: 0 25px;
+}
+
+
+.in {
+    margin: 0;
+    margin-bottom: 1px;
+}
+
+.alert {
+    margin-top: 60px !important;
 }

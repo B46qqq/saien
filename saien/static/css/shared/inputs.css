@@ -14,16 +14,7 @@
     transform-origin: 0 0;
     transition: all 0.2s ease;
 }
-.in .border {
-    position: absolute;
-    bottom: 6px;
-    left: 0;
-    height: 3px;
-    width: 0;
-    background: #07f;
-    transform-origin: 0 0;
-    transition: all 0.15s ease;
-}
+
 .in input,
 .in textarea{
     -webkit-appearance: none;
@@ -62,16 +53,12 @@
 .in textarea:focus {
     background: none;
     outline: none;
+    border-bottom: 2px solid #07f;
 }
 .in input:focus + span,
 .in textarea:focus + span {
     color: #07f;
     transform: translateY(-26px) scale(0.75);
-}
-.in input:focus + span + .border,
-.in textarea:focus + span + .border {
-//    transform: scaleX(1);
-    width: 100%;
 }
 
 .in input:required,
@@ -85,14 +72,14 @@
 }
 
 .reg_btn {
-    margin: 25px 25px;;
+    margin: 30px 30px;
     background: inherit;
     border: 1px solid #9098a9;
     border-radius: 5px;
     cursor: pointer;
     color: grey;
-    height: 40px;
-    width: 100px;
+    height: 35px;
+    width: 80px;
     font-size: 16px;
 }
 

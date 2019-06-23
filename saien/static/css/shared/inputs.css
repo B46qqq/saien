@@ -7,7 +7,7 @@
 
 .in .label {
     position: absolute;
-    top: 25px;
+    top: 18px;
     left: 0;
     font-size: 16px;
     color: #9098a9;
@@ -16,12 +16,11 @@
 }
 .in .border {
     position: absolute;
-    bottom: 0;
+    bottom: 6px;
     left: 0;
     height: 3px;
     width: 0;
     background: #07f;
-//    transform: scaleX(0);
     transform-origin: 0 0;
     transition: all 0.15s ease;
 }
@@ -32,8 +31,8 @@
     border: 0;
     font-family: inherit;
     padding: 12px 0;
-    height: 60px;
-    font-size: 20px;
+    height: 50px;
+    font-size: 18px;
     font-weight: 500;
     border-bottom: 2px solid #c8ccd4;
     background: none;

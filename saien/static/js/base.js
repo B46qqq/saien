@@ -14,13 +14,14 @@ function sidebar_closing(){
     var stcc = get_element(".sidebar_toggle_container_closed");
 
     sc.classList.add("sc_closed");
-    sc.addEventListener("transitionend", function(){
-        stcc.style.left = "0vw";
-    }, { once: true });
+    stcc.style.left = "0vw";
+    // sc.addEventListener("transitionend", function(){
+    //     stcc.style.left = "0vw";
+    // }, { once: true });
 
-    sc.addEventListener("webkitTransitionEnd", function(){
-        stcc.style.left = "0vw";
-    }, { once: true });
+    // sc.addEventListener("webkitTransitionEnd", function(){
+    //     stcc.style.left = "0vw";
+    // }, { once: true });
 }
 
 function sidebar_opening(){
@@ -28,11 +29,12 @@ function sidebar_opening(){
     var stcc = get_element(".sidebar_toggle_container_closed");
 
     stcc.style.left = "-35vw";
-    stcc.addEventListener("transitionend", function(){
-        sc.classList.remove("sc_closed");
-    }, { once: true });
+    sc.classList.remove("sc_closed");
+    // stcc.addEventListener("transitionend", function(){
+    //     sc.classList.remove("sc_closed");
+    // }, { once: true });
 
-    stcc.addEventListener("webkitTransitionEnd", function(){
-        sc.classList.remove("sc_closed");
-    }, { once: true });    
+    // stcc.addEventListener("webkitTransitionEnd", function(){
+    //     sc.classList.remove("sc_closed");
+    // }, { once: true });    
 }

@@ -26,7 +26,7 @@ body {
     width: 35px;
     border-radius: 5px;
     transition: left 1s ease,
-                transform 0.3s linear,
+                transform 0.3s linear,m
                 background-color 0.3s linear;
     z-index: 5;
 }
@@ -69,7 +69,7 @@ bar {
         "login_section"
         "auth_navi"
         "common_navi";
-    grid-template-rows: 50px minmax(auto, 255px) auto 1fr;
+    grid-template-rows: 35px minmax(auto, 200px) auto 1fr;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-color: grey;
@@ -101,11 +101,12 @@ bar {
 .sidebar_toggle_switch {
     position: absolute;
     text-align: center;
-    line-height: 35px;
-    width: 40px;
-    height: 40px;
-    font-size: 40px;
-    right: 0px;
+    line-height: 25px;
+    width: 30px;
+    height: 30px;
+    font-size: 30px;
+    top: 5px;
+    right: 5px;
     color: #A9A9A9;
     transition: all 0.25s ease-in;
 }
@@ -119,7 +120,6 @@ bar {
 .login_section {
     position: relative;
     grid-area: login_section;
-    padding: 15px 0;
 }
 
 .auth_sidebar, .common_sidebar {
@@ -127,10 +127,10 @@ bar {
     grid-area: auth_navi;
     display: grid;
     grid-template-columns: 1fr;
-    grid-auto-rows: 60px;
+    grid-auto-rows: 50px;
     grid-row-gap: 5px;
     align-items: center;
-    padding: 15px 0; 
+    padding: 10px 0; 
 }
 
 .common_sidebar {
@@ -165,7 +165,7 @@ bar {
 
 .navitag {
     display: block;
-    font-size: 26px;
+    font-size: 23px;
     font-weight: bold;
 }
 

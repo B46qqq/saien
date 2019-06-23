@@ -1,17 +1,17 @@
 productlist {
     display: grid;
-    grid-template-columns: calc(200px + 2vw) auto;
+    grid-template-columns: calc(180px + 2vw) auto;
     grid-template-rows: 50px auto;
     grid-template-areas:
         "search message"
         "p_list p_info";
     border: 1px solid #d3d3d3;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 #product_filter {
     padding: 0 10px;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .product_search {
@@ -26,7 +26,7 @@ productlist {
 .product_tab {
     grid-area: p_list;
     width: 100%;
-    height: 720px;
+    height: 600px;
     background-color: #f3f3f3;
     display: grid;
     grid-template-rows: auto 40px;
@@ -41,7 +41,7 @@ productlist {
     background-color: inherit;
     border-right: 1px solid #d3d3d3;
     color: #222;
-    padding: 22px 16px;
+    padding: 16px 16px;
     width: 100%;
     outline: none;
     text-align: left;
@@ -66,10 +66,8 @@ productlist {
 .product_info {
     grid-area: p_info;
     padding: 0px 12px;
-    width: 100%;
     border-left: none;
-    height: 300px;
-    margin: 30px 50px
+    margin: 10px 50px
 }
 
 .in {
@@ -89,7 +87,7 @@ productlist {
         "pbox pboxc"
         "upd upd"
         "del del";
-    grid-row-gap: 20px;
+    grid-row-gap: 15px;
 }
 
 .label_changed {

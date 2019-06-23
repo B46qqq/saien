@@ -2,7 +2,7 @@
     position: relative;
     height: auto;
     width: 100%;
-    padding: 20px 0 40px 0;
+    padding: 30px 0 20px 0;
 }
 
 .loginSection_logo {
@@ -22,7 +22,6 @@
 
 .loginSection_settings {
     position: relative;
-    height: calc(2 * 45px);
     width: 100%;
     display: grid;
     grid-template-columns: 50% 50%;
@@ -35,13 +34,13 @@
 }
 
 .loginSection_setting_btn {
-    height: 42px;
-    width: 105px;
+    height: 40px;
+    width: 100px;
     padding: 1px 8px;
     color: #222;
     background-color: #fff;
     border: 1px solid #fff;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease-out;

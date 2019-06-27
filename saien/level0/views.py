@@ -9,12 +9,14 @@ level0 = Blueprint('level0', __name__)
 def index():
     return render_template('level0_base.html')
 
-@level0.route('/search/')
+@level0.route('/search/', methods=['GET'])
 def search():
     products = Product.query.all()
     plist = []
     for p in products:
-        plist.append(p.as_dict())
-    return render_template('searchpage.html')
+        plist.append({"id" : p.product_id,
+                      "name" : p.product_name})
+        
+    return render_template('searchpage.html', plist=plist)
 
 

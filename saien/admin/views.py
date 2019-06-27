@@ -52,6 +52,12 @@ def productManagement():
                       "name" : p.product_name})
     return render_template('admin_productmanagement.html', plist=plist)
 
+@admin.route('/admin/createnotice/', methods=['GET'])
+@login_required
+@admin_login_required
+def createNotice():
+    return render_template('admin_createnotice.html')
+
 
 @admin.route('/admin/productmanagement/pnew', methods=['POST'])
 @login_required
@@ -69,15 +75,15 @@ def productNew():
 def productUpdate():
     data = request.form;
     update_target = Product.query.get((int)(data['pid']))
-
+    
     # Do nothing but return error message when product_name is none;
     if str(data['pname']) is None or str(data['pname']) is '':
         return json.dumps({'error' : 'Update Failed; product name cannot be none.'})
     
     update_target.product_name = str(data['pname'])
     update_target.product_description = str(data['pdes'])
-    update_target.price_unit_kg = (int)(data['ppkg']) * 100
-    update_target.price_unit_box = (int)(data['ppbox']) * 100
+    update_target.price_unit_kg = (float)(data['ppkg']) * 100
+    update_target.price_unit_box = (float)(data['ppbox']) * 100
     try:
         db.session.commit()
     except:

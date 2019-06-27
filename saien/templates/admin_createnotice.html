@@ -1,0 +1,40 @@
+{% extends "top_base.html" %}
+
+{% block css_block %}
+{{ super() }}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/inputs.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/button.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/admin_createnotice.css') }}">
+{% endblock %}
+
+{% block content_block %}
+<h1> Create Notice </h1>
+
+<form class="notice_form"
+      action="#"
+      method="post">
+    Starting Date:
+    <input type="date" name="bday">
+    
+    Expire Date:
+    <input type="date" name="bday">
+
+    <p class="pd">Notice: </p>
+    <label class="in text pdc">
+        <textarea id="pinfo_des" placeholder="&nbsp;" name="pdes"></textarea>
+        <span id="pdes_label" class="label">Enter new notice: </span>
+    </label>
+    
+</form>
+
+
+{% endblock %}
+
+{% block js_block %}
+{{ super() }}
+<script>
+</script>
+{% endblock %}

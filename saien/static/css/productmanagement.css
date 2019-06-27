@@ -40,7 +40,7 @@ productlist {
     background-color: inherit;
     border-right: 1px solid #d3d3d3;
     color: #222;
-    padding: 16px 16px;
+    padding: 16px 20px;
     width: 100%;
     outline: none;
     text-align: left;
@@ -48,7 +48,14 @@ productlist {
     transition: 0.3s;
 }
 
-.product_tab .active{
+.product_tab .active, .product_tab a:hover{
+    font-weight: bold;
+    font-size: 17px;
+    padding: 12px 20px;
+    box-shadow: 5px 5px 5px rgba(33, 33, 33, 0.2);
+}
+
+.product_tab .active {
     border: none;
     background-color: #fff;
 }
@@ -59,6 +66,15 @@ productlist {
 
 .product_tab .active:hover{
     background-color: #fff;
+}
+
+.product_tab_list {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    direction: rtl;
+    display: grid;
+    grid-auto-rows: 40px;
+    grid-row-gap: 3px;
 }
 
 /* Style the tab content */
@@ -122,7 +138,7 @@ productlist {
     left: 0;
     margin-left: 0;
     max-width: 990px;
-    padding: 5px 30px;
+    padding: 8px 30px;
     font-size: 20px;
     border-radius: 30px;
     opacity: 0.9;
@@ -190,4 +206,10 @@ productlist {
 
 #product_form p {
     margin-bottom: 8px;
+}
+
+
+#newp {
+    direction: ltr;
+    width: 95%;
 }

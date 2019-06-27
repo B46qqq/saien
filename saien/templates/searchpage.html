@@ -1,5 +1,56 @@
 {% extends "top_base.html" %}
 
+{% block css_block %}
+{{ super() }}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/inputs.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/button.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/productmanagement.css') }}">
+{% endblock %}
+
 {% block content_block %}
-<h1> hello world, lets do some searching </h1>
+<h1> Search Product and Description </h1>
+
+<productlist>
+    <input type="text"
+           id="product_filter"
+           onkeyup="product_filter()"
+           placeholder="Search for product..">
+    
+    <div class="product_message alert hide" id="message">
+        <span class="closebtn" onclick="this.parentElement.classList.add('hide');">
+            &times;
+        </span>
+        <strong></strong>
+    </div>
+    
+    <div class="product_tab">
+        <div class="product_tab_list">
+            {% for p in plist %}
+            <a class="product_link"
+               id='{{ p.id }}'
+               onclick="open_product('{{ p.id }}')">
+                {{ p.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="product_info">
+    </div>
+    
+</productlist>
+{% endblock %}
+
+{% block js_block %}
+{{ super() }}
+<script>
+ var url_gpmf = "{{ url_for('admin.gpmf') }}";
+</script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='js/shared/product_search.js') }}"></script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='js/searchpage.js') }}"></script>
 {% endblock %}

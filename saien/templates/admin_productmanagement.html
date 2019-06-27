@@ -89,7 +89,7 @@
             <div class="del">
                 <button id="beforedelete" class="reg_btn del_btn" type="button" onclick="confirmDelete(event)">Delete</button>
                 <button id="canceldelete" class="reg_btn hide" type="button" onclick="cancelDelete()">Cancel</button>           
-                <button id="delete" class="reg_btn del_btn hide" type="button" onclick="deleteProduct()">!DELETE!</button>
+                <button id="delete" class="reg_btn del_btn hide" type="button" onclick="deleteProduct()">DELETE</button>
             </div>
 
         </form>
@@ -107,6 +107,8 @@
  var url_productdelete = "{{ url_for('admin.productDelete') }}";
  var url_productnew = "{{ url_for('admin.productNew') }}";
 </script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='js/shared/product_search.js') }}"></script>
 <script type="text/javascript"
         src="{{ url_for('static', filename='js/productmanagement.js') }}"></script>
 {% endblock %}

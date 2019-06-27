@@ -13,7 +13,7 @@ function getProductForm(pid){
         var p_pkg = document.getElementById('pinfo_pkg');
         var p_box = document.getElementById('pinfo_box');
         
-        p_info = JSON.parse(this.responseText);
+        var p_info = JSON.parse(this.responseText);
 
         p_id.value = p_info.product_id;
         p_name.value = p_info.product_name;
@@ -319,23 +319,5 @@ function createProduct(){
 
     document.addEventListener('mousedown', handlerNewProduct);
 }
-
-function product_filter() {
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById("product_filter");
-    filter = input.value.toUpperCase();
-    tab_list = document.querySelector(".product_tab_list");
-    plist = tab_list.getElementsByTagName("a");
-    for (i = 0; i < plist.length; ++i) {
-        a = plist[i];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            a.style.display = "";
-        } else {
-            a.style.display = "none";
-        }
-    }
-}
-
 
 blankForm();

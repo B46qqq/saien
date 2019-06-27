@@ -15,6 +15,7 @@ function showLoginForm(){
     var ti = get_element(".tab_input");
 
     form.style.gridTemplateColumns = "0 100%";
+    form.classList.add("no_padding_top");
     li.style.display = "none";
     ti.style.display = "grid";
 }
@@ -26,6 +27,7 @@ function hideLoginForm(){
     var ti = get_element(".tab_input");
 
     form.style.gridTemplateColumns = "100% 0";
+    form.classList.remove("no_padding_top");
     li.style.display = "flex";
     ti.style.display = "none";
 }

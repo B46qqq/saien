@@ -77,7 +77,7 @@ def productUpdate():
     update_target.product_name = str(data['pname'])
     update_target.product_description = str(data['pdes'])
     update_target.price_unit_kg = (int)(data['ppkg']) * 100
-    update_target.price_unit_box = (int)(data['pbox']) * 100
+    update_target.price_unit_box = (int)(data['ppbox']) * 100
     try:
         db.session.commit()
     except:

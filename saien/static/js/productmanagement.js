@@ -58,9 +58,9 @@ function getProductForm(pid){
 
         p_box.addEventListener("input", function(){
             if (Number(p_box.value) != Number(p_info.price_unit_box/100))
-                p_field_change('pbox');
+                p_field_change('ppbox');
             else
-                p_field_revert('pbox');
+                p_field_revert('ppbox');
         });
         
     }
@@ -93,25 +93,35 @@ function refresh_product(pid){
 function p_field_change(f){
     var update_btn = document.querySelector('.reg_btn');
     var label = document.getElementById(f+'_label');
+    var input = document.getElementsByName(f)[0];
 
     update_btn.classList.remove('disabled');
     update_btn.setAttribute('onclick', 'updateProduct()');
     label.classList.add('label_changed');
     label.innerHTML = label.innerHTML.replace('Current', 'Future');
+    input.classList.add('input_changed');
 }
 
 function p_field_revert(f){
-    var update_btn = document.querySelector('.reg_btn');
     var label = document.getElementById(f+'_label');
+    var input = document.getElementsByName(f)[0];
     
-    update_btn.classList.add('disabled');
-    update_btn.setAttribute('onclick', '');
     label.classList.remove('label_changed');
     label.innerHTML = label.innerHTML.replace('Future', 'Current');
+    input.classList.remove('input_changed');
+    updateSubmitButtonStatus();
+}
+
+function updateSubmitButtonStatus(){
+    if (document.getElementsByClassName('label_changed').length == 0){
+        var update_btn = document.querySelector('.reg_btn');
+        update_btn.classList.add('disabled');
+        update_btn.setAttribute('onclick', '');        
+    }
 }
 
 function revert_all_fields(){
-    var fields = ["pname", "pdes", "ppkg", "pbox"];
+    var fields = ["pname", "pdes", "ppkg", "ppbox"];
     var i = 0;
     for (; i < fields.length; ++i)
         p_field_revert(fields[i]);
@@ -185,7 +195,7 @@ function getFormData(){
     args += ('&' + 'pname=' + fd.get('pname'));
     args += ('&' + 'pdes=' + fd.get('pdes').trim());
     args += ('&' + 'ppkg=' + localStringToNumber(fd.get('ppkg')));
-    args += ('&' + 'pbox=' + localStringToNumber(fd.get('ppbox')));
+    args += ('&' + 'ppbox=' + localStringToNumber(fd.get('ppbox')));
 
     return args;
 }
@@ -201,7 +211,7 @@ function updateProduct(){
     args += ('&' + 'pname=' + fd.get('pname'));
     args += ('&' + 'pdes=' + fd.get('pdes').trim());
     args += ('&' + 'ppkg=' + localStringToNumber(fd.get('ppkg')));
-    args += ('&' + 'pbox=' + localStringToNumber(fd.get('ppbox')));
+    args += ('&' + 'ppbox=' + localStringToNumber(fd.get('ppbox')));
 
     var request = new XMLHttpRequest();
     request.open('POST', url_productupdate, true);
@@ -328,6 +338,4 @@ function product_filter() {
 }
 
 
-// empty form inputs upon First load & Refresh
-// Just looks nicer;
 blankForm();

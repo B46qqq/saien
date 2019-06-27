@@ -7,10 +7,12 @@
 }
 
 * {
+    font-family: Courier, "Courier New";
     box-sizing: border-box;
 }
 
 *:before, *:after {
+    font-family: Courier, "Courier New";
     box-sizing: border-box;
 }
 
@@ -69,7 +71,7 @@ bar {
         "login_section"
         "auth_navi"
         "common_navi";
-    grid-template-rows: 35px minmax(auto, 200px) auto 1fr;
+    grid-template-rows: 35px minmax(auto, 230px) auto 1fr;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-color: grey;
@@ -78,8 +80,8 @@ bar {
 }
 
 .sidebar_container * {
-    font-family: Courier, "Courier New";
     letter-spacing: -1px;
+    font-size: 24px;
 }
 
 .sc_closed {
@@ -101,12 +103,12 @@ bar {
 .sidebar_toggle_switch {
     position: absolute;
     text-align: center;
-    line-height: 25px;
-    width: 30px;
-    height: 30px;
-    font-size: 30px;
-    top: 5px;
-    right: 5px;
+    line-height: 35px;
+    width: 35px;
+    height: 35px;
+    font-size: 40px;
+    top: 1px;
+    right: 0px;
     color: #A9A9A9;
     transition: all 0.25s ease-in;
 }
@@ -130,7 +132,7 @@ bar {
     grid-auto-rows: 50px;
     grid-row-gap: 5px;
     align-items: center;
-    padding: 10px 0; 
+    padding: 5px 0; 
 }
 
 .common_sidebar {
@@ -165,7 +167,6 @@ bar {
 
 .navitag {
     display: block;
-    font-size: 23px;
     font-weight: bold;
 }
 

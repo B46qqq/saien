@@ -6,12 +6,11 @@ productlist {
         "search message"
         "p_list p_info";
     border: 1px solid #d3d3d3;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 #product_filter {
     padding: 0 10px;
-    font-size: 16px;
 }
 
 .product_search {
@@ -77,7 +76,6 @@ productlist {
 
 .product_info form {
     display: grid;
-    width: 90%;
     grid-template-columns: 180px 1fr;
     grid-template-rows: auto;
     grid-template-areas:
@@ -95,6 +93,10 @@ productlist {
 }
 .border_changed {
     background: #ff9800 !important;
+}
+
+.input_changed {
+    border-bottom: 2px solid #ff9800 !important;
 }
 
 .disabled, .disabled:hover{

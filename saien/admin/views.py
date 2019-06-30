@@ -52,11 +52,13 @@ def productManagement():
                       "name" : p.product_name})
     return render_template('admin_productmanagement.html', plist=plist)
 
+
 @admin.route('/admin/createnotice/', methods=['GET'])
 @login_required
 @admin_login_required
 def createNotice():
     return render_template('admin_createnotice.html')
+
 
 
 @admin.route('/admin/productmanagement/pnew', methods=['POST'])

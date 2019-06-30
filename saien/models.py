@@ -203,6 +203,24 @@ class InvoiceItem(db.Model):
 
         return returnStr
 
+class Notice(db.Model):
+    __tablename__ = 'notice'
+
+    id = db.Column(db.Integer, primary_key = True)
+    start_date = db.Column(db.DateTime, default = datetime.utcnow)
+    expire_date = db.Column(db.DateTime, nullable = True)
+    message = db.Column(db.String(), nullable = False)
+    important = db.Column(db.Boolean, default = False)
+
+    def __repr__(self):
+        returnStr = str('Start date : %s\n') % self.start_date.strftime('%d-%B-%Y')
+        if self.expire_date is not None:
+            returnStr += str('Expire date : %s\n') % self.expire_date.strftime('%d-%B-%Y')
+        returnStr += self.message
+        
+        return returnStr
+    
+
 ##############################################################
 # Avoid circular imports, not the ideal solution but no time #
 ##############################################################

@@ -2,11 +2,15 @@
 
 echo $BASH_VERSION
 
+# Place required Python package name in the $required array.
+# DO NOT USE '_' (lower undersore in packages name
+# Use '-' instead
 required=("flask"\
           "flask-login"\
           "flask-sqlalchemy"\
-          "flask_wtf"\
-          "flask_bcrypt"\
+          "flask-wtf"\
+          "flask-bcrypt"\
+          "flask-migrate"\
          )
 needed=()
 installed="$(pip3 list --format=freeze | cut -d '=' -f 1)"
@@ -16,6 +20,7 @@ for i in ${required[@]}
 do
     req=1
     for j in ${installed[@]}; do
+        echo ${j,,}
         if [[ ${i,,} == ${j,,} ]]; then
             (( req-- ))
             break

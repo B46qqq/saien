@@ -1,6 +1,7 @@
 from flask import render_template, redirect, request, Blueprint, url_for, flash, session, json
 from flask_login import login_user, current_user, logout_user, login_required
-from sqlalchemy import exc
+from sqlalchemy import exc, desc
+from datetime import datetime, timedelta
 from .forms import LoginForm, NewShopForm
 from saien.models import *
 from saien.util.access_protocol import *
@@ -52,12 +53,62 @@ def productManagement():
                       "name" : p.product_name})
     return render_template('admin_productmanagement.html', plist=plist)
 
+@admin.route('/admin/noticemanagement/', methods=['GET'])
+@login_required
+@admin_login_required
+def noticeManagement():
+    dateToday = datetime.today().strftime('%Y-%m-%d')
+    dateTmr = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+    # Query for existing notices, for better management.
+    existingNotice = Notice.query.filter().order_by(desc(Notice.start_date))
+    enlist = []
+    for n in existingNotice:
+        enlist.append({'id' : n.id,
+                       'begin' : n.start_date.strftime('%d-%m-%Y'),
+                       'expire' : n.expire_date.strftime('%d-%m-%Y')
+                       if n.expire_date is not None else 'UNSET',
+                       'title' : n.title,
+                       'message' : n.message})
+#    print(enlist)
+    return render_template('admin_noticemanagement.html',
+                           min_date = dateToday,
+                           tmr_date = dateTmr,
+                           old_notice = enlist)
 
-@admin.route('/admin/createnotice/', methods=['GET'])
+
+@admin.route('/admin/createnotice/', methods=['POST'])
 @login_required
 @admin_login_required
 def createNotice():
-    return render_template('admin_createnotice.html')
+    dateBegin = request.form['begin']
+    dateExpire = request.form['expire']
+
+    if dateBegin is not None and dateBegin is not '':
+        dateBegin = datetime.strptime(dateBegin, '%Y-%m-%d')
+    else:
+        dateBegin = datetime.today()
+    if dateExpire is not None and dateExpire is not '':
+        dateExpire = datetime.strptime(dateExpire, '%Y-%m-%d')
+    else:
+        dateExpire = None
+        
+    title = str(request.form['title'])
+    message = str(request.form['message'])
+    # Current there is no difference between important notice and
+    # normal notice. Not sure how this variable will become important
+    # later on.
+    important = False
+
+    newPost = Notice(dateBegin, dateExpire, title, message, important)
+    db.session.add(newPost)
+    try:
+        db.session.commit()
+    except:
+        flash('Datebase commit failed! Please retry', 'error')
+        
+    flash ('Notice posted correctly', 'success')
+    return redirect(url_for('admin.noticeManagement'))
+
 
 
 

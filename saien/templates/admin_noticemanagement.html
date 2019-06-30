@@ -1,0 +1,130 @@
+{% extends "top_base.html" %}
+
+{% block css_block %}
+{{ super() }}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/inputs.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/button.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/admin_noticemanagement.css') }}">
+{% endblock %}
+
+{% block content_block %}
+<h1> Notice Management </h1>
+<div class="new_notice">
+    <form class="notice_form"
+          id="notice_form"
+          action="{{ url_for('admin.createNotice') }}"
+          method="post">
+        
+        <p class="dbegin">
+            Starting Date:<br>
+            (Default date is today)
+        </p>
+        <label class="in dbegin_input">
+            <input type="date"
+                   name="begin"
+                   min="{{ min_date }}">
+            <span class="label">First date for notice to take effect</span>
+        </label>
+
+        <p class="dexpire">
+            Expire Date:<br>
+            (Default no expire date)
+        </p>
+        <div class="in dexpire_input">
+            <input type="date"
+                   name="expire"
+                   min="{{ tmr_date }}">
+            <span class="label">Last date for notice to take effect</span>
+        </div>
+
+        <p class="title">
+            Notice Title
+        </p>
+        <label class="in title_input">
+            <input type="text"
+                   placeholder="&nbsp;"
+                   name="title"
+                   required>
+            <span class="label">Notice Title: </span>
+        </label>
+
+        <p class="notice">
+            Notice / News <br>
+            (Message to customers)
+        </p>
+        <div class="notice_input">
+            <label class="in text">
+                <textarea id=""
+                          placeholder=" "
+                          name="message"
+                          required></textarea>
+                <span class="label">Enter new notice: </span>
+            </label>
+        </div>
+
+        <div class="btn_div">
+            <button class="reg_btn reset" type="reset" onclick="postBtnHide()">
+                Reset
+            </button>
+            
+            <button id="postBtn" class="reg_btn disabled" type="button" name="update">
+                Post
+            </button>
+        </div>
+
+        <div class="error_div">
+            {% with errors = get_flashed_messages(category_filter=["error"]) %}
+            {% if errors %}
+            <div class="alert">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">
+                    &times;
+                </span>
+                <strong>New notice did NOT processed correctly!</strong>
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            {% with msgs = get_flashed_messages(category_filter=["success"]) %}
+            {% if msgs %}
+            <div class="alert success">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">
+                    &times;
+                </span>
+                <strong>New notice posted correctly.</strong>
+            </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </form>
+</div>
+
+<hr>
+
+<!-- Functionality: can remove old posts, cannot modify -->
+<div class="old_notice">
+    <h2> Posted Notice </h2>
+
+    <div class="collap_wrap">
+        {% for n in old_notice %}
+        <button class="collap">
+            <bn>{{ n.begin }}</bn>
+            <bn>{{ n.title }}</bn>
+            <bn>{{ n.expire }}</bn>
+        </button>
+        <div class="content">
+            <p>{{ n.message }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block js_block %}
+{{ super() }}
+<script type="text/javascript"
+        src="{{ url_for('static', filename='js/noticemanagement.js') }}">
+ </script>
+{% endblock %}

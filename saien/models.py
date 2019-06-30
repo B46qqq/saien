@@ -209,14 +209,23 @@ class Notice(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     start_date = db.Column(db.DateTime, default = datetime.utcnow)
     expire_date = db.Column(db.DateTime, nullable = True)
-    message = db.Column(db.String(), nullable = False)
+    title = db.Column(db.String(120), nullable = False)
+    message = db.Column(db.String(2048), nullable = False)
     important = db.Column(db.Boolean, default = False)
+
+    def __init__(self, begin, expire, title, message, important):
+        self.start_date = begin
+        self.title = title
+        self.message = message
+        self.expire_date = expire
+        self.important = important
 
     def __repr__(self):
         returnStr = str('Start date : %s\n') % self.start_date.strftime('%d-%B-%Y')
         if self.expire_date is not None:
             returnStr += str('Expire date : %s\n') % self.expire_date.strftime('%d-%B-%Y')
-        returnStr += self.message
+        returnStr += str('Title : %s\n') % self.title
+        returnStr += str('Message : %s\n') % self.message
         
         return returnStr
     

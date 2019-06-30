@@ -1,0 +1,124 @@
+.new_notice {
+    margin: 40px 0;
+}
+
+.notice_form {
+    position: relative;
+    display: grid;
+    grid-template-columns: 35% 65%;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "dbegin debgin_input"
+        "dexpire dexpire_input"
+        "title title_input"
+        "notice notice_input"
+        "btn_div error_div";
+    grid-column-gap: 60px;
+    grid-row-gap: 30px;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+}
+
+.notice_form p {
+    justify-self: end;
+}
+
+.dbegin {
+    grid-area: dbegin;
+}
+
+.debgin_input {
+    grid-area: dbegin_input;
+    display: grid;
+}
+
+.dexpire {
+    grid-area: dexpire;
+}
+
+.dexpire_input {
+    grid-area: dexpire_input;
+    display: grid;
+}
+
+.title {
+    grid-area: title;
+}
+
+.title_input {
+    grid-area: title_input;
+    display: grid;
+}
+
+.notice {
+    grid-area: notice;
+}
+
+.notice_input {
+    grid-area: notice_input;
+    display: grid;
+}
+
+.btn_div {
+    grid-area: btn_div;
+    justify-self: end;
+}
+
+.error_div {
+    grid-area: error_div;
+}
+
+.alert {
+    max-width: 550px;
+    left: 0;
+    margin-left: unset;
+}
+
+.in {
+    margin: 10px 0;
+}
+
+.reg_btn {
+    margin: 10px 0;
+    justify-self: end;
+}
+
+.reset {
+    margin-right: 30px;
+    justify-self: unset;
+}
+
+.collap {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    display: grid;
+    grid-template-columns: 20% 1fr 20%;
+}
+
+.active, .collap:hover {
+    background-color: #555;
+}
+
+.content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;
+}
+
+.old_notice {
+    display: grid;
+}
+
+.collap_wrap {
+    width: 90%;
+    max-width: 900px;
+    justify-self: center;
+    margin: 20px 0 60px 0;
+}

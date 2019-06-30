@@ -115,23 +115,6 @@ productlist {
     border-bottom: 2px solid #ff9800 !important;
 }
 
-.disabled, .disabled:hover{
-    background-color: grey;
-    color: white;
-    box-shadow: unset;
-}
-
-.hide {
-    display: none;
-}
-
-.del_btn:hover, .del_confirm {
-    background-color: #f44336;
-    color: white;
-    border: 0px;
-    box-shadow: 2px 3px 5px rgba(33, 33, 33, 0.3);
-}
-
 .alert {
     height: 100%;
     width: 100%;

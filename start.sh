@@ -20,7 +20,6 @@ for i in ${required[@]}
 do
     req=1
     for j in ${installed[@]}; do
-        echo ${j,,}
         if [[ ${i,,} == ${j,,} ]]; then
             (( req-- ))
             break

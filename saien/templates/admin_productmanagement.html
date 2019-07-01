@@ -102,7 +102,7 @@
 {% block js_block %}
 {{ super() }}
 <script>
- var url_gpmf = "{{ url_for('admin.gpmf') }}";
+ var url_pinfo = "{{ url_for('level0.get_productInfo') }}";
  var url_productupdate = "{{ url_for('admin.productUpdate') }}";
  var url_productdelete = "{{ url_for('admin.productDelete') }}";
  var url_productnew = "{{ url_for('admin.productNew') }}";

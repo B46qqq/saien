@@ -8,16 +8,14 @@ function open_product(pid){
 
 
 function getProductInfo(pid){
-
     var args = "pid="+pid;
     var request = new XMLHttpRequest();
-    request.open('POST', url_gpmf, true);
+    request.open('POST', url_pinfo, true);
     request.setRequestHeader('Content-type',
                              'application/x-www-form-urlencoded');
 
     request.onload = function(){
         var p_info = JSON.parse(this.responseText);
-        console.log(p_info);
 
         var info = document.querySelector('.product_info');
         info.innerHTML = '<p>' + p_info.product_name + '</p>';

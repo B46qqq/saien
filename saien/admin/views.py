@@ -108,6 +108,8 @@ def createNotice():
     flash ('Notice posted correctly', 'success')
     return redirect(url_for('admin.noticeManagement'))
 
+
+
 @admin.route('/admin/removenotice/', methods=['POST'])
 @login_required
 @admin_login_required
@@ -121,6 +123,7 @@ def removeNotice():
     return json.dumps({'success' : 'Notice Deleted!'})
 
 
+
 @admin.route('/admin/productmanagement/pnew', methods=['POST'])
 @login_required
 @admin_login_required
@@ -130,6 +133,8 @@ def productNew():
     db.session.add(new_target)
     db.session.commit()
     return str(new_target.product_id)
+
+
 
 @admin.route('/admin/productmanagement/pupdate', methods=['POST'])
 @login_required
@@ -151,6 +156,8 @@ def productUpdate():
     except:
         return json.dumps({'error' : 'Update Failed; database not accepting requests.'})
     return json.dumps({'success' : 'Update Success'})
+
+
 
 @admin.route('/admin/productmanagement/pdelete', methods=['POST'])
 @login_required
@@ -220,13 +227,3 @@ def admin_logout():
     logout_user()
     session.clear()
     return redirect(url_for('level0.index'))
-
-
-@admin.route('/product/get_product_management_form', methods=['POST'])
-@login_required
-@admin_login_required
-def gpmf():
-    pid = (int)(request.form['pid'])
-    retInfo = Product.query.get(pid)
-    retInfo = json.dumps(retInfo.as_dict())
-    return retInfo;

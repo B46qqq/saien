@@ -2,7 +2,7 @@ function getProductForm(pid){
 
     var args = "pid="+pid;
     var request = new XMLHttpRequest();
-    request.open('POST', url_gpmf, true);
+    request.open('POST', url_pinfo, true);
     request.setRequestHeader('Content-type',
                              'application/x-www-form-urlencoded');
 

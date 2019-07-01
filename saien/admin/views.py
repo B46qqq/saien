@@ -68,8 +68,7 @@ def noticeManagement():
                        'expire' : n.expire_date.strftime('%d-%m-%Y')
                        if n.expire_date is not None else 'UNSET',
                        'title' : n.title,
-                       'message' : n.message})
-#    print(enlist)
+                       'message' : (n.message).replace('\n', '<br>')})
     return render_template('admin_noticemanagement.html',
                            min_date = dateToday,
                            tmr_date = dateTmr,
@@ -109,7 +108,17 @@ def createNotice():
     flash ('Notice posted correctly', 'success')
     return redirect(url_for('admin.noticeManagement'))
 
-
+@admin.route('/admin/removenotice/', methods=['POST'])
+@login_required
+@admin_login_required
+def removeNotice():
+    try:
+        delete_target = Notice.query.get((int)(request.form['id']))
+        db.session.delete(delete_target)
+        db.session.commit()
+    except:
+        return json.dumps({'error' : 'Deletion Failed; database not accepting requests.'})
+    return json.dumps({'success' : 'Notice Deleted!'})
 
 
 @admin.route('/admin/productmanagement/pnew', methods=['POST'])

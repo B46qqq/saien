@@ -105,17 +105,33 @@
 
 <!-- Functionality: can remove old posts, cannot modify -->
 <div class="old_notice">
-    <h2> Posted Notice </h2>
+    <div class="on_status">
+        <h2> Posted Notice </h2>
+        
+        <div class="message alert hide" id="message">
+            <span class="closebtn" onclick="this.parentElement.classList.add('hide');">
+                &times;
+            </span>
+            <strong></strong>
+        </div>
+    </div>
 
     <div class="collap_wrap">
         {% for n in old_notice %}
-        <button class="collap">
+        <button id="{{ n.id }}" class="collap">
             <bn>{{ n.begin }}</bn>
             <bn>{{ n.title }}</bn>
             <bn>{{ n.expire }}</bn>
         </button>
-        <div class="content">
+        <div class="notice_content">
+            {% autoescape false %}
             <p>{{ n.message }}</p>
+            {% endautoescape %}
+            <div class="del">
+                <button class="reg_btn del_btn" type="button" onclick="confirmDelete(event)">Delete</button>
+                <button class="reg_btn hide" type="button" onclick="cancelDelete(event)">Cancel</button>           
+                <button class="reg_btn del_btn hide" type="button" onclick="deleteNotice({{ n.id }})">DELETE</button>
+            </div>
         </div>
         {% endfor %}
     </div>
@@ -124,7 +140,10 @@
 
 {% block js_block %}
 {{ super() }}
+<script>
+ var url_removeNotice = "{{ url_for('admin.removeNotice') }}";
+</script>
 <script type="text/javascript"
         src="{{ url_for('static', filename='js/noticemanagement.js') }}">
- </script>
+</script>
 {% endblock %}

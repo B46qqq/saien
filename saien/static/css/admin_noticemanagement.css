@@ -72,6 +72,7 @@
     max-width: 550px;
     left: 0;
     margin-left: unset;
+    border-radius: 25px;
 }
 
 .in {
@@ -88,9 +89,13 @@
     justify-self: unset;
 }
 
+.reset:hover {
+    background-color: #ff9800;
+}    
+
 .collap {
-    background-color: #777;
-    color: white;
+    background-color: #d3d3d3;
+    color: #000;
     cursor: pointer;
     padding: 18px;
     width: 100%;
@@ -98,18 +103,22 @@
     text-align: left;
     outline: none;
     display: grid;
+    margin-bottom: 5px;
     grid-template-columns: 20% 1fr 20%;
+    transition: 0.3s;
 }
 
 .active, .collap:hover {
-    background-color: #555;
+    background-color: #e0e0e0;
+    box-shadow: 5px 5px 5px rgba(33, 33, 33, 0.4)
 }
 
-.content {
+.notice_content {
+    margin-top: 5px;
     padding: 0 18px;
     display: none;
     overflow: hidden;
-    background-color: #f1f1f1;
+    background-color: #f3f3f3;
 }
 
 .old_notice {
@@ -117,8 +126,31 @@
 }
 
 .collap_wrap {
-    width: 90%;
+    width: 100%;
     max-width: 900px;
     justify-self: center;
     margin: 20px 0 60px 0;
+}
+
+.del {
+    display: grid;
+    grid-template-columns: 1fr 10%;
+}
+
+.del button{
+    height: 30px;
+    width: 80px;
+}
+
+.on_status {
+    display: grid;
+    grid-template-columns: 1fr 40%;
+}
+
+.message {
+    height: 40px;
+    max-width: 300px;
+    margin: 20px 30px 0 0;
+    padding: 10px 20px;
+    border-radius: 10px;
 }

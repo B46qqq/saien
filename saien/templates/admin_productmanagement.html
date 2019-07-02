@@ -3,9 +3,7 @@
 {% block css_block %}
 {{ super() }}
 <link rel="stylesheet"
-      href="{{ url_for('static', filename='css/shared/inputs.css') }}">
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/shared/button.css') }}">
+      href="{{ url_for('static', filename='css/shared/searchproduct.css') }}">
 <link rel="stylesheet"
       href="{{ url_for('static', filename='css/productmanagement.css') }}">
 {% endblock %}
@@ -35,6 +33,7 @@
                 {{ p.name }}
             </a>
             {% endfor %}
+            <margin></margin>
         </div>
         <div class="btn">
             <button class="icon-btn add-btn" onclick="createProduct()">

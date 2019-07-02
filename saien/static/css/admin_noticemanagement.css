@@ -89,10 +89,6 @@
     justify-self: unset;
 }
 
-.reset:hover {
-    background-color: #ff9800;
-}    
-
 .collap {
     background-color: #d3d3d3;
     color: #000;
@@ -134,7 +130,7 @@
 
 .del {
     display: grid;
-    grid-template-columns: 1fr 10%;
+    grid-template-columns: 1fr 15%;
 }
 
 .del button{

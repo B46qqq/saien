@@ -1,5 +1,5 @@
 .sidebar_container {
-    grid-template-rows: 35px minmax(auto, 210px) auto 1fr;
+    grid-template-rows: minmax(auto, 210px) auto 1fr;
 }
 
 .loginSection_logo_wrapper, .loginSection_logo_wrapper *{

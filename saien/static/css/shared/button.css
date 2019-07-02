@@ -102,19 +102,67 @@
     top: calc(50% - 2px);
 }
 
-.disabled, .disabled:hover{
-    background-color: grey;
+
+
+.reg_btn {
+    margin: 30px 0;
+    background: inherit;
+    border: 1px solid #2196F3;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+    width: 90px;
+    font-size: 16px;
+    font-weight: bold;
+    color: dodgerblue
+}
+
+.reg_btn:focus {
+    outline: none;
+}
+
+
+.reg_btn::-moz-focus-inner{
+    border: 0;
+}
+
+.reg_btn:hover {
+    background-color: #07f;
     color: white;
-    box-shadow: unset;
+    border: 0px;
+    box-shadow: 2px 3px 5px rgba(33, 33, 33, 0.3);
 }
 
-.hide {
-    display: none;
+.del_btn{
+    border-color: #f44336;
+    color: red;
 }
 
-.del_btn:hover, .del_confirm {
+.del_btn:hover {
     background-color: #f44336;
     color: white;
     border: 0px;
     box-shadow: 2px 3px 5px rgba(33, 33, 33, 0.3);
+}
+
+.warning_btn {
+    border-color: #ff9800;
+    color: orange;
+}
+
+.warning_btn:hover {
+    background: #ff9800;
+    color: white;
+}
+
+
+.disabled, .disabled:hover{
+    background-color: grey;
+    color: white;
+    box-shadow: unset;
+    border-color: grey;
+}
+
+.hide {
+    display: none;
 }

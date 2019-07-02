@@ -1,0 +1,82 @@
+productlist {
+    display: grid;
+    grid-template-columns: calc(180px + 2vw) auto;
+    grid-template-rows: 50px auto;
+    grid-template-areas:
+        "search message"
+        "p_list p_info";
+    border: 1px solid #d3d3d3;
+    font-size: 16px;
+}
+
+#product_filter {
+    padding: 0 10px;
+}
+
+.product_search {
+    grid-area: search;
+}
+
+.product_message {
+    grid-area: message;
+}
+
+
+.product_tab {
+    grid-area: p_list;
+    width: 100%;
+    height: 600px;
+    background-color: #efefef;
+    display: grid;
+    grid-template-rows: auto 40px;
+}
+
+.product_tab:hover {
+    border-right: unset;
+}
+
+.product_tab a {
+    display: block;
+    background-color: inherit;
+    border-right: 1px solid #d3d3d3;
+    color: #222;
+    padding: 8px 10px 8px 15px;
+    width: 100%;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.product_tab .active, .product_tab a:hover{
+    font-weight: bold;
+    font-size: 17px;
+    padding: 7px 0 9px 18px;
+    box-shadow: 5px 5px 5px rgba(33, 33, 33, 0.2);
+}
+
+.product_tab .active {
+    border: none;
+    background-color: #fff;
+}
+
+.product_tab a:hover {
+    background-color: #fbfbfb;
+}
+
+.product_tab .active:hover{
+    background-color: #fff;
+}
+
+.product_tab_list {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    direction: rtl;
+    display: grid;
+    grid-auto-rows: 40px;
+    grid-row-gap: 3px;
+}
+
+.product_tab_list margin{
+    height: 10px;
+}

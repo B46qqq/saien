@@ -189,14 +189,12 @@ function getFormData(){
 function confirmDelete(e){
     e.currentTarget.style.display= 'none';
     document.getElementById('delete').classList.remove('hide');
-    document.getElementById('delete').classList.add('del_confirm');
     document.getElementById('canceldelete').classList.remove('hide');
 }
 
 function cancelDelete(){
     document.getElementById('beforedelete').style.display = "block";
     document.getElementById('delete').classList.add('hide');
-    document.getElementById('delete').classList.remove('del_confirm');
     document.getElementById('canceldelete').classList.add('hide');
 }
 
@@ -290,6 +288,7 @@ function handlerNewProduct(){
             np.setAttribute('id', pid);
             np.setAttribute('onclick', 'open_product(' + pid.toString() +')');
             np.innerHTML = pname;
+            open_product(pid);
         };
 
         request.send(args);
@@ -302,6 +301,7 @@ function blankForm(){
 
 function createProduct(){
     blankForm();
+    unselectAll();
     
     var list = document.querySelector('.product_tab_list');
     var newProduct = document.createElement('a');
@@ -309,12 +309,15 @@ function createProduct(){
 
     newProduct.setAttribute('class', 'product_link');
     newProduct.setAttribute('id', 'new_product');
+    newProduct.classList.add('active');
+    newProduct.classList.add('less_margin');
+    
     newInput.setAttribute('type', 'text');
     newInput.setAttribute('value', '');
     newInput.setAttribute('id', 'newp');
+    
     newProduct.appendChild(newInput);
-
-    list.appendChild(newProduct);
+    list.insertBefore(newProduct, list.childNodes[0]);
     newInput.focus();
 
     document.addEventListener('mousedown', handlerNewProduct);

@@ -9,32 +9,17 @@ function get_element(className){
     return element;
 }
 
-function sidebar_closing(){
+function sidebar_toggle(x){
+    x.classList.toggle('open');
+
     var sc = get_element(".sidebar_container");
-    var stcc = get_element(".sidebar_toggle_container_closed");
-
-    sc.classList.add("sc_closed");
-    stcc.style.left = "0vw";
-    // sc.addEventListener("transitionend", function(){
-    //     stcc.style.left = "0vw";
-    // }, { once: true });
-
-    // sc.addEventListener("webkitTransitionEnd", function(){
-    //     stcc.style.left = "0vw";
-    // }, { once: true });
-}
-
-function sidebar_opening(){
-    var sc = get_element(".sidebar_container");
-    var stcc = get_element(".sidebar_toggle_container_closed");
-
-    stcc.style.left = "-35vw";
-    sc.classList.remove("sc_closed");
-    // stcc.addEventListener("transitionend", function(){
-    //     sc.classList.remove("sc_closed");
-    // }, { once: true });
-
-    // stcc.addEventListener("webkitTransitionEnd", function(){
-    //     sc.classList.remove("sc_closed");
-    // }, { once: true });    
+    var cc = get_element(".content_container");
+    
+    if (x.classList.contains('open')){
+        sc.classList.remove('sc_closed');
+        x.classList.remove('stc_closed');
+    } else {
+        sc.classList.add('sc_closed');
+        x.classList.add('stc_closed');
+    }
 }

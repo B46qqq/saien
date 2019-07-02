@@ -3,10 +3,6 @@
 {% block css_block %}
 {{ super() }}
 <link rel="stylesheet"
-      href="{{ url_for('static', filename='css/shared/inputs.css') }}">
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/shared/button.css') }}">
-<link rel="stylesheet"
       href="{{ url_for('static', filename='css/admin_noticemanagement.css') }}">
 {% endblock %}
 
@@ -66,7 +62,7 @@
         </div>
 
         <div class="btn_div">
-            <button class="reg_btn reset" type="reset" onclick="postBtnHide()">
+            <button class="reg_btn reset warning_btn" type="reset" onclick="postBtnHide()">
                 Reset
             </button>
             

@@ -1,0 +1,5 @@
+* Bars need to be changed to be more prominent
+* fonts need to be changed
+* Search item: label
+* create new product message is too low.
+* sidebar more color, maybe divider

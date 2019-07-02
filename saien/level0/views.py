@@ -1,5 +1,6 @@
 from flask import render_template, request, redirect, Blueprint, url_for, json, jsonify
 from flask_login import current_user
+from datetime import datetime
 from sqlalchemy import exc, desc
 from saien.models import Product, Notice
 
@@ -21,7 +22,9 @@ def search():
 
 @level0.route('/news/', methods=['GET'])
 def news():
-    notices = Notice.query.filter().order_by(desc(Notice.start_date))
+    today = datetime.today()
+    print(today);
+    notices = Notice.query.filter(Notice.start_date <= today).order_by(desc(Notice.start_date))
     enlist = []
     for n in notices:
         enlist.append({'begin' : n.start_date.strftime('%d-%m-%Y'),

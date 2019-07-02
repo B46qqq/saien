@@ -1,0 +1,34 @@
+notice_container {
+    display: grid;
+}
+
+h3 {
+    border-bottom: 1px solid #D3D3D3;
+}
+
+notice {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "title date"
+        "content content";
+    border-radius: 20px;
+    border: 1px solid #D3D3D3;
+    padding: 0 40px;
+    margin: 10px 20px;
+}
+
+noticeTitle {
+    grid-area: title;
+    justify-self: start;
+}
+
+noticeDate {
+    grid-area: date;
+    justify-self: end;
+}
+
+noticeContent {
+    grid-area: content;
+    padding: 0 20px;
+}

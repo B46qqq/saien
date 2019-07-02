@@ -4,8 +4,6 @@
 {% block css_block %}
 {{ super() }}
 <link rel="stylesheet"
-      href="{{ url_for('static', filename='css/shared/inputs.css') }}">
-<link rel="stylesheet"
       href="{{ url_for('static', filename='css/admin_newshop.css') }}">
 {% endblock %}
 
@@ -34,7 +32,7 @@
     </div>
 
     <div class="form_pws">
-        <button class="reg_btn" type="reset">
+        <button class="reg_btn warning_btn" type="reset">
             Reset
         </button>
     </div>

@@ -2,6 +2,10 @@
 
 {% block css_block %}
 <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/inputs.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/button.css') }}">
+<link rel="stylesheet"
       href="{{ url_for('static', filename='css/shared/auth_login_section.css') }}">
 {% endblock %}
 

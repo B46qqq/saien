@@ -321,10 +321,6 @@
     justify-self: end;
 }
 
-.back_btn:hover {
-    background-color: #f44336;
-}
-
 .userloginfielderror {
     position: absolute;
     margin: 0;

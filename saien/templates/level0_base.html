@@ -4,6 +4,8 @@
 <link rel="stylesheet"
       href="{{ url_for('static', filename='css/shared/inputs.css') }}">
 <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/button.css') }}">
+<link rel="stylesheet"
       href="{{ url_for('static', filename='css/level0_base.css') }}">
 {% endblock %}
 
@@ -59,7 +61,7 @@
             Login
         </button>
         
-        <button class="reg_btn back_btn" type="button" onclick="hideLoginForm()">
+        <button class="reg_btn back_btn warning_btn" type="button" onclick="hideLoginForm()">
             Cancel
         </button>
 

@@ -3,27 +3,33 @@
 {% block css_block %}
 {{ super() }}
 <link rel="stylesheet"
-      href="{{ url_for('static', filename='css/shared/button.css') }}">
+      href="{{ url_for('static', filename='css/newspage.css') }}">
 {% endblock %}
 
 {% block content_block %}
 <h1> Lastest notice from Saien </h1>
 
-<div class="notices">
-    <div class="collap_wrap">
-        {% for n in notices %}
-        <button id="{{ n.id }}" class="collap">
-            <bn>{{ n.begin }}</bn>
-            <bn>{{ n.title }}</bn>
-        </button>
-        <div class="notice_content">
+<notice_container>
+    {% for n in notices %}
+    <notice>
+        <noticeTitle>
+            <h3>
+                {{ n.title }}
+            </h3>
+        </noticeTitle>
+        <noticeDate>
+            <h3>
+                {{ n.begin }}
+            </h3>
+        </noticeDate>
+        <noticeContent>
             {% autoescape false %}
             <p>{{ n.message }}</p>
             {% endautoescape %}
-        </div>
-        {% endfor %}
-    </div>
-</div>
+        </noticeContent>
+    </notice>
+    {% endfor %}
+</notice_container>
 {% endblock %}
 
 {% block js_block %}

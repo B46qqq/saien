@@ -1,83 +1,3 @@
-productlist {
-    display: grid;
-    grid-template-columns: calc(180px + 2vw) auto;
-    grid-template-rows: 50px auto;
-    grid-template-areas:
-        "search message"
-        "p_list p_info";
-    border: 1px solid #d3d3d3;
-    font-size: 16px;
-}
-
-#product_filter {
-    padding: 0 10px;
-}
-
-.product_search {
-    grid-area: search;
-}
-
-.product_message {
-    grid-area: message;
-}
-
-
-.product_tab {
-    grid-area: p_list;
-    width: 100%;
-    height: 600px;
-    background-color: #f3f3f3;
-    display: grid;
-    grid-template-rows: auto 40px;
-}
-
-.product_tab:hover {
-    border-right: unset;
-}
-
-.product_tab a {
-    display: block;
-    background-color: inherit;
-    border-right: 1px solid #d3d3d3;
-    color: #222;
-    padding: 16px 20px;
-    width: 100%;
-    outline: none;
-    text-align: left;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.product_tab .active, .product_tab a:hover{
-    font-weight: bold;
-    font-size: 17px;
-    padding: 12px 20px;
-    box-shadow: 5px 5px 5px rgba(33, 33, 33, 0.2);
-}
-
-.product_tab .active {
-    border: none;
-    background-color: #fff;
-}
-
-.product_tab a:hover {
-    background-color: #fbfbfb;
-}
-
-.product_tab .active:hover{
-    background-color: #fff;
-}
-
-.product_tab_list {
-    overflow-y: scroll;
-    overflow-x: hidden;
-    direction: rtl;
-    display: grid;
-    grid-auto-rows: 40px;
-    grid-row-gap: 3px;
-}
-
-/* Style the tab content */
 .product_info {
     grid-area: p_info;
     padding: 0px 12px;
@@ -191,8 +111,23 @@ productlist {
     margin-bottom: 8px;
 }
 
+@keyframes input_blink {
+    0% {
+        border: 3px solid #80C883;
+    } 100% {
+        border: 3px solid #437A35;
+    }
+}
 
 #newp {
     direction: ltr;
+    height: 100%;
     width: 95%;
+    font-size: inherit;
+    animation: input_blink 1.5s infinite;
 }
+
+.less_margin {
+    padding: 6px 0px 6px 15px !important;
+}
+

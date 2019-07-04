@@ -16,7 +16,8 @@
 }
 
 .in input,
-.in textarea{
+.in textarea,
+.in select{
     -webkit-appearance: none;
     width: 100%;
     border: 0;
@@ -39,35 +40,40 @@
     resize: vertical;
 }
 
-
 .in input:hover,
-.in textarea:hover {
+.in textarea:hover,
+.in select:hover {
     background: rgba(34,50,84,0.05);
 }
 .in input:not(:placeholder-shown) + span,
-.in textarea:not(:placeholder-shown) + span{
+.in textarea:not(:placeholder-shown) + span,
+.in select:not(:placeholder-shown) + span {
     color: #5a667f;
     transform: translateY(-26px) scale(0.75);
 }
 .in input:focus,
-.in textarea:focus {
+.in textarea:focus,
+.in select:focus {
     background: none;
     outline: none;
     border-bottom: 2px solid #07f;
 }
 .in input:focus + span,
-.in textarea:focus + span {
+.in textarea:focus + span,
+.in select:focus + span {
     color: #07f;
     transform: translateY(-26px) scale(0.75);
 }
 
 .in input:required,
-.in textarea:required {
+.in textarea:required,
+.in select:required {
     box-shadow: none;
 }
 
 .in input:invalid,
-.in textarea:invalid {
+.in textarea:invalid,
+.in select:invalid {
     box-shadow: none;
 }
 

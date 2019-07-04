@@ -1,0 +1,78 @@
+{% extends "user_base.html" %}
+
+{% block css_block %}
+{{ super() }}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/user_makeorder.css') }}">
+{% endblock %}
+
+{% block content_block %}
+<h1> Make New Order </h1>
+
+<form autocomplete="off">
+    <orderDate>
+        <p>
+            Order Date:<br>
+        </p>
+        <label class="in">
+            <input type="date"
+                   name="begin"
+                   min="{{ min_date }}"
+                   required>
+            <span class="label">Date for this order; IMPORTANT</span>
+        </label>
+    </orderDate>
+    
+    <hr>
+
+    <orderSection class="noselect">
+        <product style="display: none;">
+            <orderNumber>0</orderNumber>
+            <label class="in autocomplete">
+                <input type="text"
+                       placeholder=""
+                       required>
+                <span class="label">product name</span>
+            </label>
+            
+            <label class="in">
+                <select name="unit">
+                    <option disabled selected value style="display:none"></option>
+                    <option value="pc">Piece</option>
+                    <option value="kg">Kilogram</option>
+                    <option value="box">Box/Bag/Tray</option>
+                </select>
+                <span class="label">unit</span>
+            </label>
+            
+            <label class="in">
+                <input type="number"
+                       step="0.01"
+                       placeholder=""
+                       min="0"
+                       required>
+                <span class="label">quantity</span>
+            </label>
+            <div></div>
+            <button class="reg_btn del_btn" type="button" onclick="deleteItem(event)">Remove</button>
+        </product>
+        <addBtn>
+            <button class="icon-btn add-btn"
+                    type="button"
+                    onclick="addItem(event)">
+                <div class="add-icon"></div>
+                <div class="btn-txt">Add</div>
+            </button>
+        </addBtn>
+    </orderSection>
+</form>
+{% endblock %}
+
+{% block js_block %}
+{{ super() }}
+<script>
+ var products = {{ allProducts|tojson }};
+</script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='js/user_makeorder.js') }}"></script>
+{% endblock %}

@@ -1,8 +1,9 @@
-from flask import render_template, redirect, request, Blueprint, url_for, flash, session
+from flask import render_template, redirect, request, Blueprint, url_for, flash, session, json
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import exc
+from datetime import datetime, timedelta
 from .forms import *
-from saien.models import User
+from saien.models import User, Product
 from urllib.parse import urlparse, urljoin
 from saien.util.access_protocol import shop_login_required
 
@@ -36,15 +37,20 @@ def verify():
 def index():
     return render_template('user_base.html')
 
-@user.route('/u/search/', methods=['GET'])
+
+@user.route('/u/makeorder/', methods=['GET'])
 @login_required
 @shop_login_required
-def search():
-    return "shop is searching!"
-
-@user.route('/u/reroute/', methods=['GET'])
-def uselessfunction():
-    return render_template('level0_base.html')
+def makeOrder():
+    dateToday = datetime.today().strftime('%Y-%m-%d')
+    products = Product.query.all()
+    productNames = []
+    for p in products:
+        productNames.append(p.product_name)
+    productsData = {'productNames' : productNames}
+    return render_template('user_makeorder.html',
+                           min_date = dateToday,
+                           allProducts=productsData)
 
 
 @user.route('/u/logout')

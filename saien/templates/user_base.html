@@ -2,6 +2,10 @@
 
 {% block css_block %}
 <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/inputs.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/shared/button.css') }}">
+<link rel="stylesheet"
       href="{{ url_for('static', filename='css/shared/auth_login_section.css') }}">
 <link rel="stylesheet"
       href="{{ url_for('static', filename='css/auth_user_base.css') }}">
@@ -42,15 +46,11 @@
 
 
 {% block auth_sidebar %}
-<div class="navitag">
+<div class="navitag"
+     onclick="window.location.href='{{ url_for('user.makeOrder') }}'">
         <a>Make Order</a>
 </div>
 <div class="navitag">
         <a>Order History</a>
 </div>
-{% endblock %}
-
-
-
-{% block js_block %}
 {% endblock %}

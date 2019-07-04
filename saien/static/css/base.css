@@ -1,4 +1,4 @@
-#noselect {
+.noselect {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */
@@ -107,7 +107,7 @@ body {
 
 .content_container {
     grid-area: content;
-    padding: 0 40px;
+    padding: 0 70px;
     overflow-y: auto;
     scrollbar-color: grey;
     scrollbar-width: thin;

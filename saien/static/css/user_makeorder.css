@@ -52,6 +52,17 @@
     color: #ffffff;
 }
 
+formTop {
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr 1fr;
+}
+
+.formTop_btn {
+    margin: 0;
+    justify-self: center;
+    align-self: center;
+}
+
 orderDate {
     display: grid;
     grid-template-columns: 30% 1fr;
@@ -79,10 +90,12 @@ product {
     justify-self: center;
 }
 
+input {
+    padding: 0 10px !important;
+}
 
 .invalid_input {
     border-bottom: 2px solid #f44336 !important;
-    color: #f44336 !important;
     background-color: #ffdddd !important;
 }
 
@@ -90,6 +103,15 @@ product {
 .invalid_label {
     font-style: italic !important;
     color: #f44336 !important;
+}
+
+.valid_input {
+    border-bottom: 2px solid #4CAF50 !important;
+}
+
+.valid_label {
+    font-style: italic !important;
+    color: #4CAF50 !important;
 }
 
 addBtn {
@@ -100,10 +122,10 @@ addBtn {
 
 addBtn .add-btn {
     justify-self: center;
-    align-self: center;
+    align-self: end;
 }
 
-.reg_btn {
+.item_remove_btn {
     margin: unset;
     align-self: center;
     justify-self: center;
@@ -114,7 +136,7 @@ addBtn .add-btn {
     padding: 1px 4px;
 }
 
-.reg_btn:hover {
+.item_remove_btn:hover {
     opacity: 1;
 }
 
@@ -130,4 +152,12 @@ orderNumber {
 
 form {
     margin-top: 60px;
+}
+
+.additional:required:invalid{
+    color: #9098a9;
+}
+
+.additional option{
+    color: #223254;
 }

@@ -38,18 +38,32 @@ def index():
     return render_template('user_base.html')
 
 
+# Order can be made prior to 4am everyday (actually not Sundays)
 @user.route('/u/makeorder/', methods=['GET'])
 @login_required
 @shop_login_required
 def makeOrder():
-    dateToday = datetime.today().strftime('%Y-%m-%d')
+    # Check if current time is before/after 4am;
+    timeNow = datetime.now();
+    today4am = timeNow.replace(hour=4, minute=0, second=0, microsecond=0)
+    orderDate_begin = None
+    if (timeNow < today4am):
+        #Time is before 4am, order of today's can be arranged
+        orderDate_begin = timeNow.strftime('%Y-%m-%d')
+    else:
+        #Time passed the expected ordering time.
+        #earlies date can only be tomorrow / (not sunday)
+        orderDate_begin = (timeNow + timedelta(days=1)).strftime('%Y-%m-%d')
+
+    # Query all products in datebase
     products = Product.query.all()
     productNames = []
     for p in products:
         productNames.append(p.product_name)
     productsData = {'productNames' : productNames}
+    
     return render_template('user_makeorder.html',
-                           min_date = dateToday,
+                           min_date = orderDate_begin,
                            allProducts=productsData)
 
 

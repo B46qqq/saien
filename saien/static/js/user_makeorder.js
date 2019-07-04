@@ -79,7 +79,7 @@ function autocomplete(inp, arr) {
      * 
      */
     inp.addEventListener("click", function(e){
-        makeValid(inp.parentNode);
+        resetField(inp.parentNode, 'product');
     });
 
     /*
@@ -110,12 +110,14 @@ function autocomplete(inp, arr) {
         /*add class "autocomplete-active":*/
         x[currentFocus].classList.add("autocomplete-active");
     }
+    
     function removeActive(x) {
         /*a function to remove the "active" class from all autocomplete items:*/
         for (var i = 0; i < x.length; i++) {
             x[i].classList.remove("autocomplete-active");
         }
     }
+    
     function closeAllLists(elmnt) {
         /*close all autocomplete lists in the document,
           except the one passed as an argument:*/
@@ -128,36 +130,132 @@ function autocomplete(inp, arr) {
     }
 }
 
-function makeInvalid(element){
-    var input = element.querySelector('input');
-    var label = element.querySelector('span');
-    input.classList.add('invalid_input');
-    label.classList.add('invalid_label');
-    label.innerHTML = 'product does not exist / invalid';    
+
+function unit_input (inp){
+    var ops = inp.getElementsByTagName('option');
+    var validVals = []
+    for (var i = 1; i < ops.length; ++i)
+        validVals.push(ops[i].value);
+
+    
+    inp.addEventListener('click', function(){
+        resetField(inp.parentNode, 'unit');
+    });
+
+    
+    inp.addEventListener('focusout', function(){
+        if (validVals.includes(inp.value))
+            makeValidField(inp.parentNode);
+    });
 }
 
-function makeValid(element){
-    var input = element.querySelector('input');
-    var label = element.querySelector('span');
-    input.classList.remove('invalid_input');
-    label.classList.remove('invalid_label');
-    label.innerHTML = 'product name';
+function quan_input (inp){
+    //    var regFloat = new RegExp('^[0-9]+(\.[0-9]{0,2})?$');
+    var regFloat = new RegExp('^([0-9]+(\.[0-9]{0,2})?|\.([0-9]{0,2})?)$');
+
+    inp.addEventListener('click', function(){
+        resetField(inp.parentNode, 'quantity');
+    });
+
+    inp.addEventListener('focusout', function(){
+        inp.value = inp.value.replace(/^0+/, '');
+        if (!inp.checkValidity())
+            makeInvalidField(inp.parentNode, 'invalid quantity');
+
+        if (inp.value == null || inp.value == '')
+            return;
+
+        if (!regFloat.test(inp.value))
+            makeInvalidField(inp.parentNode, 'reasonable value only');
+        else 
+            makeValidField(inp.parentNode);
+    });
 }
+
+
+function resetField(element, message){
+    var input = element.querySelector('input');
+    var selec = element.querySelector('select');
+    var label = element.querySelector('span');
+
+    if (input != null){
+        input.classList.remove('invalid_input');
+        input.classList.remove('valid_input');
+    }
+    if (selec != null){
+        selec.classList.remove('invalid_input');
+        selec.classList.remove('valid_input');
+    }
+    if (label != null){
+        label.classList.remove('invalid_label');
+        label.classList.remove('valid_label');
+        label.innerHTML = message;
+    }
+}
+
+function makeInvalidField(element, message){
+    var input = element.querySelector('input');
+    var selec = element.querySelector('select');
+    var label = element.querySelector('span');
+
+    if (input != null)
+        input.classList.add('invalid_input');
+    if (selec != null)
+        selec.classList.add('invalid_input');
+    if (label != null){
+        label.classList.add('invalid_label');
+        label.innerHTML = message;
+    }
+}
+    
+
+function makeValidField(element){
+    var input = element.querySelector('input');
+    var selec = element.querySelector('select');
+    var label = element.querySelector('span');
+
+    if (input != null)
+        input.classList.add('valid_input');
+    if (selec != null)
+        selec.classList.add('valid_input');
+    if (label != null){
+        label.classList.add('valid_label');
+    }
+}
+
+
 
 function verifyProductName(element){
     var val = element.querySelector('input').value;
     if (val == null || val == '')
         return;
     if (!products.includes(val))
-        makeInvalid(element);
+        makeInvalidField(element, 'product does not exist / invalid name');
+    else
+        makeValidField(element);
 }
 
+function submitBtnActivate(){
+    var btn = document.getElementById('placeOrder');
+    btn.classList.remove('disabled');
+    btn.setAttribute('onclick', 'submitOrderForm()');
+}
+
+function submitBtnDisable(){
+    var btn = document.getElementById('placeOrder');
+    btn.classList.add('disabled');
+    btn.setAttribute('onclick', '');
+}
 
 function newItem() {
     var toClone = document.querySelector('product');
     var cloned = toClone.cloneNode(true);
     cloned.style.display = 'grid';
+    
     autocomplete(cloned.querySelector('input'), products);
+    unit_input(cloned.querySelector('select[name="unit"]'));
+    quan_input(cloned.querySelector('input[name="quantity"]'));
+    
     var orderSection = document.querySelector("orderSection");
     var addBtn = document.querySelector("addBtn");
     orderSection.insertBefore(cloned, addBtn);
@@ -167,6 +265,7 @@ function newItem() {
 
 function addItem(e){
     newItem();
+    submitBtnActivate();
 }
 
 // Remove corresponding <product> entry from <orderSection>
@@ -176,9 +275,57 @@ function deleteItem(e){
     var from = document.querySelector('orderSection');
     var targetNum = parseInt(target.querySelector('orderNumber').innerHTML);
     var updates = from.querySelectorAll('product');
+    
+    // make submit invalid
+    if (updates.length <= 2)
+        submitBtnDisable();
+    
     for (var i = targetNum; i < updates.length; i++){
         var c = updates[i].querySelector('orderNumber');
         c.innerHTML = parseInt(c.innerHTML) - 1;
     }
     from.removeChild(target);
+}
+
+/*
+ * args: none
+ * Final browser side input validation before submit
+ * to server.
+ */
+function submitOrderForm(){
+    // One by One checking if field is valid or not;
+    var items = document.getElementsByTagName('product');
+    var ableToSubmit = true;
+    for (var i = 1; i < items.length; ++i){
+        if (!validateSingleItem(items[i]))
+            ableToSubmit = false;
+    }
+
+    if (ableToSubmit)
+        console.log('all good');
+    else
+        console.log('cannot submit');
+}
+
+/*
+ * args: <product ...>
+ * for each item in order form, check for input.
+ * each input field must contain valid data before
+ * submit. (Browser side check only)
+ */
+function validateSingleItem(item){
+    var p = item.getElementsByTagName('input')[0];
+    var u = item.querySelector('select');
+    var q = item.getElementsByTagName('input')[1];
+    var arr = [p, u, q];
+    var ret = true;
+
+    for (var i = 0; i < arr.length; ++i){
+        if (arr[i].value == '' || arr[i].value == null){
+            makeInvalidField(arr[i].parentNode, 'required');
+            ret = false;
+        }
+    }
+    
+    return ret;
 }

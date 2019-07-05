@@ -95,6 +95,7 @@
 {{ super() }}
 <script>
  var products = {{ allProducts|tojson }};
+ var url_placeorder = "{{ url_for('user.placeOrder')}}";
 </script>
 <script type="text/javascript"
         src="{{ url_for('static', filename='js/user_makeorder.js') }}"></script>

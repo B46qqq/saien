@@ -66,9 +66,17 @@ def makeOrder():
                            min_date = orderDate_begin,
                            allProducts=productsData)
 
+@user.route('/u/placeorder/', methods=['POST'])
+@login_required
+@shop_login_required
+def placeOrder():
+    r = request.json
+    print (r)
+    return 'hi';
 
 @user.route('/u/logout')
 @login_required
+@shop_login_required
 def logout():
     logout_user()
     session.clear()

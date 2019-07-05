@@ -301,10 +301,31 @@ function submitOrderForm(){
             ableToSubmit = false;
     }
 
-    if (ableToSubmit)
-        console.log('all good');
-    else
-        console.log('cannot submit');
+    var order = {}
+
+    if (ableToSubmit){
+        // JSON.stringfy data and POST with ajax
+        for (var i = 1; i < items.length; ++i){
+            order["item" + i.toString()] = objectifyItem(items[i]);
+        }
+        console.log(JSON.stringify(order));
+        ajaxPostJson(JSON.stringify(order));
+    }
+}
+
+/*
+ * args: <product ...>
+ * Extract any order related input,
+ * return a dictionary containing those input values.
+ */
+function objectifyItem(item){
+    var pname = item.querySelector('input[name="pname"]');
+    var unit = item.querySelector('select[name="unit"]');
+    var quan = item.querySelector('input[name="quantity"]');
+    
+    return {"pname" : pname.value,
+            "unit" : unit.value,
+            "quantity" : quan.value};
 }
 
 /*
@@ -328,4 +349,22 @@ function validateSingleItem(item){
     }
     
     return ret;
+}
+
+
+/*
+ * args: 
+ */
+function ajaxPostJson(jsonString){
+    
+    var request = new XMLHttpRequest();
+    request.open('POST', url_placeorder, true);
+    request.setRequestHeader('Content-type',
+                             'application/json');
+
+    request.onload = function(){
+        console.log('success');
+    }
+    
+    request.send(jsonString);
 }

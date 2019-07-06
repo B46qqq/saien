@@ -10,6 +10,7 @@ function getProductForm(pid){
         var p_id = document.getElementById('pinfo_id');
         var p_name = document.getElementById('pinfo_name');
         var p_des = document.getElementById('pinfo_des');
+        var p_ppc = document.getElementById('pinfo_ppc');
         var p_pkg = document.getElementById('pinfo_pkg');
         var p_box = document.getElementById('pinfo_box');
         
@@ -21,6 +22,12 @@ function getProductForm(pid){
             p_info.product_description = '';            
             p_des.value = '';
         } else p_des.value = p_info.product_description;
+
+        if (p_info.price_unit_pc != null)
+            p_ppc.value = (p_info.price_unit_pc / 100);
+        else p_ppc.value = '';
+        p_ppc.focus();
+        p_ppc.blur();
 
         if (p_info.price_unit_kg != null)
             p_pkg.value = (p_info.price_unit_kg / 100);
@@ -47,6 +54,13 @@ function getProductForm(pid){
                 p_field_change('pdes');
             else
                 p_field_revert('pdes');
+        });
+
+        p_ppc.addEventListener("input", function(){
+            if (Number(p_ppc.value) != Number(p_info.price_unit_pc/100))
+                p_field_change('pppc');
+            else
+                p_field_revert('pppc');
         });
 
         p_pkg.addEventListener("input", function(){
@@ -121,7 +135,7 @@ function updateSubmitButtonStatus(){
 }
 
 function revert_all_fields(){
-    var fields = ["pname", "pdes", "ppkg", "ppbox"];
+    var fields = ["pname", "pdes", "pppc", "ppkg", "ppbox"];
     var i = 0;
     for (; i < fields.length; ++i)
         p_field_revert(fields[i]);
@@ -157,7 +171,7 @@ function onBlur(e){
         style                 : "currency",
         currencyDisplay       : "symbol"
     }
-    if (value == '' || value == 0){
+    if (value == '' || value == '0'){
         e.target.value = 'UNSET';
         return;
     }
@@ -180,6 +194,7 @@ function getFormData(){
     var args = 'pid=' + pid;
     args += ('&' + 'pname=' + fd.get('pname'));
     args += ('&' + 'pdes=' + fd.get('pdes').trim());
+    args += ('&' + 'pppc=' + localStringToNumber(fd.get('pppc')));
     args += ('&' + 'ppkg=' + localStringToNumber(fd.get('ppkg')));
     args += ('&' + 'ppbox=' + localStringToNumber(fd.get('ppbox')));
 
@@ -205,11 +220,7 @@ function updateProduct(){
     var fd = new FormData(form);
     var pid = fd.get('pid');
 
-    var args = 'pid=' + pid;
-    args += ('&' + 'pname=' + fd.get('pname'));
-    args += ('&' + 'pdes=' + fd.get('pdes').trim());
-    args += ('&' + 'ppkg=' + localStringToNumber(fd.get('ppkg')));
-    args += ('&' + 'ppbox=' + localStringToNumber(fd.get('ppbox')));
+    var args = getFormData();
 
     var request = new XMLHttpRequest();
     request.open('POST', url_productupdate, true);

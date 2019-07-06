@@ -1,13 +1,38 @@
 var products = products.productNames;
+var unitDict = {
+    "pc" : "Piece",
+    "kg" : "Kilogram",
+    "box" : "Box/Bag/Tray"};
+
 // Global array storing names of already selected items.
 // This acts as a barrier for user to select the same item
 // twice.
 var selectedItems = [];
 
+/*
+ * EventListener for orderDate input element.
+ */
+var odinput = document.querySelector('input[type="date"]');
+odinput.addEventListener('click', function(){
+    resetField(this.parentNode, 'date for this order; important');
+});
+
+odinput.addEventListener('focusout', function(){
+    if (this.value == '' || this.value == null)
+        return;
+    var day = new Date(this.value);
+    if (day.getDay() == 0) // Does not make order on Sundays
+        makeInvalidField(this.parentNode, 'no order on Sundays');
+    else
+        makeValidField(this.parentNode);
+});
+
+
 function autocomplete(inp, arr) {
     /*the autocomplete function takes two arguments,
       the text field element and an array of possible autocompleted values:*/
     var currentFocus;
+    var lastValue;
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
         var a, b, i, val = this.value;
@@ -92,12 +117,23 @@ function autocomplete(inp, arr) {
      *               will be rendered as invalid.
      */
     inp.addEventListener("focusout", function(e){
+
+        var sel = inp.parentNode.nextElementSibling.querySelector('select');
+        if (lastValue != this.value){
+            sel.value = "";
+            sel.focusout;
+            sel.click();
+            removeUnitSelector(this.parentNode.nextElementSibling);
+            updateUnitSelector(this.value, this.parentNode.nextElementSibling);
+        }
+        
         setTimeout(function(){
             var needRemove = inp.parentNode.querySelector(".autocomplete-items");
             if (needRemove != null)
                 inp.parentNode.removeChild(needRemove);
             verifyProductName(inp.parentNode);
         }, 300);
+        lastValue = this.value;
     });
 
     function addActive(x) {
@@ -130,21 +166,39 @@ function autocomplete(inp, arr) {
     }
 }
 
+function updateUnitSelector(val, e){
+    if (val == '' || val == null) return;
+    thisUnits = productsUnit[val];
+    if (thisUnits == null) return;
+    for (var i = 0; i < thisUnits.length; ++i){
+        var opt = document.createElement('option');
+        opt.value = thisUnits[i];
+        opt.innerHTML = unitDict[thisUnits[i]];
+        e.querySelector('select[name="unit"]').appendChild(opt);
+    }
+}
+
+function removeUnitSelector(e){
+    select = e.querySelector('select[name="unit"]');
+    options = e.querySelectorAll('option');
+    for (var i = 1; i < options.length; ++i){
+        select.removeChild(options[i]);
+    }
+}
+
 
 function unit_input (inp){
     var ops = inp.getElementsByTagName('option');
-    var validVals = []
-    for (var i = 1; i < ops.length; ++i)
-        validVals.push(ops[i].value);
-
+//    var validVals = []
+//    for (var i = 1; i < ops.length; ++i)
+//        validVals.push(ops[i].value);
     
     inp.addEventListener('click', function(){
         resetField(inp.parentNode, 'unit');
     });
 
-    
     inp.addEventListener('focusout', function(){
-        if (validVals.includes(inp.value))
+        if (this.value != null && this.value != '')
             makeValidField(inp.parentNode);
     });
 }
@@ -224,15 +278,21 @@ function makeValidField(element){
 }
 
 
-
+/*
+ * args: <label ...>
+ * return false when product name entered is not valid.
+ * return true when input field contains valid product name
+ */
 function verifyProductName(element){
     var val = element.querySelector('input').value;
     if (val == null || val == '')
-        return;
-    if (!products.includes(val))
+        return false;
+    if (!products.includes(val)){
         makeInvalidField(element, 'product does not exist / invalid name');
-    else
-        makeValidField(element);
+        return false;
+    }
+    makeValidField(element);
+    return true;
 }
 
 function submitBtnActivate(){
@@ -287,6 +347,7 @@ function deleteItem(e){
     from.removeChild(target);
 }
 
+
 /*
  * args: none
  * Final browser side input validation before submit
@@ -295,23 +356,92 @@ function deleteItem(e){
 function submitOrderForm(){
     // One by One checking if field is valid or not;
     var items = document.getElementsByTagName('product');
+    var date = document.querySelector('orderDate');
     var ableToSubmit = true;
+
+    // Check if any required input is empty
+    if (isOrderDateEmpty(date))
+        ableToSubmit = false;
+    
     for (var i = 1; i < items.length; ++i){
-        if (!validateSingleItem(items[i]))
+        if (isOrderItemEmpty(items[i]))
             ableToSubmit = false;
     }
 
-    var order = {}
+    // check if all required inputs are valid
+    if (!isOrderDateValid(date))
+        ableToSubmit = false;
 
+    for (var i = 1; i < items.length; ++i)
+        if (!isOrderItemValid(items[i]))
+            ableToSubmit = false;
+
+    // process to submit
     if (ableToSubmit){
+        var order = {}
+        order['date'] = date.querySelector('input[type="date"]').value;
         // JSON.stringfy data and POST with ajax
-        for (var i = 1; i < items.length; ++i){
+        for (var i = 1; i < items.length; ++i)
             order["item" + i.toString()] = objectifyItem(items[i]);
-        }
-        console.log(JSON.stringify(order));
+
         ajaxPostJson(JSON.stringify(order));
     }
 }
+
+/*
+ * args: <orderDate ...>
+ * check if orderDate input emptyness
+ * ret -> true  = empty
+ *        false = not empty (valid)
+ */
+function isOrderDateEmpty(date){
+    var input = date.querySelector('input[type="date"]');
+    if (input.value == '' || input.value == null){
+        makeInvalidField(input.parentNode, 'order date empty');
+        return true;
+    }
+    return false;
+}
+
+
+/*
+ * args: <product ...>
+ * for each item in order form, check for input.
+ * each input field must contain valid data before
+ * submit. (Browser side check only)
+ */
+function isOrderItemEmpty(item){
+    var p = item.getElementsByTagName('input')[0];
+    var u = item.querySelector('select');
+    var q = item.getElementsByTagName('input')[1];
+    var arr = [p, u, q];
+    var ret = false;
+
+    for (var i = 0; i < arr.length; ++i){
+        if (arr[i].value == '' || arr[i].value == null){
+            makeInvalidField(arr[i].parentNode, 'required');
+            ret = true;
+        }
+    }
+    return ret;
+}
+
+function isOrderDateValid(date){
+    return !date.querySelector('input[type="date"]').classList.contains('invalid_input');
+}
+
+function isOrderItemValid(item){
+    var p = item.getElementsByTagName('input')[0];
+    var u = item.querySelector('select');
+    var q = item.getElementsByTagName('input')[1];
+    var arr = [p, u, q];
+
+    for (var i = 0; i < arr.length; ++i)
+        if (arr[i].classList.contains('invalid_input'))
+            return false;
+    return true;
+}
+
 
 /*
  * args: <product ...>
@@ -329,31 +459,10 @@ function objectifyItem(item){
 }
 
 /*
- * args: <product ...>
- * for each item in order form, check for input.
- * each input field must contain valid data before
- * submit. (Browser side check only)
- */
-function validateSingleItem(item){
-    var p = item.getElementsByTagName('input')[0];
-    var u = item.querySelector('select');
-    var q = item.getElementsByTagName('input')[1];
-    var arr = [p, u, q];
-    var ret = true;
-
-    for (var i = 0; i < arr.length; ++i){
-        if (arr[i].value == '' || arr[i].value == null){
-            makeInvalidField(arr[i].parentNode, 'required');
-            ret = false;
-        }
-    }
-    
-    return ret;
-}
-
-
-/*
- * args: 
+ * args: JSON.stringify'ed value
+ * main purpose divide code into smaller section for better maintenance
+ * objective: send value via ajax post,
+ * upon receive, display success / error message
  */
 function ajaxPostJson(jsonString){
     

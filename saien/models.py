@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
 
 shopContacts = db.Table('shopcontacts',
-                        db.Column('shop_id', db.Integer, db.ForeignKey('shop.shop_id')),
+                        db.Column('shop_id', db.Integer, db.ForeignKey('shop.id')),
                         db.Column('contact_id', db.Integer, db.ForeignKey('contactperson.cp_id')),
 )
 
@@ -20,8 +20,8 @@ class User(db.Model):
     password = db.Column(db.String(127), nullable = False)
     roles = db.relationship('Role', secondary=userRoles,
                             backref=db.backref('users', lazy=True))
-    info = db.relationship('Info', uselist=False, backref='user')
-
+    info = db.relationship('Shop', uselist=False, backref='user')
+    
     @property
     def is_authenticated(self):
         return True
@@ -77,8 +77,8 @@ class Role(db.Model):
     name = db.Column(db.String(31), unique = True)
 
 
-class Info(db.Model):
-    __tablename__ = 'info'
+class Shop(db.Model):
+    __tablename__ = 'shop'
 
     id = db.Column(db.Integer, primary_key = True)
     shop_name = db.Column(db.String(63), nullable = False)
@@ -87,51 +87,8 @@ class Info(db.Model):
     shop_email = db.Column(db.String(63), nullable = False, unique = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    
-class Shop(db.Model):
-    __tablename__ = 'shop'
-    
-    shop_id = db.Column(db.Integer, primary_key = True)
-    shop_name = db.Column(db.String(63), nullable = False)
-    shop_address = db.Column(db.String(255), nullable = False)
-    shop_phone = db.Column(db.String(15))
-    shop_email = db.Column(db.String(63), nullable = False, unique = True)
-    shop_password = db.Column(db.String(32), nullable = False)
-    
     invoices = db.relationship('Invoice', backref='origin_shop')
-    contacts = db.relationship('ContactPerson',
-                               secondary = shopContacts,
-                               lazy = 'subquery',
-                               backref = db.backref('shop', lazy = True))
-    
-    @property
-    def is_authenticated(self):
-        return True
-
-    @property
-    def is_active(self):
-        return True
-    
-    @property
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return str(self.shop_id)
-
-    def set_password(self, password):
-        self.shop_password = bcrypt.generate_password_hash(password)
-
-    def check_password(self, password):
-        return bcrypt.check_password_hash(self.shop_password, password)
-        
-    def __repr__(self):
-        returnStr = str('Shop name: %s\nLocation: %s\n') % (self.shop_name, self.shop_address)
-        if (self.shop_phone is not None):
-            returnStr += str('Phone: %s\n') % (self.shop_phone)
-
-        return returnStr
-    
+ 
 class ContactPerson(db.Model):
     __tablename__ = 'contactperson'
     
@@ -147,11 +104,14 @@ class Invoice(db.Model):
     __tablename__ = 'invoice'
     
     invoice_id = db.Column(db.Integer, primary_key = True)
-    order_date = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
+    order_date = db.Column(db.DateTime, unique = True, nullable = False, default = datetime.utcnow)
     total = db.Column(db.Integer, nullable = False)
 
-    shop_id = db.Column(db.Integer, db.ForeignKey('shop.shop_id'))
-    items = db.relationship('InvoiceItem', backref='origin_invoice')
+    shop_id = db.Column(db.Integer, db.ForeignKey('shop.id'))
+    items = db.relationship('InvoiceItem', backref='origin_invoice', cascade="delete")
+
+    def setTotal(self, total):
+        self.total = total
 
     def __repr__(self):
         returnStr = str('Invoice date: %s\nTotal (AUD): $%s\n') % (self.order_date.strftime('%d/%m/%Y'), str(self.total/100))
@@ -164,11 +124,32 @@ class Product(db.Model):
     product_id = db.Column(db.Integer, primary_key = True)
     product_name = db.Column(db.String(63), nullable = False)
     product_description = db.Column(db.String(511))
+    price_unit_pc = db.Column(db.Integer)
     price_unit_kg = db.Column(db.Integer)
     price_unit_box = db.Column(db.Integer)
-
+    
     invoiceitems = db.relationship('InvoiceItem', backref='origin_product')
 
+    
+    def priceByUnit(self, unit, quantity):
+        if unit.upper() == 'KG':
+            return self.price_unit_kg * quantity
+        if unit.upper() == 'BOX':
+            return self.price_unit_box * quantity
+
+        
+    def availableUnit(self):
+        ret = []
+        if (self.price_unit_pc is not None):
+            ret.append('pc')
+        if (self.price_unit_kg is not None):
+            ret.append('kg')
+        if (self.price_unit_box is not None):
+            ret.append('box')
+
+        return ret
+    
+        
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
@@ -188,18 +169,18 @@ class Product(db.Model):
 class InvoiceItem(db.Model):
     __tablename__ = 'invoiceitem'
 
-    invoiceitem_id = db.Column(db.Integer, primary_key = True)
-    invoiceitem_unit = db.Column(db.String(3), nullable = False) # BOX OR KG
-    invoiceitem_quantity = db.Column(db.Integer, nullable = False)
-    invoiceitem_price = db.Column(db.Integer, nullable = False)
+    id = db.Column(db.Integer, primary_key = True)
+    unit = db.Column(db.String(3), nullable = False) # BOX or KG or PIECE
+    quantity = db.Column(db.Integer, nullable = False)
+    price = db.Column(db.Integer, nullable = False)
 
     product_id = db.Column(db.Integer, db.ForeignKey('product.product_id'))
-    invoice = db.Column(db.Integer, db.ForeignKey('invoice.invoice_id'))
+    invoice_id = db.Column(db.Integer, db.ForeignKey('invoice.invoice_id'))
 
     def __repr__(self):
-        returnStr = str('Invoice item quantity: %s\n') % (str(self.invoiceitem_quantity / 10))
-        returnStr += str('Invoice item unit: %s\n') % (str(self.invoiceitem_unit).lower())
-        returnStr += str('Inovice item price: %s\n') % (str(self.invoiceitem_price / 100))
+        returnStr = str('Invoice item quantity: %s\n') % (str(self.quantity / 10))
+        returnStr += str('Invoice item unit: %s\n') % (str(self.unit).upper())
+        returnStr += str('Inovice item price: $%s\n') % (str(self.price / 100))
 
         return returnStr
 

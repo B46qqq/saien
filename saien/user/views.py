@@ -1,9 +1,9 @@
 from flask import render_template, redirect, request, Blueprint, url_for, flash, session, json
 from flask_login import login_user, current_user, logout_user, login_required
-from sqlalchemy import exc
+from sqlalchemy import exc, and_
 from datetime import datetime, timedelta
 from .forms import *
-from saien.models import User, Product
+from saien.models import *
 from urllib.parse import urlparse, urljoin
 from saien.util.access_protocol import shop_login_required
 
@@ -18,7 +18,6 @@ def verify():
     retURL = get_redirect_target()
 
     if target != None and target.check_password(str(request.form['password'])):
-        print (target)
         if current_user is not None:
             logout_user()
         login_user(target)
@@ -58,21 +57,65 @@ def makeOrder():
     # Query all products in datebase
     products = Product.query.all()
     productNames = []
+    product_unit = {}
     for p in products:
         productNames.append(p.product_name)
+        product_unit[p.product_name] = p.availableUnit()
+
     productsData = {'productNames' : productNames}
     
     return render_template('user_makeorder.html',
                            min_date = orderDate_begin,
-                           allProducts=productsData)
+                           allProducts=productsData,
+                           allProductsUnit=product_unit)
+
 
 @user.route('/u/placeorder/', methods=['POST'])
 @login_required
 @shop_login_required
 def placeOrder():
     r = request.json
-    print (r)
-    return 'hi';
+    date = datetime.strptime(r.pop('date'), '%Y-%m-%d')
+
+    # Assume the incoming data is correct
+    # First create a new Invoice for the current_user;
+    # check if invoice already exists
+    invoice = Invoice.query.filter(and_(Invoice.origin_shop == current_user.info
+                                        , Invoice.order_date == date)).first()
+    # If order from current user already exist on that date, remove entry
+    if invoice is not None:
+        db.session.delete(invoice)
+        db.session.commit()
+        
+    invoice = Invoice(order_date = date,
+                         total = -999, #update total later
+                         origin_shop = current_user.info)
+    totalCost = 0
+    allInvoiceItems = []
+    
+    for order in r:
+        o = r[order]
+        product = Product.query.filter_by(product_name = o['pname']).first()
+        calcPrice =  product.priceByUnit(o['unit'], int(o['quantity']))
+        totalCost += calcPrice
+        ii = InvoiceItem(unit = o['unit'],
+                         quantity = int(o['quantity']) * 10,
+                         price = calcPrice,
+                         origin_product = product,
+                         origin_invoice = invoice)
+
+    invoice.setTotal(totalCost)
+    db.session.add(invoice)
+    db.session.add_all(allInvoiceItems)
+    db.session.commit()
+
+    checkDb()
+    
+    return 'hi'
+
+def checkDb():
+    print (current_user.info.invoices)
+    
 
 @user.route('/u/logout')
 @login_required
@@ -81,7 +124,6 @@ def logout():
     logout_user()
     session.clear()
     return redirect(url_for('level0.index'))
-
 
 
 def is_safe_url(target):

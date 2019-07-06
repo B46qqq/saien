@@ -1,5 +1,8 @@
-from os import environ
+from os import environ, path
 from datetime import timedelta
+
+PROJECT_ROOT = path.dirname(path.realpath(__file__))
+DATABASE = path.join(PROJECT_ROOT, environ.get('SAIEN_DATABASE'))
 
 class Config:
     # General config
@@ -14,8 +17,9 @@ class Config:
     BCRYPT_LOG_ROUNDS = 10
 
     # Session timeout
-    PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=90)
 
     # Flask-SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI')
+    # SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE
     SQLALCHEMY_TRACK_MODIFICATIONS = False

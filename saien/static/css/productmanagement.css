@@ -17,6 +17,7 @@
     grid-template-areas:
         "pn pnc"
         "pd pdc"
+        "ppc ppcc"
         "pkg pkgc"
         "pbox pboxc"
         "upd upd"
@@ -81,6 +82,14 @@
 
 .pdc {
     grid-area: pdc;
+}
+
+.ppc {
+    grid-area: ppc;
+}
+
+.ppcc {
+    grid-area: ppcc;
 }
 
 .pkg {

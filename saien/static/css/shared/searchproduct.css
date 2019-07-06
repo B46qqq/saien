@@ -24,8 +24,6 @@ productlist {
 
 .product_tab {
     grid-area: p_list;
-    width: 100%;
-    height: 600px;
     background-color: #efefef;
     display: grid;
     grid-template-rows: auto 40px;

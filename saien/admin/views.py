@@ -149,6 +149,7 @@ def productUpdate():
     
     update_target.product_name = str(data['pname'])
     update_target.product_description = str(data['pdes'])
+    update_target.price_unit_pc = (float)(data['pppc']) * 100
     update_target.price_unit_kg = (float)(data['ppkg']) * 100
     update_target.price_unit_box = (float)(data['ppbox']) * 100
     try:
@@ -186,7 +187,7 @@ def createNewCustomerAccount():
                        username = str(form.shop_email.data).split('@')[0],
                        password = form.password.data)
         shopRole = Role.query.filter_by(name = 'shop').first()
-        newUserInfo = Info(shop_name = form.shopname.data,
+        newUserInfo = Shop(shop_name = form.shopname.data,
                            shop_address = form.shop_address.data,
                            shop_phone = form.shop_phone.data,
                            shop_email = form.shop_email.data,

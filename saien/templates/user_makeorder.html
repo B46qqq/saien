@@ -10,6 +10,16 @@
 <h1> Make New Order </h1>
 
 <form autocomplete="off">
+
+    <message>
+        <div class="alert hide" id="message">
+            <span class="closebtn" onclick="this.parentElement.classList.add('hide');">
+                &times;
+            </span>
+            <strong></strong>
+        </div>
+    </message>
+    
     <formTop>
         <orderDate>
             <p>
@@ -26,7 +36,7 @@
         
         <div></div>
 
-        <button class="reg_btn success_btn formTop_btn"
+        <button class="reg_btn success_btn formTop_btn disabled"
                 type="button"
                 name="update">
             Save
@@ -39,8 +49,31 @@
                 name="update">
             Submit
         </button>
-
     </formTop>
+
+    <formHistory>
+        <label class="in">
+            <select name="orderhistory" class="additional">
+                <option value="" disabled selected style="display:none; color:#d3d3d3;">
+                    change / reference from exisiting orders
+                </option>
+                {% for o in existOrders %}
+                <option>{{ o }}</option>                
+                {% endfor %}
+            </select>
+            <span class="label">exisiting orders</span>
+        </label>
+        <button class="reg_btn warning_btn formTop_btn disabled"
+                type="button"
+                name="view">
+            View
+        </button>
+        <button class="reg_btn success_btn formTop_btn disabled"
+                type="button"
+                name="copy">
+            Copy
+        </button>
+    </formHistory>
     
     <hr>
 
@@ -50,7 +83,7 @@
             <label class="in autocomplete">
                 <input name="pname"
                        type="text"
-                       placeholder=""
+                       placeholder="&nbsp;"
                        required>
                 <span class="label">product name</span>
             </label>
@@ -68,7 +101,7 @@
                 <input name="quantity"
                        type="number"
                        step="0.01"
-                       placeholder=""
+                       placeholder="&nbsp;"
                        min="0">
                 <span class="label">quantity</span>
             </label>

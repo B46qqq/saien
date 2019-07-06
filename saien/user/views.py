@@ -1,6 +1,6 @@
 from flask import render_template, redirect, request, Blueprint, url_for, flash, session, json
 from flask_login import login_user, current_user, logout_user, login_required
-from sqlalchemy import exc, and_
+from sqlalchemy import exc, and_, desc
 from datetime import datetime, timedelta
 from .forms import *
 from saien.models import *
@@ -61,13 +61,21 @@ def makeOrder():
     for p in products:
         productNames.append(p.product_name)
         product_unit[p.product_name] = p.availableUnit()
-
+        
     productsData = {'productNames' : productNames}
+
+    existingOrders = []
+    s = Shop.query.filter_by(user = current_user).first()
+    v = Invoice.query.filter_by(shop_id = s.id).order_by(desc(Invoice.order_date))
+    for x in v :
+        existingOrders.append(x.getOrderDate())
     
     return render_template('user_makeorder.html',
                            min_date = orderDate_begin,
                            allProducts=productsData,
-                           allProductsUnit=product_unit)
+                           allProductsUnit=product_unit,
+                           existOrders=existingOrders
+    )
 
 
 @user.route('/u/placeorder/', methods=['POST'])
@@ -107,15 +115,13 @@ def placeOrder():
     invoice.setTotal(totalCost)
     db.session.add(invoice)
     db.session.add_all(allInvoiceItems)
-    db.session.commit()
-
-    checkDb()
+    try:
+        db.session.commit()
+    except:
+        return json.dumps({'error' : 'Cannot update database!'})
     
-    return 'hi'
+    return json.dumps({'success' : 'Order successfully received'})
 
-def checkDb():
-    print (current_user.info.invoices)
-    
 
 @user.route('/u/logout')
 @login_required

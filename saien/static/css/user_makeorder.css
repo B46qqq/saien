@@ -151,7 +151,6 @@ orderNumber {
 
 
 form {
-    margin-top: 60px;
 }
 
 .additional:required:invalid{
@@ -160,4 +159,28 @@ form {
 
 .additional option{
     color: #223254;
+}
+
+
+message {
+    display: grid;
+    grid-template-rows: 70px;
+    width: 100%;
+}
+
+message .alert {
+    height: 60px;
+    width: auto;
+    align-self: center;
+}
+
+formHistory {
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr 1fr;
+
+    margin-top: 20px;
+}
+
+formHistory label {
+    justify-self: end;
 }

@@ -110,6 +110,9 @@ class Invoice(db.Model):
     shop_id = db.Column(db.Integer, db.ForeignKey('shop.id'))
     items = db.relationship('InvoiceItem', backref='origin_invoice', cascade="delete")
 
+    def getOrderDate(self):
+        return self.order_date.strftime('%d, %B, %Y \t %A')
+
     def setTotal(self, total):
         self.total = total
 

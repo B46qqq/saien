@@ -104,7 +104,7 @@ function autocomplete(inp, arr) {
      * 
      */
     inp.addEventListener("click", function(e){
-        resetField(inp.parentNode, 'product');
+        resetField(inp.parentNode, 'product name');
     });
 
     /*
@@ -119,10 +119,9 @@ function autocomplete(inp, arr) {
     inp.addEventListener("focusout", function(e){
 
         var sel = inp.parentNode.nextElementSibling.querySelector('select');
-        if (lastValue != this.value){
+        if (lastValue != this.value && lastValue != null){// lastValue != null counter for initial 
             sel.value = "";
-            sel.focusout;
-            sel.click();
+            resetField(sel.parentNode, 'unit');
             removeUnitSelector(this.parentNode.nextElementSibling);
             updateUnitSelector(this.value, this.parentNode.nextElementSibling);
         }
@@ -472,8 +471,44 @@ function ajaxPostJson(jsonString){
                              'application/json');
 
     request.onload = function(){
-        console.log('success');
+        var ret =  JSON.parse(this.responseText);
+        var msg_div = document.getElementById('message');
+        var msg = msg_div.querySelector('strong');
+        msg_div.classList.remove('hide');
+        if ('success' in ret){
+            msg_div.classList.add('success');
+            msg.innerHTML = ret['success'];
+            return;
+        }
+        msg_div.classList.remove('success');
+        msg.innerHTML = ret['error'];
     }
     
     request.send(jsonString);
+}
+
+
+// for formHistory section
+var fh = document.querySelector('select[name="orderhistory"]');
+fh.addEventListener('click', function(){
+    resetField(this.parentNode, 'existing orders');
+});
+fh.addEventListener('focusout', function(){
+    var fh_section = document.querySelector('formHistory');
+    if (this.value != ""){
+        makeValidField(this.parentNode);
+        // view existing order history
+        var temp = fh_section.querySelector('button[name="view"]');
+        temp.classList.remove('disabled');
+        temp.setAttribute('onclick', "lalala()");
+        // copy existing order history
+        var temp = fh_section.querySelector('button[name="copy"]');
+        temp.classList.remove('disabled');
+        temp.setAttribute('onclick', "lalala()");
+    }
+});
+
+
+function lalala(){
+    console.log('say something');
 }

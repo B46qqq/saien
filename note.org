@@ -3,3 +3,11 @@
 * Search item: label
 * create new product message is too low.
 * sidebar more color, maybe divider
+
+* empty homepage
+* 'setting' buttons need border
+* 'setting' buttons 
+* disable makeorder 'save' button
+* check order by date, reorder
+* no 'IMPORTANT'
+* search item, 

@@ -88,6 +88,14 @@ class Shop(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     invoices = db.relationship('Invoice', backref='origin_shop')
+
+    def getInvoiceTable(self, day):
+        invoice = Invoice.query.filter_by(shop_id = self.id).filter_by(order_date = day).first()
+        return invoice.getItemsAsJSON()
+
+    def getInvoiceList(self, day):
+        invoice = Invoice.query.filter_by(shop_id = self.id).filter_by(order_date = day).first()
+        return invoice.getItemsAsList()
  
 class ContactPerson(db.Model):
     __tablename__ = 'contactperson'
@@ -113,6 +121,28 @@ class Invoice(db.Model):
     def getOrderDate(self):
         return self.order_date.strftime('%d, %B, %Y \t %A')
 
+    def isDelivered(self, day):
+        return self.order_date <= day
+
+    def getItemsAsJSON(self):
+        allItems = InvoiceItem.query.filter_by(invoice_id = self.invoice_id).all()
+        ret = []
+        for i in allItems:
+            ret.append([i.origin_product.product_name,
+                        str(i.quantity / 10) + ' ' + str(i.unit),
+                        '$' + "{:.{}f}".format((i.price / 100), 2)])
+        return ret
+
+    def getItemsAsList(self):
+        allItems = InvoiceItem.query.filter_by(invoice_id = self.invoice_id).all()
+        ret = []
+        for i in allItems:
+            ret.append([i.origin_product.product_name,
+                        i.unit,
+                        i.quantity / 10])
+        return ret
+
+        
     def setTotal(self, total):
         self.total = total
 
@@ -135,11 +165,13 @@ class Product(db.Model):
 
     
     def priceByUnit(self, unit, quantity):
+        if unit.upper() == 'PC':
+            return self.price_unit_pc * quantity
         if unit.upper() == 'KG':
             return self.price_unit_kg * quantity
         if unit.upper() == 'BOX':
             return self.price_unit_box * quantity
-
+        return None
         
     def availableUnit(self):
         ret = []
@@ -179,6 +211,7 @@ class InvoiceItem(db.Model):
 
     product_id = db.Column(db.Integer, db.ForeignKey('product.product_id'))
     invoice_id = db.Column(db.Integer, db.ForeignKey('invoice.invoice_id'))
+    
 
     def __repr__(self):
         returnStr = str('Invoice item quantity: %s\n') % (str(self.quantity / 10))

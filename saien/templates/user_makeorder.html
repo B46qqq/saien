@@ -9,6 +9,13 @@
 {% block content_block %}
 <h1> Make New Order </h1>
 
+<div id="myModal" class="viewOrder">
+    <!-- Modal content -->
+    <div class="orderContent">
+        <span class="close">&times;</span>
+    </div>
+</div>
+
 <form autocomplete="off">
 
     <message>
@@ -38,18 +45,19 @@
 
         <button class="reg_btn success_btn formTop_btn disabled"
                 type="button"
-                name="update">
-            Save
+                name="load">
+            Load
         </button>
 
 
         <button id="placeOrder"
                 class="reg_btn info_btn formTop_btn disabled"
                 type="button"
-                name="update">
+                name="submit">
             Submit
         </button>
     </formTop>
+
 
     <formHistory>
         <label class="in">
@@ -58,7 +66,11 @@
                     change / reference from exisiting orders
                 </option>
                 {% for o in existOrders %}
-                <option>{{ o }}</option>                
+                {% if existOrders[o] is sameas true %}
+                <option class="orderDelivered">{{ o }}</option>
+                {% else %}
+                <option>{{ o }}</option>
+                {% endif %}
                 {% endfor %}
             </select>
             <span class="label">exisiting orders</span>
@@ -70,8 +82,13 @@
         </button>
         <button class="reg_btn success_btn formTop_btn disabled"
                 type="button"
-                name="copy">
-            Copy
+                name="append">
+            Append
+        </button>
+        <button class="reg_btn success_btn formTop_btn disabled"
+                type="button"
+                name="load">
+            Load
         </button>
     </formHistory>
     
@@ -106,8 +123,11 @@
                 <span class="label">quantity</span>
             </label>
             <div></div>
-            <button class="reg_btn del_btn item_remove_btn" type="button" onclick="deleteItem(event)">Remove</button>
+            <button class="reg_btn del_btn item_remove_btn"
+                    type="button"
+                    onclick="deleteItem(event)">Remove</button>
         </product>
+        
         <addBtn>
             <button class="icon-btn add-btn"
                     type="button"
@@ -125,7 +145,9 @@
 <script>
  var products = {{ allProducts|tojson }};
  var productsUnit = {{ allProductsUnit|tojson }};
- var url_placeorder = "{{ url_for('user.placeOrder')}}";
+ var url_placeorder = "{{ url_for('user.placeOrder') }}";
+ var url_vieworder = "{{ url_for('user.viewOrder') }}";
+ var url_copyorder = "{{ url_for('user.copyOrder') }}";
 </script>
 <script type="text/javascript"
         src="{{ url_for('static', filename='js/user_makeorder.js') }}"></script>

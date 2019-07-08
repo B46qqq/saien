@@ -64,18 +64,17 @@ def makeOrder():
         
     productsData = {'productNames' : productNames}
 
-    existingOrders = []
+    existingOrders = {}
     s = Shop.query.filter_by(user = current_user).first()
     v = Invoice.query.filter_by(shop_id = s.id).order_by(desc(Invoice.order_date))
     for x in v :
-        existingOrders.append(x.getOrderDate())
-    
+        existingOrders[x.getOrderDate()] = x.isDelivered(today4am)
+
     return render_template('user_makeorder.html',
                            min_date = orderDate_begin,
                            allProducts=productsData,
                            allProductsUnit=product_unit,
-                           existOrders=existingOrders
-    )
+                           existOrders=existingOrders)
 
 
 @user.route('/u/placeorder/', methods=['POST'])
@@ -104,10 +103,10 @@ def placeOrder():
     for order in r:
         o = r[order]
         product = Product.query.filter_by(product_name = o['pname']).first()
-        calcPrice =  product.priceByUnit(o['unit'], int(o['quantity']))
+        calcPrice = product.priceByUnit(o['unit'], float(o['quantity']))
         totalCost += calcPrice
         ii = InvoiceItem(unit = o['unit'],
-                         quantity = int(o['quantity']) * 10,
+                         quantity = float(o['quantity']) * 10,
                          price = calcPrice,
                          origin_product = product,
                          origin_invoice = invoice)
@@ -122,6 +121,28 @@ def placeOrder():
     
     return json.dumps({'success' : 'Order successfully received'})
 
+
+@user.route('/u/vieworder/', methods=['POST'])
+@login_required
+@shop_login_required
+def viewOrder():
+    orderDate = datetime.strptime(request.form['date'], '%d, %B, %Y\t%A')
+#    print (current_user.info.getInvoiceTable(orderDate))
+    ret = {}
+    ret['column'] = ['Product', 'Amount', 'Total']
+    ret['rows'] = current_user.info.getInvoiceTable(orderDate)
+    return json.dumps(ret)
+
+
+@user.route('/u/copyorder/', methods=['POST'])
+@login_required
+@shop_login_required
+def copyOrder():
+    orderDate = datetime.strptime(request.form['date'], '%d, %B, %Y\t%A')
+    ret = {}
+    ret['orders'] = current_user.info.getInvoiceList(orderDate)
+    print(ret)
+    return json.dumps(ret)
 
 @user.route('/u/logout')
 @login_required

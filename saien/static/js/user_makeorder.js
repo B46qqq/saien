@@ -23,8 +23,10 @@ odinput.addEventListener('focusout', function(){
     var day = new Date(this.value);
     if (day.getDay() == 0) // Does not make order on Sundays
         makeInvalidField(this.parentNode, 'no order on Sundays');
-    else
+    else {
         makeValidField(this.parentNode);
+        submitBtnActivate();
+    }
 });
 
 
@@ -119,7 +121,8 @@ function autocomplete(inp, arr) {
     inp.addEventListener("focusout", function(e){
 
         var sel = inp.parentNode.nextElementSibling.querySelector('select');
-        if (lastValue != this.value && lastValue != null){// lastValue != null counter for initial 
+        if (lastValue != this.value && (lastValue != null || lastValue == undefined)){
+            // lastValue != null counter for initial
             sel.value = "";
             resetField(sel.parentNode, 'unit');
             removeUnitSelector(this.parentNode.nextElementSibling);
@@ -204,16 +207,18 @@ function unit_input (inp){
 
 function quan_input (inp){
     //    var regFloat = new RegExp('^[0-9]+(\.[0-9]{0,2})?$');
-    var regFloat = new RegExp('^([0-9]+(\.[0-9]{0,2})?|\.([0-9]{0,2})?)$');
+    var regFloat = new RegExp('^([0-9]+(\.[0-9]{0,1})?|\.([0-9]{0,1})?)$');
 
     inp.addEventListener('click', function(){
         resetField(inp.parentNode, 'quantity');
     });
 
     inp.addEventListener('focusout', function(){
-        inp.value = inp.value.replace(/^0+/, '');
-        if (!inp.checkValidity())
+        this.value = parseFloat(this.value).toFixed(1);
+        if (!inp.checkValidity()){
             makeInvalidField(inp.parentNode, 'invalid quantity');
+            return;
+        }
 
         if (inp.value == null || inp.value == '')
             return;
@@ -300,11 +305,13 @@ function submitBtnActivate(){
     btn.setAttribute('onclick', 'submitOrderForm()');
 }
 
+
 function submitBtnDisable(){
     var btn = document.getElementById('placeOrder');
     btn.classList.add('disabled');
     btn.setAttribute('onclick', '');
 }
+
 
 function newItem() {
     var toClone = document.querySelector('product');
@@ -322,9 +329,41 @@ function newItem() {
     cloned.querySelector('orderNumber').innerHTML = parseInt(prevNum) + 1;
 }
 
+
+
+function newItemArgs(pname, punit, quantity){
+    var toClone = document.querySelector('product');
+    var cloned = toClone.cloneNode(true);
+    cloned.style.display = 'grid';
+
+    var temp = cloned.querySelector('input');
+    temp.value = pname;
+    autocomplete(temp, products);
+
+    var sel = cloned.querySelector('select[name="unit"]');
+    unit_input(sel);
+
+    var quan = cloned.querySelector('input[name="quantity"]');
+    quan_input(quan);
+    quan.value = quantity;
+    
+    var orderSection = document.querySelector("orderSection");
+    var addBtn = document.querySelector("addBtn");
+    orderSection.insertBefore(cloned, addBtn);
+    var prevNum = cloned.previousElementSibling.querySelector('orderNumber').innerHTML;
+    cloned.querySelector('orderNumber').innerHTML = parseInt(prevNum) + 1;
+
+    sel.value = punit;
+    temp.dispatchEvent(new Event('focusout'));
+    sel.querySelector('option[value="'+punit+'"]').selected = true;
+    sel.dispatchEvent(new Event('focusout'));
+    quan.dispatchEvent(new Event('focusout'));
+}
+
+
+
 function addItem(e){
     newItem();
-    submitBtnActivate();
 }
 
 // Remove corresponding <product> entry from <orderSection>
@@ -358,6 +397,15 @@ function submitOrderForm(){
     var date = document.querySelector('orderDate');
     var ableToSubmit = true;
 
+    if (items.length <= 1){
+        var msg_div = document.getElementById('message');
+        var msg = msg_div.querySelector('strong');
+        msg_div.classList.remove('hide');
+        msg_div.classList.add('warning');
+        msg.innerHTML = 'Order list is empty.';
+        return;
+    }
+    
     // Check if any required input is empty
     if (isOrderDateEmpty(date))
         ableToSubmit = false;
@@ -475,6 +523,7 @@ function ajaxPostJson(jsonString){
         var msg_div = document.getElementById('message');
         var msg = msg_div.querySelector('strong');
         msg_div.classList.remove('hide');
+        msg_div.classList.remove('warning');
         if ('success' in ret){
             msg_div.classList.add('success');
             msg.innerHTML = ret['success'];
@@ -490,9 +539,13 @@ function ajaxPostJson(jsonString){
 
 // for formHistory section
 var fh = document.querySelector('select[name="orderhistory"]');
+var fh_child = fh.getElementsByTagName('option');
+var fh_clear = new Event('clearsection');
+
 fh.addEventListener('click', function(){
     resetField(this.parentNode, 'existing orders');
 });
+
 fh.addEventListener('focusout', function(){
     var fh_section = document.querySelector('formHistory');
     if (this.value != ""){
@@ -500,15 +553,147 @@ fh.addEventListener('focusout', function(){
         // view existing order history
         var temp = fh_section.querySelector('button[name="view"]');
         temp.classList.remove('disabled');
-        temp.setAttribute('onclick', "lalala()");
+        temp.setAttribute('onclick', "showExistingOrder('"+this.value+"')");
         // copy existing order history
-        var temp = fh_section.querySelector('button[name="copy"]');
+        var temp = fh_section.querySelector('button[name="append"]');
         temp.classList.remove('disabled');
-        temp.setAttribute('onclick', "lalala()");
+        temp.setAttribute('onclick', "appendExistingOrder('"+this.value+"')");
+
+        var temp = fh_section.querySelector('button[name="load"]');
+        temp.classList.remove('disabled');
+        temp.setAttribute('onclick', "loadExistingOrder('"+this.value+"')");
     }
 });
 
+fh.addEventListener('clearsection', function(){
+    this.querySelector('option[value=""]').selected = true;
+    resetField(this.parentNode, 'make reference from previous orders');
 
-function lalala(){
-    console.log('say something');
+    var fh_section = document.querySelector('formHistory');
+    var temp = fh_section.querySelector('button[name="view"]');
+    temp.classList.add('disabled');
+    temp.removeAttribute('onclick');
+    // copy existing order history
+    temp = fh_section.querySelector('button[name="append"]');
+    temp.classList.add('disabled');
+    temp.removeAttribute('onclick');
+
+    temp = fh_section.querySelector('button[name="load"]');
+    temp.classList.add('disabled');
+    temp.removeAttribute('onclick');
+});
+
+for (var i = 1; i < fh_child.length; ++i){
+    fh_child[i].addEventListener('click', function(){
+        this.parentNode.dispatchEvent(new Event('focusout'));
+    });
 }
+
+
+/* 
+ * Just a cleaner version of appendExistingorder,
+ * as this first empties current order form data.
+ * What I learned: when removing all child element from a div,
+ * remove from backward. Last child element remove first.
+ * Or dont use reference variable (var)
+ */
+function loadExistingOrder(data){
+    var x = document.getElementsByTagName('product');
+    var length = x.length;
+    for (var i = length-1; i > 0; --i){
+        x[0].parentNode.removeChild(x[i]);
+    }
+    appendExistingOrder(data);
+}
+
+function appendExistingOrder(date){
+    var args = "date="+date;
+    var request = new XMLHttpRequest();
+    request.open('POST', url_copyorder, true);
+    request.setRequestHeader('Content-type',
+                             'application/x-www-form-urlencoded');
+
+    request.onload = function(){
+        var order_info =  JSON.parse(this.responseText);
+        for (var i = 0; i < order_info.orders.length; ++i){
+            var x = order_info.orders[i];
+            newItemArgs(x[0], x[1], x[2]);
+        }
+        fh.dispatchEvent(fh_clear);
+    };
+
+    request.send(args);
+}
+
+
+function showExistingOrder(date){
+    // Get the modal
+    var modal = document.getElementById("myModal");
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    
+    // When the user clicks the button, open the modal 
+    modal.style.display = "block";
+    
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+        removeOrderTable(modal);
+    }
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            removeOrderTable(modal);
+        }
+    }
+
+    /* send AJAX POST to backend, fetching for existing orders list
+     */
+    var args = "date="+date;
+    var request = new XMLHttpRequest();
+    request.open('POST', url_vieworder, true);
+    request.setRequestHeader('Content-type',
+                             'application/x-www-form-urlencoded');
+
+    request.onload = function(){
+        var order_info =  JSON.parse(this.responseText);
+        makeOrderTable(modal, order_info);
+    };
+
+    request.send(args);
+}
+
+
+function makeOrderTable(div, data){
+    var contentDiv = div.querySelector('.orderContent');
+    var table = document.createElement('table');
+    contentDiv.appendChild(table);
+    
+    var col = document.createElement('tr')
+    for (var i = 0; i < data.column.length; ++i){
+        var th = document.createElement('th');
+        th.innerHTML = data.column[i];
+        col.appendChild(th);
+    }
+    table.appendChild(col);
+
+    var rows = data.rows;
+    for (var i = 0; i < rows.length; ++i){
+        var row = document.createElement('tr');
+        for (var j = 0; j < rows[i].length; ++j){
+            var td = document.createElement('td');
+            td.innerHTML = rows[i][j];
+            row.appendChild(td);
+        }
+        table.appendChild(row);
+    }
+}
+
+function removeOrderTable(div){
+    var table = div.querySelector('table');
+    if (table != null)
+        table.parentNode.removeChild(table);
+}
+

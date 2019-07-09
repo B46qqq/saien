@@ -19,9 +19,9 @@
 }
 
 top {
+    height: 8%;
     display: grid;
     grid-template-columns: 3fr 5fr;
-    margin-bottom: 20px;
 }
 
 .autocomplete-items {
@@ -80,8 +80,12 @@ orderDate p {
 }
 
 orderSection {
+    margin-top: 10px;
+    border-top: 2px solid #d3d3d3;
     display: grid;
-    grid-auto-rows: 60px;
+    grid-auto-rows: 50px;
+    height: 100%;
+    overflow-y: auto;
 }
 
 product {
@@ -94,10 +98,6 @@ product {
     width: 95%;
     align-self: center;
     justify-self: center;
-}
-
-input {
-    padding: 0 10px !important;
 }
 
 .invalid_input {
@@ -161,6 +161,9 @@ orderNumber {
 
 
 form {
+    height: 90%;
+    display: grid;
+    grid-template-rows: 70px 70px 1fr;
 }
 
 .additional:required:invalid{
@@ -283,4 +286,45 @@ table tr:first-child{
     font-size: 20px;
 }
 
+
+.in input, .in textarea, .in select{
+    padding: 12px 0 0 0;
+}
+
+.in input:focus + span, .in textarea:focus + span, .in select:focus + span{
+    transform: translateY(-15px) scale(0.75);
+}
+
+.in input:not(:placeholder-shown) + span, .in textarea:not(:placeholder-shown) + span, .in select:not(:placeholder-shown) + span {
+    transform: translateY(-10px) scale(0.7);
+}
+
+addBtn button{
+    white-space: nowrap;
+}
+
+.icon_btn {
+    width: 35px;
+    height: 35px;
+}
+
+.add-btn::before{
+    left: 7px;
+}
+
+.add-btn::after{
+    right: 7px;
+}
+
+.add-icon::before, .add-icon::after{
+    width: 3px;
+}
+
+.add-icon::before{
+    left: 16px;
+}
+
+.add-icon::after{
+    right: 16px;
+}
 

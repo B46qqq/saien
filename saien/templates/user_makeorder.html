@@ -44,7 +44,7 @@
     </div>
 </div>
 
-<form autocomplete="off">
+<form autocomplete="off" class="noselect">
     <formTop>
         <orderDate>
             <p>
@@ -109,9 +109,7 @@
         </button>
     </formHistory>
     
-    <hr>
-
-    <orderSection class="noselect">
+    <orderSection>
         <product style="display: none;">
             <orderNumber>0</orderNumber>
             <label class="in autocomplete">
@@ -150,7 +148,7 @@
                     type="button"
                     onclick="addItem(event)">
                 <div class="add-icon"></div>
-                <div class="btn-txt">Add</div>
+                <div class="btn-txt">Add Item</div>
             </button>
         </addBtn>
     </orderSection>

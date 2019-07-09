@@ -65,16 +65,21 @@ def makeOrder():
     productsData = {'productNames' : productNames}
 
     existingOrders = {}
+    existingOrdersJson = {}
     s = Shop.query.filter_by(user = current_user).first()
-    v = Invoice.query.filter_by(shop_id = s.id).order_by(desc(Invoice.order_date))
+    v = Invoice.query.filter_by(shop_id = s.id).order_by(desc(Invoice.order_date)).limit(10)
     for x in v :
-        existingOrders[x.getOrderDate()] = x.isDelivered(today4am)
+        x_od = x.getOrderDate();
+        existingOrders[x_od] = x.isDelivered(today4am)
+        existingOrdersJson[x.getOrderDate_asJStime()] = x_od
 
     return render_template('user_makeorder.html',
                            min_date = orderDate_begin,
                            allProducts=productsData,
                            allProductsUnit=product_unit,
-                           existOrders=existingOrders)
+                           existOrders=existingOrders,
+                           ordersTimeJson=existingOrdersJson
+    )
 
 
 @user.route('/u/placeorder/', methods=['POST'])
@@ -117,9 +122,11 @@ def placeOrder():
     try:
         db.session.commit()
     except:
-        return json.dumps({'error' : 'Cannot update database!'})
-    
-    return json.dumps({'success' : 'Order successfully received'})
+        return json.dumps({'error' : 'Server error, order failed to register.'})
+
+    flash('Order successfully submitted', 'success')
+    return json.dumps({'redirect' : url_for('user.makeOrder')})
+#    return json.dumps({'success' : 'Order successfully submitted'})
 
 
 @user.route('/u/vieworder/', methods=['POST'])

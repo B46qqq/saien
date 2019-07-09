@@ -7,7 +7,35 @@
 {% endblock %}
 
 {% block content_block %}
-<h1> Make New Order </h1>
+<top>
+    <h1> Make New Order </h1>
+    {% with messages =get_flashed_messages(category_filter=["success"]) %}
+    {% if messages %}
+    <message>
+        <div class="alert success" id="message">
+            <span class="closebtn" onclick="this.parentElement.classList.add('hide');">
+                &times;
+            </span>
+            <strong>
+                {% for msg in messages %}
+                {{ msg }}
+                {% endfor %}
+            </strong>
+        </div>
+    </message>
+    {% else %}
+    <message>
+        <div class="alert hide" id="message">
+            <span class="closebtn" onclick="this.parentElement.classList.add('hide');">
+                &times;
+            </span>
+            <strong></strong>
+        </div>
+    </message>
+    {% endif %}
+    {% endwith %}
+    
+</top>
 
 <div id="myModal" class="viewOrder">
     <!-- Modal content -->
@@ -17,16 +45,6 @@
 </div>
 
 <form autocomplete="off">
-
-    <message>
-        <div class="alert hide" id="message">
-            <span class="closebtn" onclick="this.parentElement.classList.add('hide');">
-                &times;
-            </span>
-            <strong></strong>
-        </div>
-    </message>
-    
     <formTop>
         <orderDate>
             <p>
@@ -40,21 +58,20 @@
                 <span class="label">Date for this order; IMPORTANT</span>
             </label>
         </orderDate>
-        
-        <div></div>
 
-        <button class="reg_btn success_btn formTop_btn disabled"
+        <button id="update"
+                class="reg_btn large_btn success_btn formTop_btn disabled"
                 type="button"
                 name="load">
-            Load
+            Edit / Change
         </button>
 
 
         <button id="placeOrder"
-                class="reg_btn info_btn formTop_btn disabled"
+                class="reg_btn large_btn info_btn formTop_btn disabled"
                 type="button"
                 name="submit">
-            Submit
+            Submit Order
         </button>
     </formTop>
 
@@ -63,7 +80,7 @@
         <label class="in">
             <select name="orderhistory" class="additional">
                 <option value="" disabled selected style="display:none; color:#d3d3d3;">
-                    change / reference from exisiting orders
+                    reference from exisiting orders
                 </option>
                 {% for o in existOrders %}
                 {% if existOrders[o] is sameas true %}
@@ -73,7 +90,7 @@
                 {% endif %}
                 {% endfor %}
             </select>
-            <span class="label">exisiting orders</span>
+            <span class="label">most recent orders : maximum of 10</span>
         </label>
         <button class="reg_btn warning_btn formTop_btn disabled"
                 type="button"
@@ -148,6 +165,13 @@
  var url_placeorder = "{{ url_for('user.placeOrder') }}";
  var url_vieworder = "{{ url_for('user.viewOrder') }}";
  var url_copyorder = "{{ url_for('user.copyOrder') }}";
+
+ var ordersTime = {{ ordersTimeJson|tojson }};
+ var ordersTimeList = [];
+
+ for (var i in ordersTime)
+     ordersTimeList.push(new Date(i));
+ 
 </script>
 <script type="text/javascript"
         src="{{ url_for('static', filename='js/user_makeorder.js') }}"></script>

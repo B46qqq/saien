@@ -121,6 +121,9 @@ class Invoice(db.Model):
     def getOrderDate(self):
         return self.order_date.strftime('%d, %B, %Y \t %A')
 
+    def getOrderDate_asJStime(self):
+        return self.order_date.strftime('%Y-%m-%d') + 'T00:00:00.000Z';
+
     def isDelivered(self, day):
         return self.order_date <= day
 

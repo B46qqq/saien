@@ -17,17 +17,34 @@ odinput.addEventListener('click', function(){
     resetField(this.parentNode, 'date for this order; important');
 });
 
-odinput.addEventListener('focusout', function(){
-    if (this.value == '' || this.value == null)
-        return;
-    var day = new Date(this.value);
-    if (day.getDay() == 0) // Does not make order on Sundays
-        makeInvalidField(this.parentNode, 'no order on Sundays');
-    else {
-        makeValidField(this.parentNode);
-        submitBtnActivate();
+odinput.addEventListener('input', function(){
+    if (this.value == '' || this.value == null){
+        submitBtnDisable();
+        updateBtnDisable();
+    } else {
+        var day = new Date(this.value);
+        if (day.getDay() == 0) {// Does not make order on Sundays
+            makeInvalidField(this.parentNode, 'no order on Sundays');
+            submitBtnDisable();
+            updateBtnDisable();
+        } else {
+            makeValidField(this.parentNode);
+            submitBtnActivate();
+            if (orderExistAlready(day))
+                updateBtnActivate(ordersTime[day.toISOString()]);
+            else
+                updateBtnDisable();
+        }
     }
 });
+
+
+
+function orderExistAlready(selected){
+    return !!ordersTimeList.find(
+        item => {return item.getTime() == selected.getTime()}
+    );
+}
 
 
 function autocomplete(inp, arr) {
@@ -312,6 +329,18 @@ function submitBtnDisable(){
     btn.setAttribute('onclick', '');
 }
 
+function updateBtnActivate(dateString){
+    var btn = document.getElementById('update');
+    btn.classList.remove('disabled');
+    btn.setAttribute('onclick', "loadExistingOrder('"+dateString+"')");
+}
+
+function updateBtnDisable(){
+    var btn = document.getElementById('update');
+    btn.classList.add('disabled');
+    btn.setAttribute('onclick', '');    
+}
+
 
 function newItem() {
     var toClone = document.querySelector('product');
@@ -373,10 +402,6 @@ function deleteItem(e){
     var from = document.querySelector('orderSection');
     var targetNum = parseInt(target.querySelector('orderNumber').innerHTML);
     var updates = from.querySelectorAll('product');
-    
-    // make submit invalid
-    if (updates.length <= 2)
-        submitBtnDisable();
     
     for (var i = targetNum; i < updates.length; i++){
         var c = updates[i].querySelector('orderNumber');
@@ -520,6 +545,10 @@ function ajaxPostJson(jsonString){
 
     request.onload = function(){
         var ret =  JSON.parse(this.responseText);
+        if (ret.redirect){
+            window.location.href = ret.redirect;
+            return;
+        }
         var msg_div = document.getElementById('message');
         var msg = msg_div.querySelector('strong');
         msg_div.classList.remove('hide');
@@ -543,7 +572,7 @@ var fh_child = fh.getElementsByTagName('option');
 var fh_clear = new Event('clearsection');
 
 fh.addEventListener('click', function(){
-    resetField(this.parentNode, 'existing orders');
+    resetField(this.parentNode, 'most recent orders: maximum of 10');
 });
 
 fh.addEventListener('focusout', function(){
@@ -567,7 +596,7 @@ fh.addEventListener('focusout', function(){
 
 fh.addEventListener('clearsection', function(){
     this.querySelector('option[value=""]').selected = true;
-    resetField(this.parentNode, 'make reference from previous orders');
+    resetField(this.parentNode, 'most recent orders: maximum of 10');
 
     var fh_section = document.querySelector('formHistory');
     var temp = fh_section.querySelector('button[name="view"]');

@@ -6,11 +6,12 @@ productlist {
         "search message"
         "p_list p_info";
     border: 1px solid #d3d3d3;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 #product_filter {
     padding: 0 10px;
+    font-size: 15px;
 }
 
 .product_search {
@@ -44,6 +45,7 @@ productlist {
     text-align: left;
     cursor: pointer;
     transition: 0.3s;
+    direction: ltr;
 }
 
 .product_tab .active, .product_tab a:hover{
@@ -73,6 +75,7 @@ productlist {
     display: grid;
     grid-auto-rows: 40px;
     grid-row-gap: 3px;
+    height: 60vh;
 }
 
 .product_tab_list margin{

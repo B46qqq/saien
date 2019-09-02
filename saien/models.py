@@ -1,5 +1,6 @@
 from saien import db, bcrypt
 from datetime import datetime
+from sqlalchemy import exc, and_, desc
 from sqlalchemy.ext.hybrid import hybrid_property
 
 shopContacts = db.Table('shopcontacts',
@@ -63,7 +64,47 @@ class User(db.Model):
         self.password = bcrypt.generate_password_hash(password)
 
     def check_password(self, password):
-        return bcrypt.check_password_hash(self.password, password)    
+        return bcrypt.check_password_hash(self.password, password)
+
+    # return dict of order_dates
+    # { year :
+    #        { month : [days]}
+    # }
+    def order_date_past60days(self):
+        curr = datetime.utcnow();
+        orderDates = {}
+        if (self.is_shop()):
+            s = Shop.query.filter_by(user = self).first()
+            vs = Invoice.query.filter_by(shop_id = s.id)\
+                              .filter(Invoice.order_date < curr)\
+                              .order_by(desc(Invoice.order_date))\
+                              .limit(60)
+            for v in vs:
+                if v.order_date.year not in orderDates:
+                    orderDates[v.order_date.year] = {}
+                if v.order_date.month not in orderDates[v.order_date.year]:
+                    orderDates[v.order_date.year][v.order_date.month] = []
+                    
+                orderDates[v.order_date.year][v.order_date.month].insert(0, v.order_date.day)
+        return orderDates
+
+    def order_date_future14days(self):
+        curr = datetime.utcnow();
+        orderDates = {}
+        if (self.is_shop()):
+            s = Shop.query.filter_by(user = self).first()
+            vs = Invoice.query.filter_by(shop_id = s.id)\
+                              .filter(Invoice.order_date >= curr)\
+                              .order_by(desc(Invoice.order_date))\
+                              .limit(14)
+            for v in vs:
+                if v.order_date.year not in orderDates:
+                    orderDates[v.order_date.year] = {}
+                if v.order_date.month not in orderDates[v.order_date.year]:
+                    orderDates[v.order_date.year][v.order_date.month] = []
+                    
+                orderDates[v.order_date.year][v.order_date.month].insert(0, v.order_date.day)
+        return orderDates        
 
     def __repr__(self):
         returnStr = str('Account name: %s\n') % (self.username)
@@ -96,6 +137,7 @@ class Shop(db.Model):
     def getInvoiceList(self, day):
         invoice = Invoice.query.filter_by(shop_id = self.id).filter_by(order_date = day).first()
         return invoice.getItemsAsList()
+
  
 class ContactPerson(db.Model):
     __tablename__ = 'contactperson'
@@ -160,9 +202,9 @@ class Product(db.Model):
     product_id = db.Column(db.Integer, primary_key = True)
     product_name = db.Column(db.String(63), nullable = False)
     product_description = db.Column(db.String(511))
-    price_unit_pc = db.Column(db.Integer)
-    price_unit_kg = db.Column(db.Integer)
-    price_unit_box = db.Column(db.Integer)
+    price_unit_pc = db.Column(db.Integer, default = 0)
+    price_unit_kg = db.Column(db.Integer, default = 0)
+    price_unit_box = db.Column(db.Integer, default = 0)
     
     invoiceitems = db.relationship('InvoiceItem', backref='origin_product')
 
@@ -178,11 +220,11 @@ class Product(db.Model):
         
     def availableUnit(self):
         ret = []
-        if (self.price_unit_pc is not None):
+        if (self.price_unit_pc is not 0):
             ret.append('pc')
-        if (self.price_unit_kg is not None):
+        if (self.price_unit_kg is not 0):
             ret.append('kg')
-        if (self.price_unit_box is not None):
+        if (self.price_unit_box is not 0):
             ret.append('box')
 
         return ret

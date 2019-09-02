@@ -12,7 +12,7 @@
 
 .product_info form {
     display: grid;
-    grid-template-columns: 180px 1fr;
+    grid-template-columns: 160px 1fr;
     grid-template-rows: auto;
     grid-template-areas:
         "pn pnc"
@@ -22,7 +22,7 @@
         "pbox pboxc"
         "upd upd"
         "del del";
-    grid-row-gap: 15px;
+    grid-row-gap: 10px;
 }
 
 .label_changed {

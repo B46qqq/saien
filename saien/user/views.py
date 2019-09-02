@@ -37,7 +37,6 @@ def index():
     return render_template('user_base.html')
 
 
-# Order can be made prior to 4am everyday (actually not Sundays)
 @user.route('/u/makeorder/', methods=['GET'])
 @login_required
 @shop_login_required
@@ -63,7 +62,9 @@ def makeOrder():
         product_unit[p.product_name] = p.availableUnit()
         
     productsData = {'productNames' : productNames}
-
+    exist_order_date = current_user.order_date_past60days()
+    future_order_date = current_user.order_date_future14days()
+    
     existingOrders = {}
     existingOrdersJson = {}
     s = Shop.query.filter_by(user = current_user).first()
@@ -72,8 +73,10 @@ def makeOrder():
         x_od = x.getOrderDate();
         existingOrders[x_od] = x.isDelivered(today4am)
         existingOrdersJson[x.getOrderDate_asJStime()] = x_od
-
+    print (product_unit)
     return render_template('user_makeorder.html',
+                           exist_order_date = exist_order_date,
+                           future_order_date = future_order_date,
                            min_date = orderDate_begin,
                            allProducts=productsData,
                            allProductsUnit=product_unit,
@@ -133,7 +136,8 @@ def placeOrder():
 @login_required
 @shop_login_required
 def viewOrder():
-    orderDate = datetime.strptime(request.form['date'], '%d, %B, %Y\t%A')
+#    orderDate = datetime.strptime(request.form['date'], '%d, %B, %Y\t%A')
+    orderDate = datetime.strptime(request.form['date'], '%Y-%m-%d')
 #    print (current_user.info.getInvoiceTable(orderDate))
     ret = {}
     ret['column'] = ['Product', 'Amount', 'Total']
@@ -145,7 +149,8 @@ def viewOrder():
 @login_required
 @shop_login_required
 def copyOrder():
-    orderDate = datetime.strptime(request.form['date'], '%d, %B, %Y\t%A')
+    #orderDate = datetime.strptime(request.form['date'], '%d, %B, %Y\t%A')
+    orderDate = datetime.strptime(request.form['date'], '%Y-%m-%d')
     ret = {}
     ret['orders'] = current_user.info.getInvoiceList(orderDate)
     print(ret)

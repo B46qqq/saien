@@ -25,19 +25,19 @@ function getProductForm(pid){
 
         if (p_info.price_unit_pc != null)
             p_ppc.value = (p_info.price_unit_pc / 100);
-        else p_ppc.value = '';
+        else p_ppc.value = 0;
         p_ppc.focus();
         p_ppc.blur();
 
         if (p_info.price_unit_kg != null)
             p_pkg.value = (p_info.price_unit_kg / 100);
-        else p_pkg.value = '';
+        else p_pkg.value = 0;
         p_pkg.focus();
         p_pkg.blur();
 
         if (p_info.price_unit_box != null)
             p_box.value = (p_info.price_unit_box / 100);
-        else p_box.value = '';
+        else p_box.value = 0;
         p_box.focus();
         p_box.blur();
 
@@ -57,21 +57,21 @@ function getProductForm(pid){
         });
 
         p_ppc.addEventListener("input", function(){
-            if (Number(p_ppc.value) != Number(p_info.price_unit_pc/100))
+            if (localStringToNumber(p_ppc.value) != Number(p_info.price_unit_pc/100))
                 p_field_change('pppc');
             else
                 p_field_revert('pppc');
         });
 
         p_pkg.addEventListener("input", function(){
-            if (Number(p_pkg.value) != Number(p_info.price_unit_kg/100))
+            if (localStringToNumber(p_pkg.value) != Number(p_info.price_unit_kg/100))
                 p_field_change('ppkg');
             else
                 p_field_revert('ppkg');
         });
 
         p_box.addEventListener("input", function(){
-            if (Number(p_box.value) != Number(p_info.price_unit_box/100))
+            if (localStringToNumber(p_box.value) != Number(p_info.price_unit_box/100))
                 p_field_change('ppbox');
             else
                 p_field_revert('ppbox');
@@ -156,7 +156,7 @@ function localStringToNumber( s ){
 
 function onFocus(e){
     var value = e.target.value;
-    if (value == 'UNSET'){
+    if (value == 0){
         e.target.value = '';
         return;
     }
@@ -165,17 +165,18 @@ function onFocus(e){
 
 function onBlur(e){
     var value = e.target.value;
+    value = localStringToNumber(value);
     const options = {
         maximumFractionDigits : 2,
         currency              : currency,
         style                 : "currency",
         currencyDisplay       : "symbol"
     }
-    if (value == '' || value == '0'){
-        e.target.value = 'UNSET';
+    if (value == '' || value == null){
+        e.target.value = 0;
         return;
     }
-    e.target.value = localStringToNumber(value).toLocaleString(undefined, options);
+    e.target.value = value.toLocaleString(undefined, options);
 }
 
 

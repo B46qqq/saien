@@ -4,6 +4,8 @@
 {{ super() }}
 <link rel="stylesheet"
       href="{{ url_for('static', filename='css/user_makeorder.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/calendar/datepickk.min.css') }}">
 {% endblock %}
 
 {% block content_block %}
@@ -34,7 +36,6 @@
     </message>
     {% endif %}
     {% endwith %}
-    
 </top>
 
 <div id="myModal" class="viewOrder">
@@ -45,22 +46,12 @@
 </div>
 
 <form autocomplete="off" class="noselect">
-    <formTop>
-        <orderDate>
-            <p>
-                Order Date:<br>
-            </p>
-            <label class="in">
-                <input type="date"
-                       name="begin"
-                       min="{{ min_date }}"
-                       required>
-                <span class="label">Date for this order; IMPORTANT</span>
-            </label>
-        </orderDate>
+    <calendar>
+    </calendar>
 
+    <function>
         <button id="update"
-                class="reg_btn large_btn success_btn formTop_btn disabled"
+                class="reg_btn large_btn success_btn disabled"
                 type="button"
                 name="load">
             Edit / Change
@@ -68,46 +59,67 @@
 
 
         <button id="placeOrder"
-                class="reg_btn large_btn info_btn formTop_btn disabled"
+                class="reg_btn large_btn info_btn disabled"
                 type="button"
                 name="submit">
             Submit Order
         </button>
-    </formTop>
 
-
-    <formHistory>
-        <label class="in">
-            <select name="orderhistory" class="additional">
-                <option value="" disabled selected style="display:none; color:#d3d3d3;">
-                    reference from exisiting orders
-                </option>
-                {% for o in existOrders %}
-                {% if existOrders[o] is sameas true %}
-                <option class="orderDelivered">{{ o }}</option>
-                {% else %}
-                <option>{{ o }}</option>
-                {% endif %}
-                {% endfor %}
-            </select>
-            <span class="label">most recent orders : maximum of 10</span>
-        </label>
-        <button class="reg_btn warning_btn formTop_btn disabled"
+        <button id="viewBtn"
+                class="reg_btn warning_btn formTop_btn disabled"
                 type="button"
                 name="view">
             View
         </button>
+        
         <button class="reg_btn success_btn formTop_btn disabled"
                 type="button"
                 name="append">
             Append
         </button>
-        <button class="reg_btn success_btn formTop_btn disabled"
+        
+        <button id="loadBtn"
+                class="reg_btn success_btn formTop_btn disabled"
                 type="button"
                 name="load">
             Load
         </button>
-    </formHistory>
+        
+    </function>
+
+
+    <!-- <formHistory>
+         <label class="in">
+         <select name="orderhistory" class="additional">
+         <option value="" disabled selected style="display:none; color:#d3d3d3;">
+         reference from exisiting orders
+         </option>
+         {% for o in existOrders %}
+         {% if existOrders[o] is sameas true %}
+         <option class="orderDelivered">{{ o }}</option>
+         {% else %}
+         <option>{{ o }}</option>
+         {% endif %}
+         {% endfor %}
+         </select>
+         <span class="label">most recent orders : maximum of 10</span>
+         </label>
+         <button class="reg_btn warning_btn formTop_btn disabled"
+         type="button"
+         name="view">
+         View
+         </button>
+         <button class="reg_btn success_btn formTop_btn disabled"
+         type="button"
+         name="append">
+         Append
+         </button>
+         <button class="reg_btn success_btn formTop_btn disabled"
+         type="button"
+         name="load">
+         Load
+         </button>
+         </formHistory> -->
     
     <orderSection>
         <product style="display: none;">
@@ -157,20 +169,28 @@
 
 {% block js_block %}
 {{ super() }}
+
 <script>
  var products = {{ allProducts|tojson }};
  var productsUnit = {{ allProductsUnit|tojson }};
+ var existingOrderDate = {{ exist_order_date|tojson }};
+ var futureOrderDate = {{ future_order_date|tojson }};
  var url_placeorder = "{{ url_for('user.placeOrder') }}";
  var url_vieworder = "{{ url_for('user.viewOrder') }}";
  var url_copyorder = "{{ url_for('user.copyOrder') }}";
 
  var ordersTime = {{ ordersTimeJson|tojson }};
  var ordersTimeList = [];
-
+ 
  for (var i in ordersTime)
      ordersTimeList.push(new Date(i));
- 
 </script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='js/calendar/datepickk.min.js') }}"></script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='js/user/makeorder_global.js') }}"></script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='js/user/makeorder_iteminput.js') }}"></script>
 <script type="text/javascript"
         src="{{ url_for('static', filename='js/user_makeorder.js') }}"></script>
 {% endblock %}

@@ -1,210 +1,155 @@
-var products = products.productNames;
-var unitDict = {
-    "pc" : "Piece",
-    "kg" : "Kilogram",
-    "box" : "Box/Bag/Tray"};
-
-// Global array storing names of already selected items.
-// This acts as a barrier for user to select the same item
-// twice.
-var selectedItems = [];
-
 /*
- * EventListener for orderDate input element.
+ * Date picker initalise
+ * Restrict to one date selection only
+ * Init: 
+ *      min-date = current date - 60 days
+ *      max-date = current date + 14 days
  */
-var odinput = document.querySelector('input[type="date"]');
-odinput.addEventListener('click', function(){
-    resetField(this.parentNode, 'date for this order; important');
-});
+var calendar = new Datepickk();
+calendar.container = document.querySelector('calendar');
+calendar.inline = true;
+calendar.maxSelections = 1;
+calendar.disabledDays = 0;
 
-odinput.addEventListener('input', function(){
-    if (this.value == '' || this.value == null){
-        submitBtnDisable();
-        updateBtnDisable();
-    } else {
-        var day = new Date(this.value);
-        if (day.getDay() == 0) {// Does not make order on Sundays
-            makeInvalidField(this.parentNode, 'no order on Sundays');
-            submitBtnDisable();
-            updateBtnDisable();
-        } else {
-            makeValidField(this.parentNode);
-            submitBtnActivate();
-            if (orderExistAlready(day))
-                updateBtnActivate(ordersTime[day.toISOString()]);
-            else
-                updateBtnDisable();
+var currTime = new Date();
+var cmd = new Date();
+cmd.setDate(cmd.getDate() + 14);
+cmd.setHours(0,0,0,0);
+calendar.minDate = new Date().setDate(currTime.getDate() - 60);
+calendar.maxDate = cmd;
+// Setting highlighted dates (existing order)
+var delivered_dates = createHighlightDates(existingOrderDate);
+var future_order_dates = createHighlightDates(futureOrderDate);
+
+
+var delivered_order = {
+    dates: delivered_dates,
+    backgroundColor: '#E99C00',
+    color: '#ffffff',
+    legend: 'Delivered'//this is optional
+};
+
+var future_order = {
+    dates: future_order_dates,
+    backgroundColor: '#2196F3',
+    color: '#ffffff',
+    legend: 'Placed Order'//this is optional
+};
+
+
+calendar.highlight = [delivered_order, future_order];
+
+// TODO, more functionality needed
+calendar.onSelect = function(checked){
+    var state = (checked) ? 'selected' : 'unselected';
+    if (checked)
+        updateBtn(calendar.selectedDates[0]);
+};
+
+calendar.show();
+/* 
+ * update (activate/disable) function buttons according
+ * to the date selected in calendar
+ */
+function updateBtn(date){
+    allBtnDisable();
+    var curr = new Date();
+    var tmr  = new Date();
+    tmr.setDate(tmr.getDate() + 1);
+    tmr.setHours(0, 0, 0, 0);
+
+    // If ymd is in the future -> (edit/change, submit, remove::TODO)?
+    if (tmr <= date){
+        if (selectedDate_inObject(futureOrderDate))
+            updateBtnActivate();
+        submitBtnActivate();
+    } else if (curr.getFullYear() == date.getFullYear()
+               && curr.getMonth() == date.getMonth()
+               && curr.getDate() == date.getDate()){
+        console.log('selected today');
+    } else { // checking the existing order ONLY
+        if (selectedDate_inObject(existingOrderDate)){
+            viewBtnActivate();
+            loadBtnActivate();
         }
     }
-});
+}
 
+function selectedDate_asString(){
+    var s = calendar.selectedDates[0];
+    return s.getFullYear().toString()
+        + '-'
+        + (s.getMonth() + 1).toString()
+        + '-'
+        + s.getDate().toString();
+}
 
+function selectedDate_inObject(object){
+    var s = calendar.selectedDates[0];
+    if (object[s.getFullYear()] == null) return false;
+    if (object[s.getFullYear()][s.getMonth() + 1] == null) return false;
+    if (! object[s.getFullYear()][s.getMonth() + 1].includes(s.getDate())) return false;
+    return true;
+}
 
-function orderExistAlready(selected){
-    return !!ordersTimeList.find(
-        item => {return item.getTime() == selected.getTime()}
-    );
+function createHighlightDates(dates){
+    var dates_list = [];
+    for (var y in dates){
+        for (var m in dates[y]){
+            var days = dates[y][m];
+
+            if (days.length != 0){
+                var linked_days_start = days[0];
+                var linked_days_end = days[0];
+
+                for (var i = 1; i < days.length; ++i){
+                    if ((linked_days_end + 1) == days[i])
+                        ++ linked_days_end;
+                    else{
+                        dates_list.push(
+                            {
+                                start: new Date(y, m - 1, linked_days_start),
+                                end: new Date(y, m - 1, linked_days_end)
+                            }
+                        );
+                        linked_days_start = days[i];
+                        linked_days_end = days[i];
+                    }
+                }
+                // Account for the last entry in days list
+                dates_list.push(
+                    {
+                        start: new Date(y, m - 1, linked_days_start),
+                        end: new Date(y, m - 1, linked_days_end)
+                    }
+                );
+            }
+        }
+    }
+    return dates_list;
 }
 
 
-function autocomplete(inp, arr) {
-    /*the autocomplete function takes two arguments,
-      the text field element and an array of possible autocompleted values:*/
-    var currentFocus;
-    var lastValue;
-    /*execute a function when someone writes in the text field:*/
-    inp.addEventListener("input", function(e) {
-        var a, b, i, val = this.value;
-        /*close any already open lists of autocompleted values*/
-        closeAllLists();
-        if (!val) { return false;}
-        currentFocus = -1;
-        /*create a DIV element that will contain the items (values):*/
-        a = document.createElement("DIV");
-        a.setAttribute("id", this.id + "autocomplete-list");
-        a.setAttribute("class", "autocomplete-items");
-        /*append the DIV element as a child of the autocomplete container:*/
-        this.parentNode.appendChild(a);
-        /*for each item in the array...*/
-        for (i = 0; i < arr.length; i++) {
-            /* -- check if the item starts with the same letters as the text field value: -- */
-            // Changed: Filter consider string within as oppose to only considering the first letter.
-            var matchingIndex = arr[i].toUpperCase().indexOf(val.toUpperCase());
-            if (matchingIndex > -1){
-//            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                /*create a DIV element for each matching element:*/
-                b = document.createElement("DIV");
-                /*make the matching letters bold:*/
-                b.innerHTML = arr[i].substr(0, matchingIndex);
-                b.innerHTML += "<u>" + arr[i].substr(matchingIndex, val.length) + "</u>";
-                b.innerHTML += arr[i].substr(matchingIndex + val.length);
-                /*insert a input field that will hold the current array item's value:*/
-                b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-                /*execute a function when someone clicks on the item value (DIV element):*/
-                b.addEventListener("click", function(e) {
-                    /*insert the value for the autocomplete text field:*/
-                    inp.value = this.getElementsByTagName("input")[0].value;
-                    /*close the list of autocompleted values,
-                      (or any other open lists of autocompleted values:*/
-                    closeAllLists();
-                });
-                a.appendChild(b);
-            }
-        }
-    });
-    /*execute a function presses a key on the keyboard:*/
-    inp.addEventListener("keydown", function(e) {
-        var x = document.getElementById(this.id + "autocomplete-list");
-        if (x) x = x.getElementsByTagName("div");
-        if (e.keyCode == 40) {
-            /*If the arrow DOWN key is pressed,
-              increase the currentFocus variable:*/
-            currentFocus++;
-            /*and and make the current item more visible:*/
-            addActive(x);
-        } else if (e.keyCode == 38) { //up
-            /*If the arrow UP key is pressed,
-              decrease the currentFocus variable:*/
-            currentFocus--;
-            /*and and make the current item more visible:*/
-            addActive(x);
-        } else if (e.keyCode == 13) {
-            /*If the ENTER key is pressed, prevent the form from being submitted,*/
-            e.preventDefault();
-            if (currentFocus > -1) {
-                /*and simulate a click on the "active" item:*/
-                if (x) x[currentFocus].click();
-            }
-        }
-    });
 
-    /* 
-     * Make input field valid regardless of previous state.
-     * 
-     */
-    inp.addEventListener("click", function(e){
-        resetField(inp.parentNode, 'product name');
-    });
+function addItem(e){
+    newItem();
+}
 
-    /*
-     * Remove 'active' status when input's focusout
-     * Check input's value with a 0.3seconds delay (0.5seconds feels uncomfortable)
-     * (reason for : user might use their pointing device
-     *               to choose an product from the dropdown,
-     *               those action will cause focus out,
-     *               therefore for a breif second input field
-     *               will be rendered as invalid.
-     */
-    inp.addEventListener("focusout", function(e){
-
-        var sel = inp.parentNode.nextElementSibling.querySelector('select');
-        if (lastValue != this.value && (lastValue != null || lastValue == undefined)){
-            // lastValue != null counter for initial
-            sel.value = "";
-            resetField(sel.parentNode, 'unit');
-            removeUnitSelector(this.parentNode.nextElementSibling);
-            updateUnitSelector(this.value, this.parentNode.nextElementSibling);
-        }
-        
-        setTimeout(function(){
-            var needRemove = inp.parentNode.querySelector(".autocomplete-items");
-            if (needRemove != null)
-                inp.parentNode.removeChild(needRemove);
-            verifyProductName(inp.parentNode);
-        }, 300);
-        lastValue = this.value;
-    });
-
-    function addActive(x) {
-        /*a function to classify an item as "active":*/
-        if (!x) return false;
-        /*start by removing the "active" class on all items:*/
-        removeActive(x);
-        if (currentFocus >= x.length) currentFocus = 0;
-        if (currentFocus < 0) currentFocus = (x.length - 1);
-        /*add class "autocomplete-active":*/
-        x[currentFocus].classList.add("autocomplete-active");
-    }
+function newItem() {
+    var toClone = document.querySelector('product');
+    var cloned = toClone.cloneNode(true);
+    cloned.style.display = 'grid';
     
-    function removeActive(x) {
-        /*a function to remove the "active" class from all autocomplete items:*/
-        for (var i = 0; i < x.length; i++) {
-            x[i].classList.remove("autocomplete-active");
-        }
-    }
+    autocomplete(cloned.querySelector('input'), products);
+    unit_input(cloned.querySelector('select[name="unit"]'));
+    quan_input(cloned.querySelector('input[name="quantity"]'));
     
-    function closeAllLists(elmnt) {
-        /*close all autocomplete lists in the document,
-          except the one passed as an argument:*/
-        var x = document.getElementsByClassName("autocomplete-items");
-        for (var i = 0; i < x.length; i++) {
-            if (elmnt != x[i] && elmnt != inp) {
-                x[i].parentNode.removeChild(x[i]);
-            }
-        }
-    }
+    var orderSection = document.querySelector("orderSection");
+    var addBtn = document.querySelector("addBtn");
+    orderSection.insertBefore(cloned, addBtn);
+    var prevNum = cloned.previousElementSibling.querySelector('orderNumber').innerHTML;
+    cloned.querySelector('orderNumber').innerHTML = parseInt(prevNum) + 1;
 }
-
-function updateUnitSelector(val, e){
-    if (val == '' || val == null) return;
-    thisUnits = productsUnit[val];
-    if (thisUnits == null) return;
-    for (var i = 0; i < thisUnits.length; ++i){
-        var opt = document.createElement('option');
-        opt.value = thisUnits[i];
-        opt.innerHTML = unitDict[thisUnits[i]];
-        e.querySelector('select[name="unit"]').appendChild(opt);
-    }
-}
-
-function removeUnitSelector(e){
-    select = e.querySelector('select[name="unit"]');
-    options = e.querySelectorAll('option');
-    for (var i = 1; i < options.length; ++i){
-        select.removeChild(options[i]);
-    }
-}
-
 
 function unit_input (inp){
     var ops = inp.getElementsByTagName('option');
@@ -248,117 +193,6 @@ function quan_input (inp){
 }
 
 
-function resetField(element, message){
-    var input = element.querySelector('input');
-    var selec = element.querySelector('select');
-    var label = element.querySelector('span');
-
-    if (input != null){
-        input.classList.remove('invalid_input');
-        input.classList.remove('valid_input');
-    }
-    if (selec != null){
-        selec.classList.remove('invalid_input');
-        selec.classList.remove('valid_input');
-    }
-    if (label != null){
-        label.classList.remove('invalid_label');
-        label.classList.remove('valid_label');
-        label.innerHTML = message;
-    }
-}
-
-function makeInvalidField(element, message){
-    var input = element.querySelector('input');
-    var selec = element.querySelector('select');
-    var label = element.querySelector('span');
-
-    if (input != null)
-        input.classList.add('invalid_input');
-    if (selec != null)
-        selec.classList.add('invalid_input');
-    if (label != null){
-        label.classList.add('invalid_label');
-        label.innerHTML = message;
-    }
-}
-    
-
-function makeValidField(element){
-    var input = element.querySelector('input');
-    var selec = element.querySelector('select');
-    var label = element.querySelector('span');
-
-    if (input != null)
-        input.classList.add('valid_input');
-    if (selec != null)
-        selec.classList.add('valid_input');
-    if (label != null){
-        label.classList.add('valid_label');
-    }
-}
-
-
-/*
- * args: <label ...>
- * return false when product name entered is not valid.
- * return true when input field contains valid product name
- */
-function verifyProductName(element){
-    var val = element.querySelector('input').value;
-    if (val == null || val == '')
-        return false;
-    if (!products.includes(val)){
-        makeInvalidField(element, 'product does not exist / invalid name');
-        return false;
-    }
-    makeValidField(element);
-    return true;
-}
-
-function submitBtnActivate(){
-    var btn = document.getElementById('placeOrder');
-    btn.classList.remove('disabled');
-    btn.setAttribute('onclick', 'submitOrderForm()');
-}
-
-
-function submitBtnDisable(){
-    var btn = document.getElementById('placeOrder');
-    btn.classList.add('disabled');
-    btn.setAttribute('onclick', '');
-}
-
-function updateBtnActivate(dateString){
-    var btn = document.getElementById('update');
-    btn.classList.remove('disabled');
-    btn.setAttribute('onclick', "loadExistingOrder('"+dateString+"')");
-}
-
-function updateBtnDisable(){
-    var btn = document.getElementById('update');
-    btn.classList.add('disabled');
-    btn.setAttribute('onclick', '');    
-}
-
-
-function newItem() {
-    var toClone = document.querySelector('product');
-    var cloned = toClone.cloneNode(true);
-    cloned.style.display = 'grid';
-    
-    autocomplete(cloned.querySelector('input'), products);
-    unit_input(cloned.querySelector('select[name="unit"]'));
-    quan_input(cloned.querySelector('input[name="quantity"]'));
-    
-    var orderSection = document.querySelector("orderSection");
-    var addBtn = document.querySelector("addBtn");
-    orderSection.insertBefore(cloned, addBtn);
-    var prevNum = cloned.previousElementSibling.querySelector('orderNumber').innerHTML;
-    cloned.querySelector('orderNumber').innerHTML = parseInt(prevNum) + 1;
-}
-
-
 
 function newItemArgs(pname, punit, quantity){
     var toClone = document.querySelector('product');
@@ -387,12 +221,6 @@ function newItemArgs(pname, punit, quantity){
     sel.querySelector('option[value="'+punit+'"]').selected = true;
     sel.dispatchEvent(new Event('focusout'));
     quan.dispatchEvent(new Event('focusout'));
-}
-
-
-
-function addItem(e){
-    newItem();
 }
 
 // Remove corresponding <product> entry from <orderSection>
@@ -431,18 +259,10 @@ function submitOrderForm(){
         return;
     }
     
-    // Check if any required input is empty
-    if (isOrderDateEmpty(date))
-        ableToSubmit = false;
-    
     for (var i = 1; i < items.length; ++i){
         if (isOrderItemEmpty(items[i]))
             ableToSubmit = false;
     }
-
-    // check if all required inputs are valid
-    if (!isOrderDateValid(date))
-        ableToSubmit = false;
 
     for (var i = 1; i < items.length; ++i)
         if (!isOrderItemValid(items[i]))
@@ -451,28 +271,13 @@ function submitOrderForm(){
     // process to submit
     if (ableToSubmit){
         var order = {}
-        order['date'] = date.querySelector('input[type="date"]').value;
+        order['date'] = selectedDate_asString();
         // JSON.stringfy data and POST with ajax
         for (var i = 1; i < items.length; ++i)
             order["item" + i.toString()] = objectifyItem(items[i]);
 
         ajaxPostJson(JSON.stringify(order));
     }
-}
-
-/*
- * args: <orderDate ...>
- * check if orderDate input emptyness
- * ret -> true  = empty
- *        false = not empty (valid)
- */
-function isOrderDateEmpty(date){
-    var input = date.querySelector('input[type="date"]');
-    if (input.value == '' || input.value == null){
-        makeInvalidField(input.parentNode, 'order date empty');
-        return true;
-    }
-    return false;
 }
 
 
@@ -498,9 +303,6 @@ function isOrderItemEmpty(item){
     return ret;
 }
 
-function isOrderDateValid(date){
-    return !date.querySelector('input[type="date"]').classList.contains('invalid_input');
-}
 
 function isOrderItemValid(item){
     var p = item.getElementsByTagName('input')[0];
@@ -626,13 +428,14 @@ for (var i = 1; i < fh_child.length; ++i){
  * remove from backward. Last child element remove first.
  * Or dont use reference variable (var)
  */
-function loadExistingOrder(data){
+function loadExistingOrder(){
+    var date = selectedDate_asString();
     var x = document.getElementsByTagName('product');
     var length = x.length;
     for (var i = length-1; i > 0; --i){
         x[0].parentNode.removeChild(x[i]);
     }
-    appendExistingOrder(data);
+    appendExistingOrder(date);
 }
 
 function appendExistingOrder(date){
@@ -655,7 +458,8 @@ function appendExistingOrder(date){
 }
 
 
-function showExistingOrder(date){
+function showExistingOrder(){
+    var date = selectedDate_asString();
     // Get the modal
     var modal = document.getElementById("myModal");
     // Get the <span> element that closes the modal
@@ -726,3 +530,71 @@ function removeOrderTable(div){
         table.parentNode.removeChild(table);
 }
 
+
+
+
+
+
+/*
+ * *****************************************************
+ * ********************************Button Status Section
+ * Manage all buttons related functionality on this page.
+ */
+function allBtnDisable(){
+    submitBtnDisable();
+    updateBtnDisable();
+    viewBtnDisable();
+    loadBtnDisable();
+}
+
+
+function submitBtnActivate(){
+    var btn = document.getElementById('placeOrder');
+    btn.classList.remove('disabled');
+    btn.setAttribute('onclick', 'submitOrderForm()');
+}
+
+function submitBtnDisable(){
+    var btn = document.getElementById('placeOrder');
+    btn.classList.add('disabled');
+    btn.setAttribute('onclick', '');
+}
+
+function updateBtnActivate(){
+    var btn = document.getElementById('update');
+    btn.classList.remove('disabled');
+    btn.setAttribute('onclick', 'loadExistingOrder()');
+}
+
+function updateBtnDisable(){
+    var btn = document.getElementById('update');
+    btn.classList.add('disabled');
+    btn.setAttribute('onclick', '');    
+}
+
+function viewBtnActivate(){
+    var btn = document.getElementById('viewBtn');
+    btn.classList.remove('disabled');
+    btn.setAttribute('onclick', 'showExistingOrder()');
+}
+
+function viewBtnDisable(){
+    var btn = document.getElementById('viewBtn');
+    btn.classList.add('disabled');
+    btn.setAttribute('onclick', '');
+}
+
+function loadBtnActivate(){
+    var btn = document.getElementById('loadBtn');
+    btn.classList.remove('disabled');
+    btn.setAttribute('onclick', 'loadExistingOrder()');
+}
+
+function loadBtnDisable(){
+    var btn = document.getElementById('loadBtn');
+    btn.classList.add('disabled');
+    btn.setAttribute('onclick', '');
+}
+/*
+ * ****************************Button Status Section END
+ */

@@ -13,8 +13,7 @@
         "title title_input"
         "notice notice_input"
         "btn_div error_div";
-    grid-column-gap: 60px;
-    grid-row-gap: 30px;
+    grid-column-gap: 40px;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
 }
@@ -119,6 +118,7 @@
 
 .old_notice {
     display: grid;
+    margin-bottom: 100px;
 }
 
 .collap_wrap {

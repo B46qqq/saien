@@ -58,28 +58,38 @@ top {
     color: #ffffff;
 }
 
-formTop {
+
+form {
+    height: 90%;
     display: grid;
-    grid-template-columns: 4fr 2fr 1fr;
+    grid-template-columns: 1fr 1.5fr;
+    grid-template-rows: 380px 1fr;
+    grid-template-areas:
+        "calendar option"
+        "order order"
 }
 
-.formTop_btn {
+calendar {
+    grid-area: calendar;
+    display: inline-grid;
+}
+
+function {
+    grid-area: option;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+}
+
+form function button {
     margin: 0;
     justify-self: center;
     align-self: center;
 }
 
-orderDate {
-    display: grid;
-    grid-template-columns: 30% 1fr;
-}
-
-orderDate p {
-    justify-self: end;
-    padding-right: 40px;
-}
 
 orderSection {
+    grid-area: order;
     margin-top: 10px;
     border-top: 2px solid #d3d3d3;
     display: grid;
@@ -88,7 +98,7 @@ orderSection {
     overflow-y: auto;
 }
 
-product {
+orderSection product {
     display: grid;
     grid-template-columns: 1fr 3fr 2fr 2fr 1fr 1fr;
 }
@@ -160,11 +170,6 @@ orderNumber {
 }
 
 
-form {
-    height: 90%;
-    display: grid;
-    grid-template-rows: 70px 70px 1fr;
-}
 
 .additional:required:invalid{
     color: #9098a9;
